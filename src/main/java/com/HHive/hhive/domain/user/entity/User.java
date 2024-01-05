@@ -25,7 +25,7 @@ public class User {
     @Column(nullable = false)
     private int social_type;
 
-    @Column(nullable = false)
+    @Column
     private String description;
 
     //TODO: 이미지
