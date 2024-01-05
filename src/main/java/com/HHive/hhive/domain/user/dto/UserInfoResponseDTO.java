@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GetUserInfoResponseDTO {
+public class UserInfoResponseDTO {
 
     private String username;
     private String email;
     private String description;
 
-    public GetUserInfoResponseDTO(User user) {
+    public UserInfoResponseDTO(User user) {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.description = user.getDescription();

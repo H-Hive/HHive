@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 @Getter
-public class PostUserSignupRequestDTO {
+public class UserSignupRequestDTO {
 
     @Pattern(regexp = "^[a-zA-Z0-9]{4,10}$",
             message = "올바른 형식이 아닙니다. 문자(대문자/소문자) 혹은 숫자를 4글자 이상 10글자 이하로 작성해주세요.")
