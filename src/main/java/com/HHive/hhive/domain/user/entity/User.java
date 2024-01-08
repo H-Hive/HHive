@@ -1,6 +1,7 @@
 package com.HHive.hhive.domain.user.entity;
 
 import com.HHive.hhive.domain.user.dto.UpdateUserProfileRequestDTO;
+import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
