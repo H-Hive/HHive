@@ -19,11 +19,14 @@ public enum Category {
 
     @Getter
     private final String title;
+
     private final Category parentCategory;
+
     @Getter
     private final List<Category> childCategories;
 
     Category(String title, Category parentCategory) {
+
         this.childCategories = new ArrayList<>();
         this.title = title;
         this.parentCategory = parentCategory;
