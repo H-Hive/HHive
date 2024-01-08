@@ -52,7 +52,7 @@ public class UserController {
                 .body(new CommonResponse<>(200, "로그인 성공", HttpStatus.OK.value()));
     }
 
-    @GetMapping("/profile/{user_id}")
+    @GetMapping("/{user_id}")
     public ResponseEntity<?> getProfile(@PathVariable Long user_id) {
 
         try {
@@ -64,7 +64,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/profile/{user_id}")
+    @PatchMapping("/{user_id}")
     public ResponseEntity<?> updateProfile(
             @PathVariable Long user_id,
             @Valid @RequestBody UpdateUserProfileRequestDTO requestDTO,
@@ -82,7 +82,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/profile/{user_id}/password")
+    @PatchMapping("/{user_id}/password")
     public ResponseEntity<?> updatePassword(
             @PathVariable Long user_id,
             @Valid @RequestBody UpdateUserPasswordRequestDTO requestDTO,
