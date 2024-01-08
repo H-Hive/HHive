@@ -1,4 +1,4 @@
-package com.HHive.hhive.domain.relationship.partyuser.pk;
+/*package com.HHive.hhive.domain.relationship.partyuser.pk;
 
 import com.HHive.hhive.domain.party.entity.Party;
 import com.HHive.hhive.domain.user.User;
@@ -29,4 +29,4 @@ public class PartyUserPK implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
-}
+}*/

@@ -1,14 +1,18 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/HHIVE
+    username: root
+    password: 10041004
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
     open-in-view: false
+
+jwt:
+  secret:
+    key: b54b5f966ce6c1d714a3ad1bf05f305b1e56882c3894f88efe035cd432510eec0b9f8bdaf0fbaa23504fd5df58b39f768fb3db538a49dfb568cc45ff4dd5b67b
