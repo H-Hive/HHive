@@ -17,13 +17,14 @@ public enum ErrorCode {
     ALREADY_EXIST_EMAIL_EXCEPTION(401, "중복된 이메일입니다."),
     AUTHENTICATION_MISMATCH_EXCEPTION(401, "권한이 없습니다."),
     PASSWORD_CONFIRMATION_EXCEPTION(401, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
-    NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다");
+    NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다"),
 
     //Hive
 
     //Party
 
     //Notification
+    NOT_FOUND_NOTIFICATION_EXCEPTION(401,"알림이 존재하지 않습니다");
 
     private final int statusCode;
 

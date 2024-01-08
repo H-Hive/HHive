@@ -4,8 +4,12 @@ import com.HHive.hhive.domain.notification.dto.NotificationRequestDTO;
 import com.HHive.hhive.domain.notification.dto.NotificationResponseDTO;
 import com.HHive.hhive.domain.notification.entity.Notification;
 import com.HHive.hhive.domain.notification.repository.NotificationRepository;
+import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
+import com.HHive.hhive.domain.relationship.hiveuser.repository.HiveUserRepository;
 import com.HHive.hhive.domain.relationship.notificationuser.entity.UserNotification;
 import com.HHive.hhive.domain.relationship.notificationuser.repository.UserNotificationRepository;
+import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
+import com.HHive.hhive.domain.relationship.partyuser.repository.PartyUserRepository;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.global.common.CommonResponse;
@@ -22,8 +26,8 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final UserPartyRepository userPartyRepository;
-    private final UserHiveRepository userHiveRepository;
+    private final PartyUserRepository partyUserRepository;
+    private final HiveUserRepository hiveUserRepository;
     private final UserNotificationRepository userNotificationRepository;
     private final UserRepository userRepository;
 
@@ -36,13 +40,13 @@ public class NotificationService {
                 .build();
         notificationRepository.save(notification);
         if (type.equals("party")) {
-            List<UserParty> userPartyList = userPartyRepository.findUsersByPartyId(
+            List<PartyUser> partyUserList = partyUserRepository.findUsersByPartyId(
                     notificationRequestDTO.getId());
-            sendNotificationToUserListParty(userPartyList, notification);
+            sendNotificationToUserListParty(partyUserList, notification);
         } else if (type.equals("hive")) {
-            List<UserHive> userHiveList = userHiveRepository.findUsersByHiveId(
+            List<HiveUser> hiveUserList = hiveUserRepository.findUsersByHiveId(
                     notificationRequestDTO.getId());
-            sendNotificationToUserListHive(userHiveList, notification);
+            sendNotificationToUserListHive(hiveUserList, notification);
         }
 
         return new CommonResponse(200, "알림전송 성공", notification);
@@ -70,10 +74,10 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
-    private void sendNotificationToUserListParty(List<UserParty> userPartyList,
+    private void sendNotificationToUserListParty(List<PartyUser> partyUserList,
             Notification notification) {
-        List<Long> userIdList = userPartyList.stream()
-                .map(userParty -> userParty.getUser().getId())
+        List<Long> userIdList = partyUserList.stream()
+                .map(partyUser -> partyUser.getUser().getId())
                 .toList();
 
         for (Long userId : userIdList) {
@@ -87,11 +91,10 @@ public class NotificationService {
         }
     }
 
-    private void sendNotificationToUserListHive(List<UserHive> userHiveList,
+    private void sendNotificationToUserListHive(List<HiveUser> hiveUserList,
             Notification notification) {
-        List<Long> userIdList = userHiveList.stream()
-                .map(UserHive::getUser)
-                .map(User::getId)
+        List<Long> userIdList = hiveUserList.stream()
+                .map(hiveUser -> hiveUser.getUser().getId())
                 .toList();
 
         for (Long userId : userIdList) {
