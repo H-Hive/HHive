@@ -1,6 +1,7 @@
 package com.HHive.hhive.domain.hive.entity;
 
 import com.HHive.hhive.domain.category.entity.Category;
+import com.HHive.hhive.domain.hive.dto.HiveDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -13,11 +14,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "hives")
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Hive extends BaseTimeEntity {
@@ -27,12 +30,12 @@ public class Hive extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long creater_id;
+    private Long creatorId;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String introduction;
 
     @Column
@@ -46,4 +49,15 @@ public class Hive extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+
+    public void update(HiveDTO.UpdateHiveRequest updateHiveRequest) {
+        if (updateHiveRequest.getName() != null) {
+            this.name = updateHiveRequest.getName();
+        }
+
+        if (updateHiveRequest.getIntroduction() != null) {
+            this.introduction = updateHiveRequest.getIntroduction();
+        }
+    }
 }
