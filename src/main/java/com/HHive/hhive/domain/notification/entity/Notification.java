@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name="nofication")
+@Table(name = "nofication")
 @NoArgsConstructor
 public class Notification extends BaseTimeEntity {
 
@@ -21,17 +21,16 @@ public class Notification extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "message")
+    @Column(name = "message")
     private String message;
 
-    @Column(name="status")
+    @Column(name = "status")
     private String status;
 
     @Builder
-    public Notification(String message, String status)
-    {
-        this.message=message;
-        this.status="unread";
+    public Notification(String message, String status) {
+        this.message = message;
+        this.status = "unread";
     }
 
 

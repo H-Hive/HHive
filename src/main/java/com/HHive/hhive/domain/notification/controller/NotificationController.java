@@ -22,16 +22,18 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/send")
-    public ResponseEntity<CommonResponse> sendNotification(@RequestBody NotificationRequestDTO notificationRequestDTO) {
+    public ResponseEntity<CommonResponse> sendNotification(
+            @RequestBody NotificationRequestDTO notificationRequestDTO) {
         CommonResponse response = notificationService.sendNotification(notificationRequestDTO);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<NotificationResponseDTO>> getNotificationsByUserId(
-            @PathVariable(name="userId") Long userId
-    ){
-        List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(userId);
+            @PathVariable(name = "userId") Long userId
+    ) {
+        List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(
+                userId);
         return ResponseEntity.ok(notifications);
     }
 
