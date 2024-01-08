@@ -5,11 +5,13 @@ import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.global.exception.user.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -119,6 +121,15 @@ public class UserService {
         userToDelete.updateDeletedAt();
 
         userRepository.save(userToDelete);
+    }
+
+    @Scheduled(fixedRate = 60 * 1000) // 1분마다 실행
+    public void processPendingDeletions() {
+        List<User> userToDelete = userRepository.findByIsDeletedAndDeletedAtBefore(true, LocalDateTime.now().minusMinutes(1));
+
+        for (User user : userToDelete) {
+            userRepository.delete(user);
+        }
     }
 
     public User getUser(Long user_id) {
