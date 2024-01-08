@@ -100,6 +100,24 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<?> deleteUser(
+            @PathVariable Long user_id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        User loginUser = userDetails.getUser();
+
+        try {
+            userService.deleteUser(user_id, loginUser);
+            return ResponseEntity.ok()
+                    .body(new CommonResponse<>(200, "회원 탈퇴 성공", HttpStatus.OK.value()));
+        } catch (CustomException customException) {
+            return ResponseEntity.status(customException.getStatusCode())
+                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
+        }
+    }
+
+
     //TODO: 카테고리 선택
 
     //TODO: 카카오 로그인

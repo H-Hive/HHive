@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -103,6 +104,21 @@ public class UserService {
         }
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long user_id, User loginUser) {
+        User userToDelete = getUser(user_id);
+
+        // 로그인 한 유저 == 삭제할 유저 확인
+        if (!loginUser.getUsername().equals(userToDelete.getUsername())) {
+            throw new AuthenticationMismatchException();
+        }
+
+        // 삭제 -> Soft delete로 구현
+        userToDelete.updateDeletedAt();
+
+        userRepository.save(userToDelete);
     }
 
     public User getUser(Long user_id) {

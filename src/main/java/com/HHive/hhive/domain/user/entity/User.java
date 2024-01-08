@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -33,6 +35,10 @@ public class User extends BaseTimeEntity {
     @Column
     private String description;
 
+    @Column(nullable = false)
+    private boolean is_deleted = false;
+    private LocalDateTime deletedAt;
+
     //TODO: 이미지
 
     //TODO: 카테고리
@@ -48,5 +54,10 @@ public class User extends BaseTimeEntity {
     public void updateProfile(UpdateUserProfileRequestDTO requestDTO) {
         this.email = email;
         this.description = description;
+    }
+
+    public void updateDeletedAt() {
+        this.is_deleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 }
