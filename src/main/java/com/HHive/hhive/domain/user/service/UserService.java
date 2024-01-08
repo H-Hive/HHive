@@ -76,7 +76,7 @@ public class UserService {
             throw new AuthenticationMismatchException();
         }
 
-        user.update(requestDTO);
+        user.updateProfile(requestDTO);
     }
 
     @Transactional

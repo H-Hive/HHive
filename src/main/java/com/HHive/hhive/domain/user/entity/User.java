@@ -44,7 +44,7 @@ public class User {
         this.description = description;
     }
 
-    public void update(UpdateUserProfileRequestDTO requestDTO) {
+    public void updateProfile(UpdateUserProfileRequestDTO requestDTO) {
         this.email = email;
         this.description = description;
     }
