@@ -1,6 +1,7 @@
 package com.HHive.hhive.global.exception.common;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
@@ -17,9 +18,12 @@ public enum ErrorCode {
     ALREADY_EXIST_EMAIL_EXCEPTION(401, "중복된 이메일입니다."),
     AUTHENTICATION_MISMATCH_EXCEPTION(401, "권한이 없습니다."),
     PASSWORD_CONFIRMATION_EXCEPTION(401, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
-    NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다");
+    NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다"),
 
     //Hive
+    FORBIDDEN_ABOUT_HIVE(403, "해당 하이브에 대한 권한이 없습니다."),
+    NOT_FOUND_HIVE(404, "해당 하이브를 찾을 수 없습니다.");
+
 
     //Party
 

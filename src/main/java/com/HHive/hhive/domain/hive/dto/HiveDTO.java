@@ -24,8 +24,25 @@ public class HiveDTO {
         private String name;
 
         public Hive toEntity(User createdBy) {
-            return Hive.builder().name(name).user(createdBy).build();
+            return Hive.builder()
+                    .name(name)
+                    .creatorId(createdBy.getId())
+                    .build();
         }
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateHiveRequest {
+
+        private String name;
+
+        private String introduction;
+
+        private LocalDateTime modifiedAt;
 
     }
 
@@ -42,19 +59,24 @@ public class HiveDTO {
 
         private String introduction;
 
+        private Long hostId;
+
         private String createdBy;
 
         private List<String> hivePlayers;
 
         private LocalDateTime createdAt;
 
-        public static HiveDTO.Response of(Hive hive) {
+        private LocalDateTime modifiedAt;
+
+        public static HiveDTO.Response of(Hive hive, User user) {
             return Response.builder()
                     .id(hive.getId())
                     .name(hive.getName())
                     .introduction(hive.getIntroduction())
-                    .createdBy(hive.getUser().getEmail())
+                    .createdBy(user.getEmail())
                     .createdAt(hive.getCreatedAt())
+                    .modifiedAt(hive.getModifiedAt())
                     .build();
         }
 
