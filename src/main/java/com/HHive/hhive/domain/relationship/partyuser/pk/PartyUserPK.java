@@ -1,7 +1,7 @@
 package com.HHive.hhive.domain.relationship.partyuser.pk;
 
 import com.HHive.hhive.domain.party.entity.Party;
-import com.HHive.hhive.domain.user.User;
+import com.HHive.hhive.domain.user.entity.User;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

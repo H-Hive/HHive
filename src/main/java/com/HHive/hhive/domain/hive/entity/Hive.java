@@ -1,6 +1,6 @@
 package com.HHive.hhive.domain.hive.entity;
 
-import com.HHive.hhive.domain.category.entity.Category;
+import com.HHive.hhive.domain.category.Category;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.Column;
