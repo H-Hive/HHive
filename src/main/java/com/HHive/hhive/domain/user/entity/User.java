@@ -1,17 +1,20 @@
 package com.HHive.hhive.domain.user.entity;
 
 import com.HHive.hhive.domain.user.dto.UpdateUserProfileRequestDTO;
+import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +35,10 @@ public class User {
     @Column
     private String description;
 
+    @Column(nullable = false)
+    private boolean is_deleted = false;
+    private LocalDateTime deletedAt;
+
     //TODO: 이미지
 
     //TODO: 카테고리
@@ -44,8 +51,13 @@ public class User {
         this.description = description;
     }
 
-    public void update(UpdateUserProfileRequestDTO requestDTO) {
+    public void updateProfile(UpdateUserProfileRequestDTO requestDTO) {
         this.email = email;
         this.description = description;
+    }
+
+    public void updateDeletedAt() {
+        this.is_deleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 }
