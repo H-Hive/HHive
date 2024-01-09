@@ -64,16 +64,16 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/{user_id}")
+    @PatchMapping("/{userId}")
     public ResponseEntity<?> updateProfile(
-            @PathVariable Long user_id,
+            @PathVariable Long userId,
             @Valid @RequestBody UpdateUserProfileRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User loginUser = userDetails.getUser();
 
         try {
-            userService.updateProfile(user_id, requestDTO, loginUser);
+            userService.updateProfile(userId, requestDTO, loginUser);
             return ResponseEntity.ok()
                     .body(new CommonResponse<>(200, "프로필 수정 성공", HttpStatus.OK.value()));
         } catch (CustomException customException) {
@@ -82,16 +82,16 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/{user_id}/password")
+    @PatchMapping("/{userId}/password")
     public ResponseEntity<?> updatePassword(
-            @PathVariable Long user_id,
+            @PathVariable Long userId,
             @Valid @RequestBody UpdateUserPasswordRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User loginUser = userDetails.getUser();
 
         try {
-            userService.updatePassword(user_id, requestDTO, loginUser);
+            userService.updatePassword(userId, requestDTO, loginUser);
             return ResponseEntity.ok()
                     .body(new CommonResponse<>(200, "비밀번호 수정 성공", HttpStatus.OK.value()));
         } catch (CustomException customException) {
@@ -100,15 +100,15 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{user_id}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(
-            @PathVariable Long user_id,
+            @PathVariable Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User loginUser = userDetails.getUser();
 
         try {
-            userService.deleteUser(user_id, loginUser);
+            userService.deleteUser(userId, loginUser);
             return ResponseEntity.ok()
                     .body(new CommonResponse<>(200, "회원 탈퇴 성공", HttpStatus.OK.value()));
         } catch (CustomException customException) {
