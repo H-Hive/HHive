@@ -38,7 +38,7 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
-    @DeleteMapping("/{notificationId")
+    @DeleteMapping("/{notificationId}")
     public ResponseEntity<CommonResponse> deleteNotification(
             @PathVariable(name = "notificationId") Long notificationId
     ) {
