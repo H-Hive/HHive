@@ -8,8 +8,7 @@ import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
-import com.HHive.hhive.global.exception.common.CustomException;
-import com.HHive.hhive.global.exception.common.ErrorCode;
+import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +68,6 @@ public class HiveService {
 
     public Hive findHiveById(Long hiveId) {
         return hiveRepository.findByIdAndIsDeletedIsFalse(hiveId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_HIVE_EXCEPTION));
+                NotFoundHiveException::new);
     }
 }
