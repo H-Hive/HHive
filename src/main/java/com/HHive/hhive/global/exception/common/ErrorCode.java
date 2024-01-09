@@ -20,8 +20,8 @@ public enum ErrorCode {
     NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다"),
 
     //Hive
-    FORBIDDEN_ABOUT_HIVE(403, "해당 하이브에 대한 권한이 없습니다."),
-    NOT_FOUND_HIVE(404, "해당 하이브를 찾을 수 없습니다."),
+    FORBIDDEN_ABOUT_HIVE_EXCEPTION(403, "해당 하이브에 대한 권한이 없습니다."),
+    NOT_FOUND_HIVE_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
 
     //Party
     HIVE_NOT_FOUND_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),

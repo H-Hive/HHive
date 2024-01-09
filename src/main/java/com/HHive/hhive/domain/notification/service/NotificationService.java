@@ -59,7 +59,7 @@ public class NotificationService {
                 .findByUserIdAndNotificationStatus(userId, "unread");
 
         if (userNotifications.isEmpty()) {
-            // 유저에게 연관된 알림이 없는 경우 처리
+
             throw new NotificationNotFoundException();
         }
 
@@ -68,7 +68,7 @@ public class NotificationService {
                 .toList();
 
         if (notifications.isEmpty()) {
-            // 알림이 하나도 없는 경우 처리
+
             throw new NotificationNotFoundException();
         }
 
