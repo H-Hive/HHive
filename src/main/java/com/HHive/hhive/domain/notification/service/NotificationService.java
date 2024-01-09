@@ -15,6 +15,8 @@ import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.global.common.CommonResponse;
 import com.HHive.hhive.global.exception.common.CustomException;
 import com.HHive.hhive.global.exception.common.ErrorCode;
+import com.HHive.hhive.global.exception.notification.NotificationNotFoundException;
+import com.HHive.hhive.global.exception.user.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,11 +55,12 @@ public class NotificationService {
     }
 
     public List<NotificationResponseDTO> getNotificationsByUserId(Long userId) {
-        List<UserNotification> userNotifications = userNotificationRepository.findByUserId(userId);
+        List<UserNotification> userNotifications = userNotificationRepository
+                .findByUserIdAndNotificationStatus(userId, "unread");
 
         if (userNotifications.isEmpty()) {
             // 유저에게 연관된 알림이 없는 경우 처리
-            throw new CustomException(ErrorCode.NOT_FOUND_NOTIFICATION_EXCEPTION);
+            throw new NotificationNotFoundException();
         }
 
         List<Notification> notifications = userNotifications.stream()
@@ -66,7 +69,7 @@ public class NotificationService {
 
         if (notifications.isEmpty()) {
             // 알림이 하나도 없는 경우 처리
-            throw new CustomException(ErrorCode.NOT_FOUND_NOTIFICATION_EXCEPTION);
+            throw new NotificationNotFoundException();
         }
 
         return notifications.stream()
@@ -80,6 +83,7 @@ public class NotificationService {
         return new CommonResponse(200, "알림 삭제 완료", null);
     }
 
+
     private void sendNotificationToUserListParty(List<PartyUser> partyUserList,
             Notification notification) {
         List<Long> userIdList = partyUserList.stream()
@@ -88,7 +92,7 @@ public class NotificationService {
 
         for (Long userId : userIdList) {
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+                    .orElseThrow(UserNotFoundException::new);
             UserNotification userNotification = UserNotification.builder()
                     .user(user)
                     .notification(notification)
@@ -105,7 +109,7 @@ public class NotificationService {
 
         for (Long userId : userIdList) {
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+                    .orElseThrow(UserNotFoundException::new);
             UserNotification userNotification = UserNotification.builder()
                     .user(user)
                     .notification(notification)
