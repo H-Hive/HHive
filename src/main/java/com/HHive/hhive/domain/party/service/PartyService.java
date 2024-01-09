@@ -8,9 +8,8 @@ import com.HHive.hhive.domain.party.request.PartyRequestDTO;
 import com.HHive.hhive.domain.party.response.PartyResponseDTO;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
-import com.HHive.hhive.global.exception.common.CustomException;
-import com.HHive.hhive.global.exception.common.ErrorCode;
-import jakarta.persistence.EntityNotFoundException;
+import com.HHive.hhive.global.exception.party.HiveNotFoundException;
+import com.HHive.hhive.global.exception.party.PartyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class PartyService {
 
     public PartyResponseDTO createParty(Long hiveId, PartyRequestDTO dto, User user) {
         Hive hive = hiveRepository.findById(hiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HIVE));
+                .orElseThrow(HiveNotFoundException::new);
 
         Party party = new Party(hive, dto, user);
         party.setUser(user);
@@ -43,7 +42,7 @@ public class PartyService {
     }
     public Party getParty(Long partyId) {
         return partyRepository.findById(partyId)
-                .orElseThrow(() -> new EntityNotFoundException("Party not found with id: " + partyId));
+                .orElseThrow(PartyNotFoundException::new);
     }
     public PartyResponseDTO getPartyDto(Long partyId) {
         Party party = getParty(partyId);
@@ -86,7 +85,7 @@ public class PartyService {
 
     private Party getUserParty(Long partyId, User user) {
         return partyRepository.findById(partyId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HIVE));
+                .orElseThrow(PartyNotFoundException::new);
     }
 
 
