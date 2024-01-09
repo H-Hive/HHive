@@ -8,10 +8,12 @@ import com.HHive.hhive.global.common.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.RejectedExecutionException;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +28,7 @@ public class PartyController {
             @RequestBody PartyRequestDto partyRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        PartyResponseDto responseDto = partyService.createParty(partyRequestDto, userDetails.getUser());
+        PartyResponseDto responseDto = partyService.createParty(hiveId, partyRequestDto, userDetails.getUser());
 
         return ResponseEntity.ok().body(CommonResponse.of(201, "파티 생성 성공", responseDto));
     }

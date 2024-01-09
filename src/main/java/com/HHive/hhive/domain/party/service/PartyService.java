@@ -1,9 +1,12 @@
 package com.HHive.hhive.domain.party.service;
 
+import com.HHive.hhive.domain.hive.entity.Hive;
+import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.party.entity.Party;
 import com.HHive.hhive.domain.party.repository.PartyRepository;
 import com.HHive.hhive.domain.party.request.PartyRequestDto;
 import com.HHive.hhive.domain.party.response.PartyResponseDto;
+import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +17,13 @@ public class PartyService {
     
     private final PartyRepository partyRepository;
 
-    public PartyResponseDto createParty(PartyRequestDto dto, User user) {
-        Party party = new Party(dto,user);
+    private final HiveRepository hiveRepository;
+
+    public PartyResponseDto createParty(Long hiveId, PartyRequestDto dto, User user) {
+
+        Hive hive = hiveRepository.findById(hiveId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HIVE));
+
+        Party party = new Party(hive, dto, user);
         party.setUser(user);
 
         var saved = partyRepository.save(party);

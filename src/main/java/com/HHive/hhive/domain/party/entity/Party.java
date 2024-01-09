@@ -52,7 +52,8 @@ public class Party extends BaseTimeEntity {
         this.partyContent = partyContent;
     }
 
-    public Party(PartyRequestDto dto, User user) {
+    public Party(Hive hive, PartyRequestDto dto, User user) {
+        this.hive = hive;
         this.partyTitle = dto.getPartyTitle();
         this.username = user.getUsername();
         this.partyContent = dto.getPartyContent();
