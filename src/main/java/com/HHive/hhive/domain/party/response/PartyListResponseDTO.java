@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class PartyListResponseDto {
+public class PartyListResponseDTO {
 
     private UserInfoResponseDTO user;
-    private List<PartyResponseDto> partyList;
+    private List<PartyResponseDTO> partyList;
 
-    public PartyListResponseDto(UserInfoResponseDTO user, List<PartyResponseDto> partyList) {
+    public PartyListResponseDTO(UserInfoResponseDTO user, List<PartyResponseDTO> partyList) {
         this.user =user;
         this.partyList = partyList;
     }
