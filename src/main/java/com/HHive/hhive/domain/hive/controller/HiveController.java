@@ -64,4 +64,13 @@ public class HiveController {
                 .body(new CommonResponse<>(200, "하이브들이 조회되었습니다.", responses));
     }
 
+    @PatchMapping("{hive_id}")
+    public ResponseEntity<CommonResponse> deleteHive(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long hive_id) {
+        hiveService.deleteHive(userDetails.getUser(), hive_id);
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "하이브가 삭제되었습니다.", null));
+    }
+
 }

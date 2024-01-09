@@ -53,6 +53,12 @@ public class HiveService {
         return hives.stream().map(HiveResponseDTO::of).toList();
     }
 
+    @Transactional
+    public void deleteHive(User user, Long hiveId) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        hive.deleteHive();
+
+    }
 
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {
         Hive hive = findHiveById(hiveId);
