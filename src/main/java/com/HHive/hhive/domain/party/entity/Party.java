@@ -1,7 +1,7 @@
 package com.HHive.hhive.domain.party.entity;
 
 import com.HHive.hhive.domain.hive.entity.Hive;
-import com.HHive.hhive.domain.party.request.PartyRequestDto;
+import com.HHive.hhive.domain.party.request.PartyRequestDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -18,9 +18,6 @@ public class Party extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 1500)
-    private String content;
-
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
@@ -32,30 +29,30 @@ public class Party extends BaseTimeEntity {
     private Hive hive;
 
     @Column
-    private String partyTitle;
+    private String title;
 
     @Column
     private String username;
 
-    @Column
-    private String partyContent;
+    @Column(length = 1500)
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    public Party(String partyTitle,String username, String partyContent) {
-        this.partyTitle = partyTitle;
+    public Party(String title, String username, String content) {
+        this.title = title;
         this.username = username;
-        this.partyContent = partyContent;
+        this.content = content;
     }
 
-    public Party(Hive hive, PartyRequestDto dto, User user) {
+    public Party(Hive hive, PartyRequestDTO dto, User user) {
         this.hive = hive;
-        this.partyTitle = dto.getPartyTitle();
+        this.title = dto.getTitle();
         this.username = user.getUsername();
-        this.partyContent = dto.getPartyContent();
+        this.content = dto.getContent();
         this.hostId = user.getId();
     }
 
@@ -66,12 +63,12 @@ public class Party extends BaseTimeEntity {
 
     // 서비스 메서드
     public void setTitle(String partyTitle) {
-        this.partyTitle = partyTitle;
+        this.title = partyTitle;
     }
     public void setUsername(String username) {
         this.username = username;
     }
     public void setContent(String partyContent) {
-        this.partyContent = partyContent;
+        this.content = partyContent;
     }
 }
