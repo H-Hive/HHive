@@ -1,15 +1,16 @@
 package com.HHive.hhive.domain.hive.service;
 
-import com.HHive.hhive.domain.hive.dto.HiveDTO;
-import com.HHive.hhive.domain.hive.dto.HiveDTO.Response;
-import com.HHive.hhive.domain.hive.dto.HiveDTO.UpdateHiveRequest;
+import com.HHive.hhive.domain.hive.dto.HiveCreateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
+import com.HHive.hhive.domain.hive.dto.HiveUpdateRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
-import com.HHive.hhive.global.exception.common.CustomException;
-import com.HHive.hhive.global.exception.common.ErrorCode;
+import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
+import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,23 +24,40 @@ public class HiveService {
     private final HiveRepository hiveRepository;
 
 
-    public Response createHive(User user, HiveDTO.CreateHiveRequest createHiveRequest) {
+    public HiveResponseDTO createHive(User user, HiveCreateRequestDTO hiveCreateRequestDTO) {
         User createBy = userService.getUser(user.getId());
-        Hive saveHive = hiveRepository.save(createHiveRequest.toEntity(createBy));
+        Hive saveHive = hiveRepository.save(hiveCreateRequestDTO.toEntity(createBy));
 
-        return HiveDTO.Response.of(saveHive, user);
+        return HiveResponseDTO.of(saveHive);
 
     }
 
     @Transactional
-    public HiveDTO.Response updateHive(User user, Long hiveId,
-            UpdateHiveRequest updateHiveRequest) {
+    public HiveResponseDTO updateHive(User user, Long hiveId,
+            @Valid HiveUpdateRequestDTO updateHiveRequest) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
 
         hive.update(updateHiveRequest);
-        return HiveDTO.Response.of(hive, user);
+        return HiveResponseDTO.of(hive);
     }
 
+    public HiveResponseDTO getHive(User user, Long hiveId) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        return HiveResponseDTO.of(hive);
+    }
+
+    public List<HiveResponseDTO> getHives() {
+        List<Hive> hives = hiveRepository.findAllHiveNotDeleted();
+
+        return hives.stream().map(HiveResponseDTO::of).toList();
+    }
+
+    @Transactional
+    public void deleteHive(User user, Long hiveId) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        hive.deleteHive();
+
+    }
 
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {
         Hive hive = findHiveById(hiveId);
@@ -50,7 +68,6 @@ public class HiveService {
 
     public Hive findHiveById(Long hiveId) {
         return hiveRepository.findByIdAndIsDeletedIsFalse(hiveId).orElseThrow(
-                () -> new CustomException(ErrorCode.FORBIDDEN_ABOUT_HIVE)
-        );
+                NotFoundHiveException::new);
     }
 }
