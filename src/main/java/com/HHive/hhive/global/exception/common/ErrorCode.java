@@ -26,7 +26,6 @@ public enum ErrorCode {
     //Party
     HIVE_NOT_FOUND_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
     PARTY_NOT_FOUND_EXCEPTION(404, "해당 파티를 찾을 수 없습니다."),
-    INVALID_REQUEST_EXCEPTION(400,"잘못된 요청 입니다."),
     UNAUTHORIZED_ACCESS_EXCEPTION(403,"해당 파티에 대한 권한이 없습니다."),
 
     //Notification
