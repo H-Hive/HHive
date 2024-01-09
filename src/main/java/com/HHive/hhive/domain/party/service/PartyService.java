@@ -4,13 +4,12 @@ import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.party.entity.Party;
 import com.HHive.hhive.domain.party.repository.PartyRepository;
-import com.HHive.hhive.domain.party.request.PartyRequestDto;
-import com.HHive.hhive.domain.party.response.PartyResponseDto;
+import com.HHive.hhive.domain.party.request.PartyRequestDTO;
+import com.HHive.hhive.domain.party.response.PartyResponseDTO;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
-import com.HHive.hhive.global.exception.common.CustomException;
-import com.HHive.hhive.global.exception.common.ErrorCode;
-import jakarta.persistence.EntityNotFoundException;
+import com.HHive.hhive.global.exception.party.HiveNotFoundException;
+import com.HHive.hhive.global.exception.party.PartyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,34 +29,34 @@ public class PartyService {
     private final HiveRepository hiveRepository;
 
 
-    public PartyResponseDto createParty(Long hiveId, PartyRequestDto dto, User user) {
+    public PartyResponseDTO createParty(Long hiveId, PartyRequestDTO dto, User user) {
         Hive hive = hiveRepository.findById(hiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HIVE));
+                .orElseThrow(HiveNotFoundException::new);
 
         Party party = new Party(hive, dto, user);
         party.setUser(user);
 
         var saved = partyRepository.save(party);
 
-        return new PartyResponseDto(saved);
+        return new PartyResponseDTO(saved);
     }
     public Party getParty(Long partyId) {
         return partyRepository.findById(partyId)
-                .orElseThrow(() -> new EntityNotFoundException("Party not found with id: " + partyId));
+                .orElseThrow(PartyNotFoundException::new);
     }
-    public PartyResponseDto getPartyDto(Long partyId) {
+    public PartyResponseDTO getPartyDto(Long partyId) {
         Party party = getParty(partyId);
-        return new PartyResponseDto(party);
+        return new PartyResponseDTO(party);
     }
 
-    public Map<UserInfoResponseDTO, List<PartyResponseDto>> getUserPartyMap() {
-        Map<UserInfoResponseDTO, List<PartyResponseDto>> userPartyMap = new HashMap<>();
+    public Map<UserInfoResponseDTO, List<PartyResponseDTO>> getUserPartyMap() {
+        Map<UserInfoResponseDTO, List<PartyResponseDTO>> userPartyMap = new HashMap<>();
 
         List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // 작성일 기준 내림차순
 
         partyList.forEach(party -> {
             var userDto = new UserInfoResponseDTO(party.getUser());
-            var partyDto = new PartyResponseDto(party);
+            var partyDto = new PartyResponseDTO(party);
             if (userPartyMap.containsKey(userDto)) {
                 userPartyMap.get(userDto).add(partyDto);
             } else {
@@ -69,13 +68,13 @@ public class PartyService {
     }
 
     @Transactional
-    public PartyResponseDto updateParty(Long partyId, PartyRequestDto partyRequestDto, User user) {
+    public PartyResponseDTO updateParty(Long partyId, PartyRequestDTO partyRequestDto, User user) {
         Party party = getUserParty(partyId, user);
 
-        party.setTitle(partyRequestDto.getPartyTitle());
-        party.setContent(partyRequestDto.getPartyContent());
+        party.setTitle(partyRequestDto.getTitle());
+        party.setContent(partyRequestDto.getContent());
 
-        return new PartyResponseDto(party);
+        return new PartyResponseDTO(party);
     }
 
     @Transactional
@@ -86,7 +85,7 @@ public class PartyService {
 
     private Party getUserParty(Long partyId, User user) {
         return partyRepository.findById(partyId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_HIVE));
+                .orElseThrow(PartyNotFoundException::new);
     }
 
 

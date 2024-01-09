@@ -1,7 +1,6 @@
 package com.HHive.hhive.global.exception.common;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
@@ -24,8 +23,10 @@ public enum ErrorCode {
     FORBIDDEN_ABOUT_HIVE_EXCEPTION(403, "해당 하이브에 대한 권한이 없습니다."),
     NOT_FOUND_HIVE_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
 
-
     //Party
+    HIVE_NOT_FOUND_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
+    PARTY_NOT_FOUND_EXCEPTION(404, "해당 파티를 찾을 수 없습니다."),
+    UNAUTHORIZED_ACCESS_EXCEPTION(403,"해당 파티에 대한 권한이 없습니다."),
 
     //Notification
     NOT_FOUND_NOTIFICATION_EXCEPTION(401,"알림이 존재하지 않습니다");

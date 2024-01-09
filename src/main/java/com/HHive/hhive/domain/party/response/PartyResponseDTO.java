@@ -5,25 +5,24 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Setter
+
 @Getter
 @Builder
-@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
-public class PartyResponseDto {
+public class PartyResponseDTO {
     private Long id;
-    private String postTitle;
+    private String title;
     private String username;
-    private String postContent;
+    private String content;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
 
 
-    public PartyResponseDto(Party party) {
+    public PartyResponseDTO(Party party) {
         this.id = party.getId();
-        this.postTitle = party.getPartyTitle();
+        this.title = party.getTitle();
         this.username =party.getUsername();
-        this.postContent = party.getPartyContent();
+        this.content = party.getContent();
         this.createAt = party.getCreatedAt();
         this.modifiedAt=party.getModifiedAt();
     }
