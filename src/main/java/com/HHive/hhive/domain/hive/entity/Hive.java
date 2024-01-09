@@ -1,7 +1,7 @@
 package com.HHive.hhive.domain.hive.entity;
 
-import com.HHive.hhive.domain.category.entity.Category;
-import com.HHive.hhive.domain.hive.dto.HiveDTO;
+
+import com.HHive.hhive.domain.hive.dto.HiveUpdateRequestDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -33,7 +33,7 @@ public class Hive extends BaseTimeEntity {
     private Long creatorId;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @Column
     private String introduction;
@@ -46,18 +46,22 @@ public class Hive extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id")
+//    private Category category;
 
 
-    public void update(HiveDTO.UpdateHiveRequest updateHiveRequest) {
-        if (updateHiveRequest.getName() != null) {
-            this.name = updateHiveRequest.getName();
+    public void update(HiveUpdateRequestDTO hiveUpdateRequestDTO) {
+        if (hiveUpdateRequestDTO.getTitle() != null) {
+            this.title = hiveUpdateRequestDTO.getTitle();
         }
 
-        if (updateHiveRequest.getIntroduction() != null) {
-            this.introduction = updateHiveRequest.getIntroduction();
+        if (hiveUpdateRequestDTO.getIntroduction() != null) {
+            this.introduction = hiveUpdateRequestDTO.getIntroduction();
         }
+    }
+
+    public void deleteHive() {
+        this.isDeleted = true;
     }
 }
