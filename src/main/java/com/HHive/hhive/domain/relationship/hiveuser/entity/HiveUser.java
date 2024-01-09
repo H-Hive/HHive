@@ -1,8 +1,6 @@
-package com.HHive.hhive.domain.relationship.partyuser.entity;
+package com.HHive.hhive.domain.relationship.hiveuser.entity;
 
-import com.HHive.hhive.domain.party.entity.Party;
-
-import com.HHive.hhive.domain.relationship.partyuser.pk.PartyUserPK;
+import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.user.entity.User;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -15,11 +13,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Getter
-public class PartyUser {
+@NoArgsConstructor
+
+public class HiveUser {
+
     @EmbeddedId
-    private PartyUserPK partyUserPK;
+    private HiveUserPK hiveUserPK;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -27,17 +27,17 @@ public class PartyUser {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "party_id")
-    @MapsId("partyId")
-    private Party party;
+    @JoinColumn(name = "hive_id")
+    @MapsId("hiveId")
+    private Hive hive;
 
     @Builder
-    public PartyUser(User user , Party party){
+    public HiveUser(User user , Hive hive){
         this.user= user;
-        this.party=party;
-        this.partyUserPK=PartyUserPK.builder()
+        this.hive=hive;
+        this.hiveUserPK=HiveUserPK.builder()
                 .userId(user.getId())
-                .partyId(party.getId())
+                .hiveId(hive.getId())
                 .build();
     }
 }

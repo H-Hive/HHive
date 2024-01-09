@@ -1,6 +1,7 @@
 package com.HHive.hhive.domain.notification.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
@@ -9,10 +10,10 @@ public class NotificationRequestDTO {
     @NotBlank
     private String message;
 
-    @NotBlank
-    private Long Id;
+    @NotNull
+    private Long id;
 
     @NotBlank
-    private String SourceType;
+    private String type;
 
 }
