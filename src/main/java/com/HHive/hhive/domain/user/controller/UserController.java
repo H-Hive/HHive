@@ -25,96 +25,69 @@ public class UserController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody UserSignupRequestDTO requestDTO) {
-        try {
-            userService.signup(requestDTO);
-            return ResponseEntity.status(HttpStatus.CREATED.value())
-                    .body(new CommonResponse<>(200, "회원가입 성공", HttpStatus.CREATED.value()));
-        } catch (CustomException customException) {
-            return ResponseEntity.status(customException.getStatusCode())
-                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
-        }
+    public ResponseEntity<CommonResponse<Void>> signup(
+            @Valid @RequestBody UserSignupRequestDTO requestDTO) {
+
+        userService.signup(requestDTO);
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(),"회원가입 성공", null));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequestDTO requestDTO, HttpServletResponse response) {
-        try {
-            userService.login(requestDTO);
-        } catch (CustomException customException) {
-            return ResponseEntity.status(customException.getStatusCode())
-                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
-        }
+    public ResponseEntity<CommonResponse<Void>> login(
+            @RequestBody UserLoginRequestDTO requestDTO, HttpServletResponse response) {
 
-        // 로그인 시 JWT 토큰이 헤더에 보임
-        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(requestDTO.getUsername()));
+        userService.login(requestDTO);
+        String token = jwtUtil.createToken(requestDTO.getUsername());
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
         return ResponseEntity.ok()
-                .body(new CommonResponse<>(200, "로그인 성공", HttpStatus.OK.value()));
+                .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", null));
     }
 
-    @GetMapping("/{user_id}")
-    public ResponseEntity<?> getProfile(@PathVariable Long user_id) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<CommonResponse<UserInfoResponseDTO>> getProfile(@PathVariable Long userId) {
 
-        try {
-            UserInfoResponseDTO responseDTO = userService.getProfile(user_id);
-            return ResponseEntity.ok(responseDTO);
-        } catch (CustomException customException) {
-            return ResponseEntity.status(customException.getStatusCode())
-                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
-        }
+        UserInfoResponseDTO responseDTO = userService.getProfile(userId);
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "프로필 조회 성공", responseDTO));
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<?> updateProfile(
+    public ResponseEntity<CommonResponse<Void>> updateProfile(
             @PathVariable Long userId,
             @Valid @RequestBody UpdateUserProfileRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User loginUser = userDetails.getUser();
+        userService.updateProfile(userId, requestDTO, loginUser);
 
-        try {
-            userService.updateProfile(userId, requestDTO, loginUser);
-            return ResponseEntity.ok()
-                    .body(new CommonResponse<>(200, "프로필 수정 성공", HttpStatus.OK.value()));
-        } catch (CustomException customException) {
-            return ResponseEntity.status(customException.getStatusCode())
-                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
-        }
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "프로필 수정 성공", null));
     }
 
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<?> updatePassword(
+    public ResponseEntity<CommonResponse<Void>> updatePassword(
             @PathVariable Long userId,
             @Valid @RequestBody UpdateUserPasswordRequestDTO requestDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User loginUser = userDetails.getUser();
+        userService.updatePassword(userId, requestDTO, loginUser);
 
-        try {
-            userService.updatePassword(userId, requestDTO, loginUser);
-            return ResponseEntity.ok()
-                    .body(new CommonResponse<>(200, "비밀번호 수정 성공", HttpStatus.OK.value()));
-        } catch (CustomException customException) {
-            return ResponseEntity.status(customException.getStatusCode())
-                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
-        }
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "비밀번호 수정 성공", null));
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> deleteUser(
+    public ResponseEntity<CommonResponse<Void>> deleteUser(
             @PathVariable Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User loginUser = userDetails.getUser();
+        userService.deleteUser(userId, loginUser);
 
-        try {
-            userService.deleteUser(userId, loginUser);
-            return ResponseEntity.ok()
-                    .body(new CommonResponse<>(200, "회원 탈퇴 성공", HttpStatus.OK.value()));
-        } catch (CustomException customException) {
-            return ResponseEntity.status(customException.getStatusCode())
-                    .body(new CommonResponse<>(customException.getStatusCode(), customException.getMessage(), null));
-        }
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "회원 탈퇴 성공", null));
     }
 
 

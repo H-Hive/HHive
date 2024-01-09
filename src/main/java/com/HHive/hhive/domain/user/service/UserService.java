@@ -127,9 +127,7 @@ public class UserService {
     public void processPendingDeletions() {
         List<User> userToDelete = userRepository.findByIsDeletedAndDeletedAtBefore(true, LocalDateTime.now().minusMinutes(1));
 
-        for (User user : userToDelete) {
-            userRepository.delete(user);
-        }
+        userRepository.deleteAll(userToDelete);
     }
 
     public User getUser(Long user_id) {

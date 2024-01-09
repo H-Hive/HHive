@@ -6,13 +6,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
@@ -52,12 +50,16 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateProfile(UpdateUserProfileRequestDTO requestDTO) {
-        this.email = email;
-        this.description = description;
+        this.email = requestDTO.getEmail();
+        this.description = requestDTO.getDescription();
     }
 
     public void updateDeletedAt() {
         this.is_deleted = true;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void setPassword(String updatePassword) {
+        this.password = updatePassword;
     }
 }
