@@ -14,7 +14,10 @@ public class PartyListResponseDto {
 
     private UserInfoResponseDTO user;
     private List<PartyResponseDto> partyList;
-    public void PostListResponseDto(UserInfoResponseDTO user, List<PartyResponseDto> partyList) {
+
+
+
+    public PartyListResponseDto(UserInfoResponseDTO user, List<PartyResponseDto> partyList) {
         this.user =user;
         this.partyList = partyList;
     }

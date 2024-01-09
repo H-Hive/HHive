@@ -7,4 +7,5 @@ public class UserLoginRequestDTO {
 
     private String username;
     private String password;
+
 }

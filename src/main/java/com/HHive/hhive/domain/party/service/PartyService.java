@@ -8,8 +8,18 @@ import com.HHive.hhive.domain.party.request.PartyRequestDto;
 import com.HHive.hhive.domain.party.response.PartyResponseDto;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.global.exception.common.CustomException;
+import com.HHive.hhive.global.exception.common.ErrorCode;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,24 +41,27 @@ public class PartyService {
         return new PartyResponseDto(saved);
     }
 
-/*    public PartyResponseDto getPartyDto(Long partyId) {
+    public Party getParty(Long partyId) {
+        return partyRepository.findById(partyId)
+                .orElseThrow(() -> new EntityNotFoundException("Party not found with id: " + partyId));
+    }
+
+    public PartyResponseDto getPartyDto(Long partyId) {
         Party party = getParty(partyId);
         return new PartyResponseDto(party);
     }
 
-    public Map<UserLoginRequestDTO, List<PartyResponseDto>> getUserPartyMap() {
-        Map<UserLoginRequestDTO, List<PartyResponseDto>> userPartyMap = new HashMap<>();
+    public Map<UserInfoResponseDTO, List<PartyResponseDto>> getUserPartyMap() {
+        Map<UserInfoResponseDTO, List<PartyResponseDto>> userPartyMap = new HashMap<>();
 
-        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate")); // 작성일 기준 내림차순
+        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // 작성일 기준 내림차순
 
         partyList.forEach(party -> {
-            var userDto = new UserLoginRequestDTO(party.getUser());
+            var userDto = new UserInfoResponseDTO(party.getUser());
             var partyDto = new PartyResponseDto(party);
             if (userPartyMap.containsKey(userDto)) {
-                // 유저 할일목록에 항목을 추가
                 userPartyMap.get(userDto).add(partyDto);
             } else {
-                // 유저 할일목록을 새로 추가
                 userPartyMap.put(userDto, new ArrayList<>(List.of(partyDto)));
             }
         });
@@ -66,6 +79,8 @@ public class PartyService {
         return new PartyResponseDto(party);
     }
 
+
+
     @Transactional
     public void deleteParty(Long partyId, User user) {
         Party party = getUserParty(partyId, user);
@@ -73,13 +88,13 @@ public class PartyService {
         partyRepository.delete(party);
     }
 
-    public Party getParty(Long partyId) {
 
+    private Party getUserParty(Long partyId, User user) {
         return partyRepository.findById(partyId)
-                .orElseThrow(PartyNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Party not found with id: " + partyId));
     }
 
-    public Party getUserParty(Long partyId, User user) {
+    /*public Party getUserParty(Long partyId, User user) {
         Party party = getParty(partyId);
 
         if(!user.getId().equals(party.getUser().getId())) {
