@@ -20,8 +20,11 @@ public class PartyController {
 
     private final PartyService partyService;
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<PartyResponseDto>> createParty(@RequestBody PartyRequestDto partyRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/hives/{hiveId}")
+    public ResponseEntity<CommonResponse<PartyResponseDto>> createParty(
+            @PathVariable Long hiveId,
+            @RequestBody PartyRequestDto partyRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         PartyResponseDto responseDto = partyService.createParty(partyRequestDto, userDetails.getUser());
 

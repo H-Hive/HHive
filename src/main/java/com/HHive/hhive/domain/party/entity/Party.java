@@ -56,6 +56,7 @@ public class Party extends BaseTimeEntity {
         this.partyTitle = dto.getPartyTitle();
         this.username = user.getUsername();
         this.partyContent = dto.getPartyContent();
+        this.hostId = user.getId();
     }
 
     // 연관관계 메서드
