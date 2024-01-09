@@ -74,6 +74,12 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
+    public CommonResponse deleteNotification(Long notificationId) {
+
+        notificationRepository.deleteById(notificationId);
+        return new CommonResponse(200, "알림 삭제 완료", null);
+    }
+
     private void sendNotificationToUserListParty(List<PartyUser> partyUserList,
             Notification notification) {
         List<Long> userIdList = partyUserList.stream()
