@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface UserNotificationRepository extends JpaRepository<UserNotification, UserNotificationPK> {
 
     List<UserNotification> findByUserId(Long userId);
-
+    List<UserNotification> findByUserIdAndNotificationStatus(Long userId, String status);
 }
 
