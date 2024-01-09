@@ -2,6 +2,7 @@ package com.HHive.hhive.domain.relationship.notificationuser.entity;
 
 import com.HHive.hhive.domain.notification.entity.Notification;
 import com.HHive.hhive.domain.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,12 +21,12 @@ public class UserNotification {
     @EmbeddedId
     private UserNotificationPK userNotificationPK;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name ="user_id")
     @MapsId("userId")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name="notification_id")
     @MapsId("notificationId")
     private Notification notification;
