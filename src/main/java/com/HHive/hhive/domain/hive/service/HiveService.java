@@ -11,6 +11,7 @@ import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.exception.common.CustomException;
 import com.HHive.hhive.global.exception.common.ErrorCode;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,12 @@ public class HiveService {
     public HiveResponseDTO getHive(User user, Long hiveId) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
         return HiveResponseDTO.of(hive);
+    }
+
+    public List<HiveResponseDTO> getHives() {
+        List<Hive> hives = hiveRepository.findAllHiveNotDeleted();
+
+        return hives.stream().map(HiveResponseDTO::of).toList();
     }
 
 

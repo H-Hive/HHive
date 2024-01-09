@@ -7,6 +7,7 @@ import com.HHive.hhive.domain.hive.service.HiveService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +57,11 @@ public class HiveController {
                 .body(new CommonResponse<>(200, "하이브가 조회되었습니다.", response));
     }
 
+    @GetMapping("")
+    public ResponseEntity<CommonResponse> gethives() {
+        List<HiveResponseDTO> responses = hiveService.getHives();
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "하이브들이 조회되었습니다.", responses));
+    }
 
 }
