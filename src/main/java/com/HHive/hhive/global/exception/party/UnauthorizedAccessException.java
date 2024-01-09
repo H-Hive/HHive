@@ -5,7 +5,7 @@ import com.HHive.hhive.global.exception.common.ErrorCode;
 
 
 public class UnauthorizedAccessException extends CustomException {
-    public UnauthorizedAccessException(ErrorCode errorCode) {
+    public UnauthorizedAccessException() {
         super(ErrorCode.UNAUTHORIZED_ACCESS_EXCEPTION);
     }
 }

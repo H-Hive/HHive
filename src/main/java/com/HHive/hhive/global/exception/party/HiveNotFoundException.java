@@ -5,7 +5,7 @@ import com.HHive.hhive.global.exception.common.ErrorCode;
 
 
 public class HiveNotFoundException extends CustomException {
-    public HiveNotFoundException(ErrorCode errorCode) {
+    public HiveNotFoundException() {
         super(ErrorCode.HIVE_NOT_FOUND_EXCEPTION);
     }
 }
