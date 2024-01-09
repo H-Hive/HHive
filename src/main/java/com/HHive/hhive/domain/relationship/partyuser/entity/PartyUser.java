@@ -1,4 +1,3 @@
-/*
 package com.HHive.hhive.domain.relationship.partyuser.entity;
 
 import com.HHive.hhive.domain.relationship.partyuser.pk.PartyUserPK;
@@ -20,4 +19,3 @@ public class PartyUser {
     @EmbeddedId
     private PartyUserPK partyUserPK;
 }
-*/
