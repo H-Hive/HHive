@@ -6,6 +6,7 @@ import com.HHive.hhive.domain.chatmessage.entity.ChatMessage;
 import com.HHive.hhive.domain.chatmessage.repository.ChatMessageRepository;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.service.HiveService;
+import com.HHive.hhive.domain.relationship.hiveuser.validator.HiveUserValidator;
 import com.HHive.hhive.domain.user.entity.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,13 @@ public class ChatMessageService {
 
     private final HiveService hiveService;
 
+    private final HiveUserValidator hiveUserValidator;
+
     public void sendChatMessages(Long hiveId, ChatMessageRequestDTO requestDTO, User user) {
 
         Hive hive = hiveService.findHiveById(hiveId);
+
+        hiveUserValidator.validateHiveUser(hive, user);
 
         ChatMessage chatMessage = makeChatMessage(hive, requestDTO.getMessage(), user);
 
@@ -31,6 +36,8 @@ public class ChatMessageService {
     public List<ChatMessageResponseDTO> getChatMessages(Long hiveId, User user) {
 
         Hive hive = hiveService.findHiveById(hiveId);
+
+        hiveUserValidator.validateHiveUser(hive, user);
 
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByHiveOrderByCreatedAtDesc(hive);
 
