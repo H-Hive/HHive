@@ -3,10 +3,12 @@ package com.HHive.hhive.domain.notification.controller;
 import com.HHive.hhive.domain.notification.dto.NotificationRequestDTO;
 import com.HHive.hhive.domain.notification.dto.NotificationResponseDTO;
 import com.HHive.hhive.domain.notification.service.NotificationService;
+import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +40,14 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
+    @GetMapping("/{userId}/count")
+    public ResponseEntity<CommonResponse> showUnreadNotificationCountForUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        CommonResponse response = notificationService.showgetUnreadNotificationCountForUser(userDetails.getUser()
+                .getId());
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<CommonResponse> deleteNotification(
             @PathVariable(name = "notificationId") Long notificationId
