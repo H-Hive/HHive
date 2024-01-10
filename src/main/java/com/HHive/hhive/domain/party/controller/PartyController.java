@@ -1,8 +1,8 @@
 package com.HHive.hhive.domain.party.controller;
 
-import com.HHive.hhive.domain.party.request.PartyRequestDTO;
-import com.HHive.hhive.domain.party.response.PartyListResponseDTO;
-import com.HHive.hhive.domain.party.response.PartyResponseDTO;
+import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
+import com.HHive.hhive.domain.party.dto.PartyListResponseDTO;
+import com.HHive.hhive.domain.party.dto.PartyResponseDTO;
 import com.HHive.hhive.domain.party.service.PartyService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
@@ -34,15 +34,19 @@ public class PartyController {
 
     @GetMapping("/{partyId}")
     public ResponseEntity<CommonResponse<PartyResponseDTO>> getParty(@PathVariable Long partyId) {
+
         PartyResponseDTO responseDto = partyService.getPartyDto(partyId);
+
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 조회 성공", responseDto));
     }
 
     @GetMapping
     public ResponseEntity<CommonResponse<List<PartyListResponseDTO>>> getPartyList() {
+
         List<PartyListResponseDTO> response = partyService.getUserPartyMap().entrySet().stream()
                 .map(entry -> new PartyListResponseDTO(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 목록 조회 성공", response));
     }
 
@@ -50,17 +54,38 @@ public class PartyController {
     public ResponseEntity<CommonResponse<PartyResponseDTO>> updateParty(@PathVariable Long partyId,
                                                                         @RequestBody PartyRequestDTO partyRequestDto,
                                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         PartyResponseDTO responseDto = partyService.updateParty(partyId, partyRequestDto, userDetails.getUser());
+
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "업데이트 성공", responseDto));
     }
 
     @DeleteMapping("/{partyId}")
     public ResponseEntity<CommonResponse<String>> deleteParty(@PathVariable Long partyId,
                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         partyService.deleteParty(partyId, userDetails.getUser());
+
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "정상적으로 삭제 되었습니다.", null));
     }
 
+    @PostMapping("/{partyId}/join")
+    public ResponseEntity<CommonResponse<String>> joinParty(@PathVariable Long partyId,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        partyService.joinParty(partyId, userDetails.getUser());
+
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 가입 성공", null));
+    }
+
+    @DeleteMapping("/{partyId}/resign")
+    public ResponseEntity<CommonResponse<String>> resignParty(@PathVariable Long partyId,
+                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        partyService.resignParty(partyId, userDetails.getUser());
+
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 탈퇴 성공", null));
+    }
 
 }
 
