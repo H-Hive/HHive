@@ -24,9 +24,12 @@ public enum ErrorCode {
     NOT_FOUND_HIVE_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
 
     //Party
-    HIVE_NOT_FOUND_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
     PARTY_NOT_FOUND_EXCEPTION(404, "해당 파티를 찾을 수 없습니다."),
     UNAUTHORIZED_ACCESS_EXCEPTION(403,"해당 파티에 대한 권한이 없습니다."),
+    PARTY_HOST_NOT_RESIGN_EXCEPTION(403,"리더는 파티 탈퇴가 불가능합니다."),
+    PARTY_HOST_NOT_JOIN_EXCEPTION(403,"리더는 파티 가입이 불가능합니다."),
+    ALREADY_JOIN_EXCEPTION(403,"이미 가입 되어 있습니다."),
+    PARTY_NOT_RESIGN_EXCEPTION(403,"탈퇴할 파티가 없습니다."),
 
     //Notification
     NOT_FOUND_NOTIFICATION_EXCEPTION(401,"알림이 존재하지 않습니다");
