@@ -1,8 +1,8 @@
 package com.HHive.hhive.domain.hive.service;
 
-import com.HHive.hhive.domain.hive.dto.HiveCreateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
-import com.HHive.hhive.domain.hive.dto.HiveUpdateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.user.entity.User;
@@ -25,12 +25,12 @@ public class HiveService {
     private final HiveRepository hiveRepository;
 
 
-    public HiveResponseDTO createHive(User user, HiveCreateRequestDTO hiveCreateRequestDTO) {
+    public HiveResponseDTO createHive(User user, CreateHiveRequestDTO createHiveRequestDTO) {
         User createBy = userService.getUser(user.getId());
-        if (hiveRepository.findByTitle(hiveCreateRequestDTO.getTitle()).isPresent()) {
+        if (hiveRepository.findByTitle(createHiveRequestDTO.getTitle()).isPresent()) {
             throw new AlreadyExistHiveException();
         }
-        Hive saveHive = hiveRepository.save(hiveCreateRequestDTO.toEntity(createBy));
+        Hive saveHive = hiveRepository.save(createHiveRequestDTO.toEntity(createBy));
 
         return HiveResponseDTO.of(saveHive);
 
@@ -38,7 +38,7 @@ public class HiveService {
 
     @Transactional
     public HiveResponseDTO updateHive(User user, Long hiveId,
-            @Valid HiveUpdateRequestDTO updateHiveRequest) {
+            @Valid UpdateHiveRequestDTO updateHiveRequest) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
 
         hive.update(updateHiveRequest);

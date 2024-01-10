@@ -1,6 +1,5 @@
 package com.HHive.hhive.domain.hive.dto;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HiveUpdateRequestDTO {
+public class UpdateHiveRequestDTO {
 
     private String title;
 

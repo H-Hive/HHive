@@ -1,8 +1,8 @@
 package com.HHive.hhive.domain.hive.controller;
 
-import com.HHive.hhive.domain.hive.dto.HiveCreateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
-import com.HHive.hhive.domain.hive.dto.HiveUpdateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.service.HiveService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
@@ -31,9 +31,9 @@ public class HiveController {
     @PostMapping
     public ResponseEntity<CommonResponse> createHive(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid HiveCreateRequestDTO hiveCreateRequestDTO) {
+            @RequestBody @Valid CreateHiveRequestDTO createHiveRequestDTO) {
         HiveResponseDTO response = hiveService.createHive(userDetails.getUser(),
-                hiveCreateRequestDTO);
+                createHiveRequestDTO);
         return ResponseEntity.ok()
                 .body(new CommonResponse<>(200, "하이브가 작성되었습니다.", response));
     }
@@ -41,7 +41,7 @@ public class HiveController {
     @PatchMapping("{hive_id}/update")
     public ResponseEntity<CommonResponse> updateHive(
             @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long hive_id,
-            @RequestBody @Valid HiveUpdateRequestDTO updateRequest) {
+            @RequestBody @Valid UpdateHiveRequestDTO updateRequest) {
         HiveResponseDTO response = hiveService.updateHive(userDetails.getUser(), hive_id,
                 updateRequest);
         return ResponseEntity.ok()
