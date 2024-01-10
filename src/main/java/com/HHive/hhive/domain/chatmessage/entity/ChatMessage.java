@@ -34,6 +34,9 @@ public class ChatMessage extends BaseTimeEntity {
     private Long senderId;
 
     @Column(nullable = false)
+    private String senderName;
+
+    @Column(nullable = false)
     private boolean isDeleted;
 
     @JoinColumn(name = "hive_id", nullable = false)
