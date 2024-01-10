@@ -32,7 +32,7 @@ public class Hive extends BaseTimeEntity {
     @Column(nullable = false)
     private Long creatorId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column

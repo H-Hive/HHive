@@ -8,6 +8,7 @@ import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
+import com.HHive.hhive.global.exception.hive.AlreadyExistHiveException;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -26,6 +27,9 @@ public class HiveService {
 
     public HiveResponseDTO createHive(User user, HiveCreateRequestDTO hiveCreateRequestDTO) {
         User createBy = userService.getUser(user.getId());
+        if (hiveRepository.findByTitle(hiveCreateRequestDTO.getTitle()).isPresent()) {
+            throw new AlreadyExistHiveException();
+        }
         Hive saveHive = hiveRepository.save(hiveCreateRequestDTO.toEntity(createBy));
 
         return HiveResponseDTO.of(saveHive);
