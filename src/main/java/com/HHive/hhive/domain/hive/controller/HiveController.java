@@ -8,6 +8,7 @@ import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO
 import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
+import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.common.CommonResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,6 +98,16 @@ public class HiveController {
                 userDetails.getUser(), hive_id);
         return ResponseEntity.ok()
                 .body(new CommonResponse<>(200, "하이브 유저들이 조회되었습니다.", hiveUserResponses));
+    }
+
+    @GetMapping("/{hive_id}/hiveUsers/search")
+    public ResponseEntity<CommonResponse> getHiveUserInHive(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long hive_id,
+            @RequestParam String username) {
+        UserInfoResponseDTO hiveUserResponse = hiveService.searchUserInHive(userDetails.getUser(), hive_id, username);
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "하이브 유저가 조회되었습니다.", hiveUserResponse));
     }
 
 }

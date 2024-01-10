@@ -6,7 +6,6 @@ import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
-import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
 import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
@@ -15,6 +14,7 @@ import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.exception.hive.AlreadyExistHiveException;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
 import com.HHive.hhive.global.exception.user.AlreadyExistEmailException;
+import com.HHive.hhive.global.exception.user.NotFoundUserException;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +86,15 @@ public class HiveService {
         List<User> hiveUsers = hiveUserService.findAllByHiveUsersInHive(hive);
         return hiveUsers.stream().map(UserInfoResponseDTO::new).toList();
     }
+
+    public UserInfoResponseDTO searchUserInHive(User user, Long hiveId, String username) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        User searchHiveUser = userService.findUserByUsername(username);
+
+        User hiveUser = hiveUserService.searchHiveUser(hive, searchHiveUser);
+        return new UserInfoResponseDTO(hiveUser);
+    }
+
 
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {
         Hive hive = findHiveById(hiveId);

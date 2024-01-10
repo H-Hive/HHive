@@ -138,4 +138,9 @@ public class UserService {
         return userRepository.findUserByEmailAndIs_deletedFalse(email)
                 .orElseThrow(UserNotFoundException::new);
     }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsernameAndIs_deletedFalse(username)
+                .orElseThrow(UserNotFoundException::new);
+    }
 }

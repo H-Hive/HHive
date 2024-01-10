@@ -5,6 +5,7 @@ import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUserPK;
 import com.HHive.hhive.domain.user.entity.User;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,9 @@ public interface HiveUserRepository extends JpaRepository<HiveUser, HiveUserPK> 
 
     @Query("SELECT  hu.user FROM HiveUser hu WHERE hu.hive.id = :hiveId")
     List<User> findUsersByHiveId(Long hiveId);
+
+    @Query("SELECT hu.user FROM HiveUser hu WHERE hu.hive.id = :hiveId and hu.user.username = :username")
+    Optional<User> findUserByHiveIdAndUsername(@Param("hiveId") Long hiveId, @Param("username") String username);
 
 //    List<HiveUser> findByHive(Hive hive);
 }
