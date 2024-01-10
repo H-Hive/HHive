@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class SendChatMessageDTO {
+public class ChatMessageRequestDTO {
 
     @Size(min = 1, max = 500)
     private String message;
