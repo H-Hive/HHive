@@ -8,9 +8,12 @@ import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.service.HiveService;
 import com.HHive.hhive.domain.relationship.hiveuser.validator.HiveUserValidator;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.global.exception.chatmessage.NotFoundChatMessageException;
+import com.HHive.hhive.global.exception.chatmessage.NotSenderOfChatMessageException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,24 @@ public class ChatMessageService {
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByHiveOrderByCreatedAtDesc(hive);
 
         return chatMessageList.stream().map(ChatMessageResponseDTO::from).toList();
+    }
+
+    @Transactional
+    public void deleteChatMessage(Long chatMessageId, User user) {
+
+        ChatMessage chatMessage = chatMessageRepository.findById(chatMessageId)
+                .orElseThrow(NotFoundChatMessageException::new);
+
+        validateLoginUserEqualsMessageSender(chatMessage, user);
+
+        chatMessage.updateDeletedAt();
+    }
+
+    public void validateLoginUserEqualsMessageSender(ChatMessage chatMessage, User user) {
+
+        if(!chatMessage.getSenderId().equals(user.getId())) {
+            throw new NotSenderOfChatMessageException();
+        }
     }
 
     private ChatMessage makeChatMessage(Hive hive, String message, User sender) {

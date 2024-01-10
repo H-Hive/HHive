@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,9 +38,16 @@ public class ChatMessage extends BaseTimeEntity {
     private String senderName;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
+
+    private LocalDateTime deletedAt;
 
     @JoinColumn(name = "hive_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Hive hive;
+
+    public void updateDeletedAt() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
