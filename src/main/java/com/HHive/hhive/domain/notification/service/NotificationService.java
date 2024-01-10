@@ -70,6 +70,8 @@ public class NotificationService {
 
     @Transactional
     public CommonResponse deleteNotification(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(NotificationNotFoundException::new);
         userNotificationRepository.deleteByNotificationId(notificationId);
         notificationRepository.deleteById(notificationId);
 

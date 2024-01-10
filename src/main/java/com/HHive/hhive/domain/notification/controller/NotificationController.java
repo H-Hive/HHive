@@ -40,7 +40,7 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
-    @GetMapping("/{userId}/count")
+    @GetMapping("/count")
     public ResponseEntity<CommonResponse> showUnreadNotificationCountForUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
