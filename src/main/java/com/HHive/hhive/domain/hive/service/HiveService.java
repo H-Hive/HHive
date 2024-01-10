@@ -5,11 +5,14 @@ import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
+import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
+import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.exception.hive.AlreadyExistHiveException;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
+import com.HHive.hhive.global.exception.user.AlreadyExistEmailException;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class HiveService {
 
     private final UserService userService;
+    private final HiveUserService hiveUserService;
     private final UserRepository userRepository;
     private final HiveRepository hiveRepository;
 
@@ -31,6 +35,7 @@ public class HiveService {
             throw new AlreadyExistHiveException();
         }
         Hive saveHive = hiveRepository.save(createHiveRequestDTO.toEntity(createBy));
+        hiveUserService.saveHiveUser(saveHive, createBy);
 
         return HiveResponseDTO.of(saveHive);
 
@@ -63,6 +68,17 @@ public class HiveService {
 
     }
 
+    public void inviteNewUser(User user, Long boardId, HiveUserInviteRequestDTO requestDTO) {
+        Hive hive = getHiveAndCheckAuth(user, boardId);
+        User requestUser = userService.findUserByEmail(requestDTO.getEmail());
+
+        if (hiveUserService.isExistedUser(requestUser, hive)) {
+            throw new AlreadyExistEmailException();
+        }
+        hiveUserService.saveHiveUser(hive, requestUser);
+
+    }
+
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {
         Hive hive = findHiveById(hiveId);
         User loginUser = userService.getUser(user.getId());
@@ -74,4 +90,5 @@ public class HiveService {
         return hiveRepository.findByIdAndIsDeletedIsFalse(hiveId).orElseThrow(
                 NotFoundHiveException::new);
     }
+
 }

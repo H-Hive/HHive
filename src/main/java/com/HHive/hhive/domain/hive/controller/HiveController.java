@@ -4,6 +4,7 @@ import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.service.HiveService;
+import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
 import jakarta.validation.Valid;
@@ -72,5 +73,16 @@ public class HiveController {
         return ResponseEntity.ok()
                 .body(new CommonResponse<>(200, "하이브가 삭제되었습니다.", null));
     }
+
+    @PostMapping("/{hive_id}")
+    public ResponseEntity<CommonResponse> inviteNewUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long hive_id,
+            @RequestBody @Valid HiveUserInviteRequestDTO requestDTO) {
+        hiveService.inviteNewUser(userDetails.getUser(), hive_id, requestDTO);
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "하이브에 참여하였습니다.", null));
+    }
+
 
 }
