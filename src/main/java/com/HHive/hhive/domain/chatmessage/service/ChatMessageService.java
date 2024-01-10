@@ -42,7 +42,7 @@ public class ChatMessageService {
 
         hiveUserValidator.validateHiveUser(hive, user);
 
-        List<ChatMessage> chatMessageList = chatMessageRepository.findAllByHiveOrderByCreatedAtDesc(hive);
+        List<ChatMessage> chatMessageList = chatMessageRepository.findAllChatMessageByHive(hive);
 
         return chatMessageList.stream().map(ChatMessageResponseDTO::from).toList();
     }
