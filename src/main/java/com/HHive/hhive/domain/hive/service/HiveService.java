@@ -6,7 +6,9 @@ import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
+import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
 import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
+import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
@@ -76,7 +78,13 @@ public class HiveService {
             throw new AlreadyExistEmailException();
         }
         hiveUserService.saveHiveUser(hive, requestUser);
+    }
 
+    public List<UserInfoResponseDTO> searchUsersInHive(User user, Long hiveId) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+
+        List<User> hiveUsers = hiveUserService.findAllByHiveUsersInHive(hive);
+        return hiveUsers.stream().map(UserInfoResponseDTO::new).toList();
     }
 
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {

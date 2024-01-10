@@ -55,7 +55,7 @@ public class NotificationService {
         } else if (type.equals("hive")) {
             hiveRepository.findById(notificationRequestDTO.getId())
                     .orElseThrow(HiveNotFoundException::new);
-            List<HiveUser> hiveUserList = hiveUserRepository.findUsersByHiveId(
+            List<HiveUser> hiveUserList = hiveUserRepository.findHiveUsersByHiveId(
                     notificationRequestDTO.getId());
             sendNotificationToUserListHive(hiveUserList, notification);
         }

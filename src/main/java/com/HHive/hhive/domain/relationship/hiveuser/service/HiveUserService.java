@@ -4,6 +4,7 @@ import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
 import com.HHive.hhive.domain.relationship.hiveuser.repository.HiveUserRepository;
 import com.HHive.hhive.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,5 +23,9 @@ public class HiveUserService {
     public void saveHiveUser(Hive saveHive, User newUser) {
         HiveUser hiveUser = HiveUser.builder().user(newUser).hive(saveHive).build();
         hiveUserRepository.save(hiveUser);
+    }
+
+    public List<User> findAllByHiveUsersInHive(Hive hive) {
+        return hiveUserRepository.findUsersByHiveId(hive.getId());
     }
 }
