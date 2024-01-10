@@ -27,7 +27,8 @@ public class NotificationController {
 
     @PostMapping("/send")
     public ResponseEntity<CommonResponse> sendNotification(
-            @RequestBody NotificationRequestDTO notificationRequestDTO) {
+            @RequestBody NotificationRequestDTO notificationRequestDTO)
+    {
         NotificationResponseDTO response = notificationService.sendNotification(
                 notificationRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
