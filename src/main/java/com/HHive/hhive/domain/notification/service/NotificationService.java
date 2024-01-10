@@ -55,17 +55,8 @@ public class NotificationService {
     }
 
     public List<NotificationResponseDTO> getNotificationsByUserId(Long userId) {
-        List<UserNotification> userNotifications = userNotificationRepository
-                .findByUserIdAndNotificationStatus(userId, "unread");
-
-        if (userNotifications.isEmpty()) {
-
-            throw new NotificationNotFoundException();
-        }
-
-        List<Notification> notifications = userNotifications.stream()
-                .map(UserNotification::getNotification)
-                .toList();
+        List<Notification> notifications = userNotificationRepository
+                .findNotificationsByUserIdAndStatus(userId, "unread");
 
         if (notifications.isEmpty()) {
 
@@ -77,12 +68,20 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public CommonResponse deleteNotification(Long notificationId) {
-
+        userNotificationRepository.deleteByNotificationId(notificationId);
         notificationRepository.deleteById(notificationId);
+
         return new CommonResponse(200, "알림 삭제 완료", null);
     }
 
+    public CommonResponse showgetUnreadNotificationCountForUser(Long userId){
+        Long numberOfNotifications = userNotificationRepository
+                .countUnreadNotificationsByUserId(userId, "unread");
+
+        return new CommonResponse(200,"d",numberOfNotifications);
+    }
 
     private void sendNotificationToUserListParty(List<PartyUser> partyUserList,
             Notification notification) {
