@@ -29,7 +29,14 @@ public enum ErrorCode {
     UNAUTHORIZED_ACCESS_EXCEPTION(403,"해당 파티에 대한 권한이 없습니다."),
 
     //Notification
-    NOT_FOUND_NOTIFICATION_EXCEPTION(401,"알림이 존재하지 않습니다");
+    NOT_FOUND_NOTIFICATION_EXCEPTION(401,"알림이 존재하지 않습니다"),
+
+    //HiveUser
+    HIVE_USER_NOT_FOUND_EXCEPTION(403, "요청하신 하이브에 가입하지 않은 사용자입니다."),
+
+    //ChatMessage
+    NOT_FOUND_CHATMESSAGE_EXCEPTION(404, "해당 메시지를 찾을 수 없습니다."),
+    NOT_SENDER_OF_CHATMESSAGE_EXCEPTION(401, "메시지 작성자만 삭제가 가능합니다");
 
     private final int statusCode;
 
