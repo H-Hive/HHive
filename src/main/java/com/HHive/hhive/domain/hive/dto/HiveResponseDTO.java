@@ -22,7 +22,7 @@ public class HiveResponseDTO {
 
     private Long hostId;
 
-    private String createdBy;
+    private String hostName;
 
     private List<String> hivePlayers;
 
@@ -35,7 +35,8 @@ public class HiveResponseDTO {
                 .id(hive.getId())
                 .title(hive.getTitle())
                 .introduction(hive.getIntroduction())
-                .createdBy(hive.getUser().getEmail())
+                .hostId(hive.getId())
+                .hostName(hive.getUser().getEmail())
                 .createdAt(hive.getCreatedAt())
                 .modifiedAt(hive.getModifiedAt())
                 .build();

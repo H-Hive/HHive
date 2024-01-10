@@ -16,6 +16,4 @@ public class HiveUpdateRequestDTO {
 
     private String introduction;
 
-    private LocalDateTime modifiedAt;
-
 }
