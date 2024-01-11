@@ -1,10 +1,9 @@
 package com.HHive.hhive.domain.relationship.hiveuser.repository;
 
-import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUserPK;
-import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.relationship.hiveuser.repository.custom.CustomHiveUserRepository;
+import com.HHive.hhive.domain.user.entity.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

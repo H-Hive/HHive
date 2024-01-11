@@ -14,7 +14,7 @@ public class HiveUserValidator {
     private final HiveUserRepository hiveUserRepository;
 
     public void validateHiveUser(Hive hive, User user) {
-        if(!hiveUserRepository.existHiveUserByHiveAndUser(hive, user)) {
+        if (!hiveUserRepository.existHiveUserByHiveAndUser(hive, user)) {
             throw new HiveUserNotFoundException();
         }
     }

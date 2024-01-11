@@ -18,7 +18,8 @@ public class HiveUserService {
     private final HiveUserRepository hiveUserRepository;
 
     public boolean isExistedUser(User user, Hive hive) {
-        return hiveUserRepository.existsByUser_IdAndHive_IdAndIsDeletedIsFasle(user.getId(), hive.getId());
+        return hiveUserRepository.existsByUser_IdAndHive_IdAndIsDeletedIsFasle(user.getId(),
+                hive.getId());
     }
 
     public void saveHiveUser(Hive saveHive, User newUser) {
@@ -31,7 +32,8 @@ public class HiveUserService {
     }
 
     public User searchHiveUser(Hive hive, User searchHiveUser) {
-        return hiveUserRepository.findUserByHiveIdAndUsername(hive.getId(), searchHiveUser.getUsername()).orElseThrow(
+        return hiveUserRepository.findUserByHiveIdAndUsername(hive.getId(),
+                searchHiveUser.getUsername()).orElseThrow(
                 NotFoundHiveException::new);
     }
 }

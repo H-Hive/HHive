@@ -20,7 +20,7 @@ public class HiveUserResponseDTO {
 
     private String email;
 
-    public static HiveUserResponseDTO of(HiveUser hiveUser){
+    public static HiveUserResponseDTO of(HiveUser hiveUser) {
         return HiveUserResponseDTO.builder()
                 .id(hiveUser.getUser().getId())
                 .hiveId(hiveUser.getHive().getId())

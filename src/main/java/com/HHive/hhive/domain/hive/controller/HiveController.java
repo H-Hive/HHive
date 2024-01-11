@@ -8,7 +8,6 @@ import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO
 import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
-import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.common.CommonResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -105,7 +104,8 @@ public class HiveController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long hive_id,
             @RequestParam String username) {
-        UserInfoResponseDTO hiveUserResponse = hiveService.searchUserInHive(userDetails.getUser(), hive_id, username);
+        UserInfoResponseDTO hiveUserResponse = hiveService.searchUserInHive(userDetails.getUser(),
+                hive_id, username);
         return ResponseEntity.ok()
                 .body(new CommonResponse<>(200, "하이브 유저가 조회되었습니다.", hiveUserResponse));
     }
