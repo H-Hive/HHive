@@ -2,14 +2,10 @@ package com.HHive.hhive.domain.party.entity;
 
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
-import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -44,10 +40,6 @@ public class Party extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
-    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PartyUser> members = new HashSet<>();
 
 
     public Party(Hive hive, PartyRequestDTO dto, User user) {

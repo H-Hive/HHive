@@ -6,8 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 
 @Getter
@@ -20,7 +19,7 @@ public class PartyResponseDTO {
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
-    private Set<MemberResponseDTO> members;
+    private List<MemberResponseDTO> members;
 
 
     public PartyResponseDTO(Party party) {
@@ -30,8 +29,5 @@ public class PartyResponseDTO {
         this.content = party.getContent();
         this.createAt = party.getCreatedAt();
         this.modifiedAt = party.getModifiedAt();
-        this.members = party.getMembers().stream()
-                .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
-                .collect(Collectors.toSet());
     }
 }

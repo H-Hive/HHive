@@ -2,10 +2,11 @@ package com.HHive.hhive.domain.party.service;
 
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
-import com.HHive.hhive.domain.party.entity.Party;
-import com.HHive.hhive.domain.party.repository.PartyRepository;
+import com.HHive.hhive.domain.party.dto.MemberResponseDTO;
 import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
 import com.HHive.hhive.domain.party.dto.PartyResponseDTO;
+import com.HHive.hhive.domain.party.entity.Party;
+import com.HHive.hhive.domain.party.repository.PartyRepository;
 import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
 import com.HHive.hhive.domain.relationship.partyuser.pk.PartyUserPK;
 import com.HHive.hhive.domain.relationship.partyuser.repository.PartyUserRepository;
@@ -18,10 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +47,12 @@ public class PartyService {
     @Transactional
     public PartyResponseDTO getPartyDto(Long partyId) {
         Party party = partyRepository.findById(partyId).orElseThrow(PartyNotFoundException::new);
-        return new PartyResponseDTO(party);
+
+        List<MemberResponseDTO> members = partyUserRepository.findUsersByPartyId(partyId).stream()
+            .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
+            .collect(Collectors.toList());
+
+        return new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getCreatedAt(), party.getModifiedAt(), members);
     }
 
     //전체 조회
@@ -56,17 +60,21 @@ public class PartyService {
     public Map<UserInfoResponseDTO, List<PartyResponseDTO>> getUserPartyMap() {
         Map<UserInfoResponseDTO, List<PartyResponseDTO>> userPartyMap = new HashMap<>();
 
-        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // 작성일 기준 내림차순
+        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        for (Party party : partyList) {
+            UserInfoResponseDTO userDto = new UserInfoResponseDTO(party.getUser());
+            List<MemberResponseDTO> members = partyUserRepository.findUsersByPartyId(party.getId()).stream()
+                    .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
+                    .collect(Collectors.toList());
 
-        partyList.forEach(party -> {
-            var userDto = new UserInfoResponseDTO(party.getUser());
-            var partyDto = new PartyResponseDTO(party);
+            PartyResponseDTO partyDto = new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getCreatedAt(), party.getModifiedAt(), members);
+
             if (userPartyMap.containsKey(userDto)) {
                 userPartyMap.get(userDto).add(partyDto);
             } else {
-                userPartyMap.put(userDto, new ArrayList<>(List.of(partyDto)));
+                userPartyMap.put(userDto, new ArrayList<>(Collections.singletonList(partyDto)));
             }
-        });
+        }
 
         return userPartyMap;
     }
