@@ -56,6 +56,9 @@ public class Party extends BaseTimeEntity {
     }
 
     // 서비스 메서드
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
     public void setTitle(String partyTitle) {
         this.title = partyTitle;
     }

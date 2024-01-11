@@ -95,7 +95,8 @@ public class PartyService {
         if (!party.getHostId().equals(user.getId())) {
             throw new UnauthorizedAccessException();
         }
-        partyRepository.delete(party);
+        party.setIsDeleted(true);
+        partyRepository.save(party);
     }
 
     private Party getUserParty(Long partyId, User user) {
