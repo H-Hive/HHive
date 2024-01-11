@@ -83,6 +83,10 @@ public class PartyService {
     public PartyResponseDTO updateParty(Long partyId, PartyRequestDTO partyRequestDto, User user) {
         Party party = getUserParty(partyId, user);
 
+        if (!party.getHostId().equals(user.getId())) {
+            throw new UnauthorizedAccessException();
+        }
+
         party.setTitle(partyRequestDto.getTitle());
         party.setContent(partyRequestDto.getContent());
 
@@ -92,9 +96,11 @@ public class PartyService {
     @Transactional
     public void deleteParty(Long partyId, User user) {
         Party party = getUserParty(partyId, user);
+
         if (!party.getHostId().equals(user.getId())) {
             throw new UnauthorizedAccessException();
         }
+
         party.setIsDeleted(true);
         partyRepository.save(party);
     }
