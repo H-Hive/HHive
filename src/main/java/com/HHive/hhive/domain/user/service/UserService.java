@@ -133,4 +133,14 @@ public class UserService {
     public User getUser(Long user_id) {
         return userRepository.findById(user_id).orElseThrow(UserNotFoundException::new);
     }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmailAndIs_deletedFalse(email)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsernameAndIs_deletedFalse(username)
+                .orElseThrow(UserNotFoundException::new);
+    }
 }

@@ -1,14 +1,21 @@
 package com.HHive.hhive.domain.hive.service;
 
-import com.HHive.hhive.domain.hive.dto.HiveCreateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
-import com.HHive.hhive.domain.hive.dto.HiveUpdateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
+import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
+import com.HHive.hhive.domain.relationship.hiveuser.repository.HiveUserRepository;
+import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
+import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
+import com.HHive.hhive.global.exception.hive.AlreadyExistHiveException;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
+import com.HHive.hhive.global.exception.user.AlreadyExistEmailException;
+import com.HHive.hhive.global.exception.user.NotFoundUserException;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +27,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class HiveService {
 
     private final UserService userService;
+    private final HiveUserService hiveUserService;
     private final UserRepository userRepository;
     private final HiveRepository hiveRepository;
+    private final HiveUserRepository hiveUserRepository;
 
 
-    public HiveResponseDTO createHive(User user, HiveCreateRequestDTO hiveCreateRequestDTO) {
+    public HiveResponseDTO createHive(User user, CreateHiveRequestDTO createHiveRequestDTO) {
         User createBy = userService.getUser(user.getId());
-        Hive saveHive = hiveRepository.save(hiveCreateRequestDTO.toEntity(createBy));
+        if (hiveRepository.findByTitle(createHiveRequestDTO.getTitle()).isPresent()) {
+            throw new AlreadyExistHiveException();
+        }
+        Hive saveHive = hiveRepository.save(createHiveRequestDTO.toEntity(createBy));
+        hiveUserService.saveHiveUser(saveHive, createBy);
 
         return HiveResponseDTO.of(saveHive);
 
@@ -34,7 +47,7 @@ public class HiveService {
 
     @Transactional
     public HiveResponseDTO updateHive(User user, Long hiveId,
-            @Valid HiveUpdateRequestDTO updateHiveRequest) {
+            @Valid UpdateHiveRequestDTO updateHiveRequest) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
 
         hive.update(updateHiveRequest);
@@ -59,6 +72,42 @@ public class HiveService {
 
     }
 
+    public void inviteNewUser(User user, Long boardId, HiveUserInviteRequestDTO requestDTO) {
+        Hive hive = getHiveAndCheckAuth(user, boardId);
+        User requestUser = userService.findUserByEmail(requestDTO.getEmail());
+
+        if (hiveUserService.isExistedUser(requestUser, hive)) {
+            throw new AlreadyExistEmailException();
+        }
+        hiveUserService.saveHiveUser(hive, requestUser);
+    }
+
+    public List<UserInfoResponseDTO> searchUsersInHive(User user, Long hiveId) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+
+        List<User> hiveUsers = hiveUserService.findAllByHiveUsersInHive(hive);
+        return hiveUsers.stream().map(UserInfoResponseDTO::new).toList();
+    }
+
+    public UserInfoResponseDTO searchUserInHive(User user, Long hiveId, String username) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        User searchHiveUser = userService.findUserByUsername(username);
+
+        User hiveUser = hiveUserService.searchHiveUser(hive, searchHiveUser);
+        return new UserInfoResponseDTO(hiveUser);
+    }
+
+    @Transactional
+    public void deleteHiveUser(User user, Long hiveId, String username) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        User hiveUser = userService.findUserByUsername(username);
+
+        if (!hiveUserService.isExistedUser(hiveUser, hive)) {
+            throw new NotFoundUserException();
+        }
+        hiveUserRepository.deleteHiveUserByHiveIdAndUserId(hiveId, hiveUser.getId());
+    }
+
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {
         Hive hive = findHiveById(hiveId);
         User loginUser = userService.getUser(user.getId());
@@ -70,4 +119,5 @@ public class HiveService {
         return hiveRepository.findByIdAndIsDeletedIsFalse(hiveId).orElseThrow(
                 NotFoundHiveException::new);
     }
+
 }
