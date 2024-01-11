@@ -110,4 +110,14 @@ public class HiveController {
                 .body(new CommonResponse<>(200, "하이브 유저가 조회되었습니다.", hiveUserResponse));
     }
 
+    @DeleteMapping("{hive_id}/hiveUsers")
+    public ResponseEntity<CommonResponse> deleteHiveUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long hive_id,
+            @RequestParam String username) {
+        hiveService.deleteHiveUser(userDetails.getUser(), hive_id, username);
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "하이브 유저가 탈퇴되었습니다.", null));
+    }
+
 }

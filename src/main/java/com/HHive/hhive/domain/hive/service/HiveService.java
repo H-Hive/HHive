@@ -6,6 +6,7 @@ import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
+import com.HHive.hhive.domain.relationship.hiveuser.repository.HiveUserRepository;
 import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.domain.user.entity.User;
@@ -29,6 +30,7 @@ public class HiveService {
     private final HiveUserService hiveUserService;
     private final UserRepository userRepository;
     private final HiveRepository hiveRepository;
+    private final HiveUserRepository hiveUserRepository;
 
 
     public HiveResponseDTO createHive(User user, CreateHiveRequestDTO createHiveRequestDTO) {
@@ -95,6 +97,16 @@ public class HiveService {
         return new UserInfoResponseDTO(hiveUser);
     }
 
+    @Transactional
+    public void deleteHiveUser(User user, Long hiveId, String username) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        User hiveUser = userService.findUserByUsername(username);
+
+        if (!hiveUserService.isExistedUser(hiveUser, hive)) {
+            throw new NotFoundUserException();
+        }
+        hiveUserRepository.deleteHiveUserByHiveIdAndUserId(hiveId, hiveUser.getId());
+    }
 
     public Hive getHiveAndCheckAuth(User user, Long hiveId) {
         Hive hive = findHiveById(hiveId);
