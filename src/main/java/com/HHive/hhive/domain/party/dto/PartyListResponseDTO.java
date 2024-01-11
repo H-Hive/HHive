@@ -1,4 +1,4 @@
-package com.HHive.hhive.domain.party.response;
+package com.HHive.hhive.domain.party.dto;
 
 import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import lombok.EqualsAndHashCode;

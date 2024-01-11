@@ -1,4 +1,4 @@
-package com.HHive.hhive.domain.party.request;
+package com.HHive.hhive.domain.party.dto;
 
 import lombok.Getter;
 

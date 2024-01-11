@@ -1,7 +1,7 @@
 package com.HHive.hhive.domain.party.entity;
 
 import com.HHive.hhive.domain.hive.entity.Hive;
-import com.HHive.hhive.domain.party.request.PartyRequestDTO;
+import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -24,7 +24,7 @@ public class Party extends BaseTimeEntity {
     @Column(name = "host_id", nullable = false)
     private Long hostId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hive_id", nullable = false)
     private Hive hive;
 
@@ -42,12 +42,6 @@ public class Party extends BaseTimeEntity {
     private User user;
 
 
-    public Party(String title, String username, String content) {
-        this.title = title;
-        this.username = username;
-        this.content = content;
-    }
-
     public Party(Hive hive, PartyRequestDTO dto, User user) {
         this.hive = hive;
         this.title = dto.getTitle();
@@ -62,6 +56,9 @@ public class Party extends BaseTimeEntity {
     }
 
     // 서비스 메서드
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
     public void setTitle(String partyTitle) {
         this.title = partyTitle;
     }
