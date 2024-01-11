@@ -3,10 +3,13 @@ package com.HHive.hhive.domain.notification.controller;
 import com.HHive.hhive.domain.notification.dto.NotificationRequestDTO;
 import com.HHive.hhive.domain.notification.dto.NotificationResponseDTO;
 import com.HHive.hhive.domain.notification.service.NotificationService;
+import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,26 +27,42 @@ public class NotificationController {
 
     @PostMapping("/send")
     public ResponseEntity<CommonResponse> sendNotification(
-            @RequestBody NotificationRequestDTO notificationRequestDTO) {
-        CommonResponse response = notificationService.sendNotification(notificationRequestDTO);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+            @RequestBody NotificationRequestDTO notificationRequestDTO)
+    {
+        NotificationResponseDTO response = notificationService.sendNotification(
+                notificationRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of(HttpStatus.CREATED.value(), "메시지 전송 성공", response));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<NotificationResponseDTO>> getNotificationsByUserId(
+    public ResponseEntity<CommonResponse> getNotificationsByUserId(
             @PathVariable(name = "userId") Long userId
     ) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(
                 userId);
-        return ResponseEntity.ok(notifications);
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 출력 성공", notifications));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<CommonResponse> showUnreadNotificationCountForUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        Long notificationCount = notificationService.showUnreadNotificationCountForUser(
+                userDetails.getUser()
+                        .getId());
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 출력 성공", notificationCount));
     }
 
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<CommonResponse> deleteNotification(
             @PathVariable(name = "notificationId") Long notificationId
     ) {
-        CommonResponse response = notificationService.deleteNotification(notificationId);
-        return ResponseEntity.status(response.getStatusCode()).body(response);
+        notificationService.deleteNotification(notificationId);
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 개수 조회 완료", null));
     }
 
 
