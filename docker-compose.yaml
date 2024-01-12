@@ -21,7 +21,15 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:h2:tcp://${{ secrets.CONTAINER_NAME }}/~/hhive
       SPRING_DATASOURCE_USERNAME: ${{ secrets.PROD_DB_USER }}
-      SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}# h2 db password
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
     depends_on:
       - db
+
+volumes:
+  db_data:
+
+networks:
+  default:
+    external:
+      name: my-network
