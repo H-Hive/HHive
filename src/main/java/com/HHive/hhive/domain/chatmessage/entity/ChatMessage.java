@@ -37,6 +37,7 @@ public class ChatMessage extends BaseTimeEntity {
     @Column(nullable = false)
     private String senderName;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean isDeleted = false;
 
