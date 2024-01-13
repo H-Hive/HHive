@@ -1,27 +1,15 @@
 version: "3"
 services:
-  db:
-    container_name: ${{ secrets.CONTAINER_NAME }}
-    image: eunchaev1006/hhive:latest
-    ports:
-      - 1521:1521
-      - 8080:80
-    environment:
-      H2_OPTIONS: -ifNotExists
-    volumes:
-      - ./h2/:/opt/h2-data
-    restart: always
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: ${{ secrets.CONTAINER_NAME }}
     ports:
-      - 5000:8080
+      - 8080:8080
     environment:
       SPRING_DATASOURCE_URL: jdbc:h2:tcp://${{ secrets.CONTAINER_NAME }}/~/hhive
       SPRING_DATASOURCE_USERNAME: ${{ secrets.PROD_DB_USER }}
-      SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}# h2 db password
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
-    depends_on:
-      - db
