@@ -1,5 +1,16 @@
 version: "3"
 services:
+  db:
+    container_name: h2_container
+    image: oscarfonts/h2:latest
+    ports:
+      - 1521:1521  # TCP port for database connection
+      - 8081:81    # HTTP port for web console connection
+    environment:
+      H2_OPTIONS: -ifNotExists  # H2 database options
+    volumes:
+      - ./h2/:/opt/h2-data  # Mounting volume for data persistence
+    restart: always
   app:
     build:
       context: .
@@ -12,3 +23,5 @@ services:
       SPRING_DATASOURCE_USERNAME: ${{ secrets.PROD_DB_USER }}
       SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    depends_on:
+      - db
