@@ -35,10 +35,10 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: web docker build and push
+      - name: Build and push Docker image
         run: |
           sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-          sudo docker build -f HHive/docker-compose.yaml -t ${{ secrets.DOCKERHUB_USERNAME }}/hhive HHive
+          sudo docker build -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/hhive .
           sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/hhive
 
       - name: Deploy Front to prod
@@ -49,10 +49,10 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           script: |
-              if docker ps -a --format ‘{{.ID}}’ | grep -q .; then
+              if docker ps -a --format '{{.ID}}' | grep -q .; then
                 sudo docker rm -f $(docker ps -qa)
               else
-                echo “No Docker containers to remove.”
+                echo "No Docker containers to remove."
               fi
               sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hhive
               sudo docker run --name hhive -d ${{ secrets.DOCKERHUB_USERNAME }}/hhive
