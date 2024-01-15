@@ -50,6 +50,6 @@ jobs:
           port: 22
           script: |
             docker rm -f $(docker ps -qa)
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/hhive
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hhive
             docker-compose up -d
