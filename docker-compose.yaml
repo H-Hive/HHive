@@ -1,27 +1,25 @@
 version: "3"
 services:
-  db:
-    container_name: h2_container
-    image: oscarfonts/h2:latest
-    ports:
-      - 1521:1521  # TCP port for database connection
-      - 8081:81    # HTTP port for web console connection
+  mysql-db:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: hhiveServer
     environment:
-      H2_OPTIONS: -ifNotExists  # H2 database options
+      MYSQL_ROOT_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
+      MYSQL_DATABASE: ${{ secrets.PROD_DB_NAME }}
+    ports:
+      - "3306:3306"
     volumes:
-      - ./h2/:/opt/h2-data  # Mounting volume for data persistence
+      - ../${{ secrets.PROD_DB_NAME }}-mysql:/var/lib/mysql
+      - ../${{ secrets.PROD_DB_NAME }}-mysql-conf:/etc/mysql/conf.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     restart: always
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: app_container
-    ports:
-      - 8080:8080
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:tcp://${{ secrets.CONTAINER_NAME }}/~/hhive
-      SPRING_DATASOURCE_USERNAME: ${{ secrets.PROD_DB_USER }}
-      SPRING_DATASOURCE_PASSWORD: ${{ secrets.PROD_DB_PASSWORD }}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
-    depends_on:
-      - db
+
+
+
+
+
+
+
