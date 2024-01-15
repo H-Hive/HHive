@@ -1,9 +1,14 @@
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${PROD_DB_URL}
-    username: ${PROD_DB_USER}
-    password: ${PROD_DB_PASSWORD}
+    driver-class-name: org.h2.Driver
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USER}
+    password: ${TEST_DB_PASSWORD}
 
   jpa:
     hibernate:
