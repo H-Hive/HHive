@@ -17,8 +17,22 @@ services:
       - --collation-server=utf8mb4_unicode_ci
     restart: always
 
+  spring-app:
+    build:
+      context: ./spring-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+    restart: always
 
-
+  redis:
+    image: redis:latest
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    restart: always
 
 
 
