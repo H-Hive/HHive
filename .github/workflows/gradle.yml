@@ -49,12 +49,7 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           script: |
-              if docker ps -a --format '{{.ID}}' | grep -q .; then
-                sudo docker rm -f $(docker ps -qa)
-              else
-                echo "No Docker containers to remove."
-              fi
-              sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hhive
-              sudo docker run --name hhive -d ${{ secrets.DOCKERHUB_USERNAME }}/hhive
-              sudo docker run --name redis-server -d -p 6379:6379 redis
-              docker image prune -f
+            docker rm -f $(docker ps -qa)
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}
+            docker-compose up -d
