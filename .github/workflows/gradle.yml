@@ -49,5 +49,7 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}
+            docker rm -f $(docker ps -qa)
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/hhive
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hhive
             docker-compose up -d
