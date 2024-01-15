@@ -52,4 +52,4 @@ jobs:
             docker rm -f $(docker ps -qa)
             docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/hhive
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hhive
-            docker-compose up -d
+            docker compose up -d
