@@ -51,7 +51,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(UserLoginRequestDTO requestDTO) {
+    public UserInfoResponseDTO login(UserLoginRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
         String password = requestDTO.getPassword();
 
@@ -62,6 +62,9 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UserNotFoundException();
         }
+
+        // 로그인 성공시 UserInfoResponseDTO로 변환하여 반환
+        return new UserInfoResponseDTO(user);
     }
 
     public UserInfoResponseDTO getProfile(Long user_id) {

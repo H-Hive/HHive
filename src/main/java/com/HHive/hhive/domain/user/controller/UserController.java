@@ -33,15 +33,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse<Void>> login(
+    public ResponseEntity<CommonResponse<UserInfoResponseDTO>> login(
             @RequestBody UserLoginRequestDTO requestDTO, HttpServletResponse response) {
 
-        userService.login(requestDTO);
+        UserInfoResponseDTO userInfo = userService.login(requestDTO);
+
         String token = jwtUtil.createToken(requestDTO.getUsername());
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
         return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", null));
+                .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", userInfo));
     }
 
     @GetMapping("/{userId}")
