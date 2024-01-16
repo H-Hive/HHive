@@ -104,8 +104,9 @@ public class JwtUtil {
         String jwtToken = createToken(username);
 
         Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
-        cookie.setPath("/");
+        cookie.setPath("/api");
         cookie.setMaxAge((int) EXPIRED_TIME);
+        cookie.setHttpOnly(true);
 
         return cookie;
     }
