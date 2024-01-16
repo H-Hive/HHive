@@ -1,5 +1,6 @@
 package com.HHive.hhive.domain.user.controller;
 
+import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +60,8 @@ public class UserController {
                 .body(CommonResponse.of(HttpStatus.OK.value(), "프로필 조회 성공", responseDTO));
     }
 
+
+
     @PatchMapping("/{userId}")
     public ResponseEntity<CommonResponse<Void>> updateProfile(
             @PathVariable Long userId,
@@ -94,6 +98,16 @@ public class UserController {
 
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "회원 탈퇴 성공", null));
+    }
+
+    @GetMapping("/{userId}/hives")
+    public ResponseEntity<CommonResponse> getMyHives(
+
+            @PathVariable Long userId) {
+        List<HiveResponseDTO> hivesResponses = userService.getMyHives(
+                userId);
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "참여 목록들이 조회되었습니다.", hivesResponses));
     }
 
 

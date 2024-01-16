@@ -36,4 +36,8 @@ public class HiveUserService {
                 searchHiveUser.getUsername()).orElseThrow(
                 NotFoundHiveException::new);
     }
+
+    public List<Hive> findAllHivesByHiveUser(User user) {
+        return hiveUserRepository.findAllHiveByHiveUser(user.getId());
+    }
 }

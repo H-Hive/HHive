@@ -1,5 +1,8 @@
 package com.HHive.hhive.domain.user.service;
 
+import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
+import com.HHive.hhive.domain.hive.entity.Hive;
+import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
@@ -21,6 +24,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final HiveUserService hiveUserService;
 
     @Transactional
     public void signup(UserSignupRequestDTO requestDTO) {
@@ -145,5 +150,13 @@ public class UserService {
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsernameAndIs_deletedFalse(username)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    public List<HiveResponseDTO> getMyHives(Long user_Id) {
+        User user = getUser(user_Id);
+
+        List<Hive> myHives = hiveUserService.findAllHivesByHiveUser(user);
+        return myHives.stream().map(HiveResponseDTO::of).toList();
+
     }
 }

@@ -1,5 +1,6 @@
 package com.HHive.hhive.domain.relationship.hiveuser.repository;
 
+import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUserPK;
 import com.HHive.hhive.domain.relationship.hiveuser.repository.custom.CustomHiveUserRepository;
@@ -30,4 +31,7 @@ public interface HiveUserRepository extends JpaRepository<HiveUser, HiveUserPK>,
     @Modifying
     @Query("DELETE FROM HiveUser hu WHERE hu.hive.id = :hiveId and hu.user.id = :userId")
     void deleteHiveUserByHiveIdAndUserId(Long hiveId, Long userId);
+
+    @Query("SELECT hu.hive FROM HiveUser hu WHERE hu.user.id = :userId")
+    List<Hive> findAllHiveByHiveUser(Long userId);
 }
