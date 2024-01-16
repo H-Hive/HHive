@@ -3,9 +3,11 @@ package com.HHive.hhive.domain.user.controller;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.domain.user.service.KakaoService;
 import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
 import com.HHive.hhive.global.jwt.JwtUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -21,15 +23,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
     private final JwtUtil jwtUtil;
+    private final KakaoService kaKaoService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<Void>> signup(
             @Valid @RequestBody UserSignupRequestDTO requestDTO) {
 
         userService.signup(requestDTO);
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(),"회원가입 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "회원가입 성공", null));
     }
 
     @PostMapping("/login")
@@ -97,5 +99,19 @@ public class UserController {
 
     //TODO: 카테고리 선택
 
-    //TODO: 카카오 로그인
+    @GetMapping("/kakao/callback")
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+
+        // jwt 토큰 반환
+        String token = kaKaoService.kakaoLogin(code);
+
+        // 반환된 토큰을 쿠키에 넣음
+        Cookie cookie = new Cookie(jwtUtil.JWT_COOKIE_NAME, token);
+        cookie.setPath("/");
+
+        // + response 객체에 넣음
+        response.addCookie(cookie);
+
+        return "redirect:/";
+    }
 }

@@ -21,3 +21,8 @@ spring:
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
+
+social:
+  api:
+    key:
+      kakao: ${KAKAO_API_KEY}

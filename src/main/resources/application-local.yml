@@ -7,8 +7,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
     open-in-view: false
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+
+social:
+  api:
+    key:
+      kakao: ${KAKAO_API_KEY}
