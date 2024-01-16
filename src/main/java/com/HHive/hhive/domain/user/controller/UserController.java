@@ -5,8 +5,8 @@ import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
-import com.HHive.hhive.global.exception.common.CustomException;
 import com.HHive.hhive.global.jwt.JwtUtil;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +38,11 @@ public class UserController {
 
         UserInfoResponseDTO userInfo = userService.login(requestDTO);
 
-        String token = jwtUtil.createToken(requestDTO.getUsername());
-        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        Cookie tokenCookie = jwtUtil.createTokenCookie(requestDTO.getUsername());
+        Cookie userInfoCookie = jwtUtil.createUserInfoCookie(userInfo);
+
+        response.addCookie(tokenCookie);
+        response.addCookie(userInfoCookie);
 
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", userInfo));
