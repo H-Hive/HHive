@@ -14,6 +14,7 @@ public enum ErrorCode {
     //User
     PASSWORD_MISMATCH_EXCEPTION(401, "비밀번호가 일치하지 않습니다."),
     ALREADY_EXIST_USERNAME_EXCEPTION(401, "중복된 유저네임입니다."),
+    ALREADY_EXIST_KAKAOID_EXCEPTION(401, "중복된 카카오ID 입니다."),
     ALREADY_EXIST_EMAIL_EXCEPTION(401, "중복된 이메일입니다."),
     AUTHENTICATION_MISMATCH_EXCEPTION(401, "권한이 없습니다."),
     PASSWORD_CONFIRMATION_EXCEPTION(401, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),

@@ -120,7 +120,7 @@ public class UserController {
         String token = kaKaoService.kakaoLogin(code);
 
         // 반환된 토큰을 쿠키에 넣음
-        Cookie cookie = new Cookie(jwtUtil.JWT_COOKIE_NAME, token);
+        Cookie cookie = new Cookie(jwtUtil.JWT_COOKIE_NAME, token.substring(7));
         cookie.setPath("/");
 
         // + response 객체에 넣음

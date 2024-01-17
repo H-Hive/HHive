@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.is_deleted = :isDeleted AND u.deletedAt < :dateTime")
     List<User> findByIsDeletedAndDeletedAtBefore(@Param("isDeleted") boolean is_deleted, @Param("dateTime") LocalDateTime dateTime);
+
+    Optional<User> findByKakaoId(Long kakaoId);
 }
