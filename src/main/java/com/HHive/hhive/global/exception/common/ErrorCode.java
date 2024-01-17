@@ -28,8 +28,10 @@ public enum ErrorCode {
     UNAUTHORIZED_ACCESS_EXCEPTION(403,"해당 파티에 대한 권한이 없습니다."),
     PARTY_HOST_NOT_RESIGN_EXCEPTION(403,"리더는 파티 탈퇴가 불가능합니다."),
     PARTY_HOST_NOT_JOIN_EXCEPTION(403,"리더는 파티 가입이 불가능합니다."),
+    END_PARTY_NOT_JOIN_EXCEPTION(403,"가입 기간이 끝난 파티 입니다."),
     ALREADY_JOIN_EXCEPTION(403,"이미 가입 되어 있습니다."),
     PARTY_NOT_RESIGN_EXCEPTION(403,"탈퇴할 파티가 없습니다."),
+    INVALID_PARTY_TIME_EXCEPTION(403,"설정 하려는 약속 시간이 현재 보다 과거 입니다."),
 
     //Notification
     NOT_FOUND_NOTIFICATION_EXCEPTION(401,"알림이 존재하지 않습니다"),
