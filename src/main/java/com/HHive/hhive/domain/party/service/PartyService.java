@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,17 @@ public class PartyService {
         Hive hive = hiveRepository.findById(hiveId)
                 .orElseThrow(NotFoundHiveException::new);
 
-        Party party = new Party(hive, dto, user);
+        LocalDateTime dateTime = LocalDateTime.of(dto.getYear(), dto.getMonth(), dto.getDay(), dto.getHours(), dto.getMinutes());
+
+        // 현재 시간을 가져옵니다.
+        LocalDateTime now = LocalDateTime.now();
+
+        // 설정하려는 약속 시간이 과거인지 확인합니다.
+        if (dateTime.isBefore(now)) {
+            throw new InvalidPartyTimeException();
+        }
+
+        Party party = new Party(hive, dto, user, dateTime);
         party.setUser(user);
 
         var saved = partyRepository.save(party);
@@ -54,7 +65,7 @@ public class PartyService {
             .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
             .collect(Collectors.toList());
 
-        return new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getCreatedAt(), party.getModifiedAt(), members);
+        return new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(),party.getDateTime(), party.getCreatedAt(), party.getModifiedAt(), members);
     }
 
     //전체 조회
@@ -72,7 +83,7 @@ public class PartyService {
                     .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
                     .collect(Collectors.toList());
 
-            PartyResponseDTO partyDto = new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getCreatedAt(), party.getModifiedAt(), members);
+            PartyResponseDTO partyDto = new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(),party.getDateTime(), party.getCreatedAt(), party.getModifiedAt(), members);
 
             if (userPartyMap.containsKey(userDto)) {
                 userPartyMap.get(userDto).add(partyDto);
@@ -119,9 +130,17 @@ public class PartyService {
     public void joinParty(Long partyId, User user) {
         Party party = getUserParty(partyId, user);
 
+        // 현재 날짜를 가져옵니다.
+        LocalDateTime now = LocalDateTime.now();
+
         // 파티 호스트가 파티에 가입하는 것을 방지
         if (party.getHostId().equals(user.getId())) {
             throw new PartyHostNotJoinException();
+        }
+
+        // 파티 날짜가 현재 날짜보다 이전인 경우, 가입 불가 처리
+        if (party.getDateTime().isBefore(now)) {
+            throw new EndPartyNotJoinException();
         }
 
         // 중복 가입 검사

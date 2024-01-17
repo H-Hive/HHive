@@ -7,6 +7,8 @@ import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Builder
@@ -41,18 +43,27 @@ public class Party extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column
+    private LocalDateTime dateTime;  // 약속 시간
 
-    public Party(Hive hive, PartyRequestDTO dto, User user) {
+
+    public Party(Hive hive, PartyRequestDTO dto, User user, LocalDateTime dateTime) {
         this.hive = hive;
         this.title = dto.getTitle();
         this.username = user.getUsername();
         this.content = dto.getContent();
         this.hostId = user.getId();
+        this.dateTime = dateTime;
     }
 
     // 연관관계 메서드
     public void setUser(User user) {
         this.user = user;
+    }
+
+    // 날짜 설정 메서드
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     // 서비스 메서드

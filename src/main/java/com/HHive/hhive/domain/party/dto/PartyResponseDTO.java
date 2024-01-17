@@ -17,6 +17,7 @@ public class PartyResponseDTO {
     private String title;
     private String username;
     private String content;
+    private LocalDateTime dateTime; // 약속 날짜,시간
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
     private List<MemberResponseDTO> members;
@@ -27,6 +28,7 @@ public class PartyResponseDTO {
         this.title = party.getTitle();
         this.username = party.getUsername();
         this.content = party.getContent();
+        this.dateTime = party.getDateTime();
         this.createAt = party.getCreatedAt();
         this.modifiedAt = party.getModifiedAt();
     }
