@@ -46,7 +46,9 @@ public class PartyService {
     //단건 조회
     @Transactional
     public PartyResponseDTO getPartyDto(Long partyId) {
-        Party party = partyRepository.findById(partyId).orElseThrow(PartyNotFoundException::new);
+        Party party = partyRepository.findById(partyId)
+                .filter(p -> !p.isDeleted()) // 삭제 되지 않은 파티만 필터링
+                .orElseThrow(PartyNotFoundException::new);
 
         List<MemberResponseDTO> members = partyUserRepository.findUsersByPartyId(partyId).stream()
             .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
@@ -60,7 +62,10 @@ public class PartyService {
     public Map<UserInfoResponseDTO, List<PartyResponseDTO>> getUserPartyMap() {
         Map<UserInfoResponseDTO, List<PartyResponseDTO>> userPartyMap = new HashMap<>();
 
-        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
+                .filter(p -> !p.isDeleted())
+                .collect(Collectors.toList());
+
         for (Party party : partyList) {
             UserInfoResponseDTO userDto = new UserInfoResponseDTO(party.getUser());
             List<MemberResponseDTO> members = partyUserRepository.findUsersByPartyId(party.getId()).stream()
