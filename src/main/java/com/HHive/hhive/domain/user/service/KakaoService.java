@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
+
+    @Value("${social.api.key.kakao}")
+    private String kakaoApiKey;
 
     public String kakaoLogin(String code) throws JsonProcessingException {
 
@@ -58,8 +62,8 @@ public class KakaoService {
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "${social.api.key.kakao}");
-        body.add("redirect_uri", "http://15.165.158.12/api/users/kakao/callback");
+        body.add("client_id", kakaoApiKey);
+        body.add("redirect_uri", "http://localhost:8080/api/users/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -82,14 +86,14 @@ public class KakaoService {
     private KakaoUserInfoDTO getKakaoUserInfo(String accessToken) throws JsonProcessingException {
 
         URI uri = UriComponentsBuilder
-                .fromUriString("https://kauth.kakao.com")
-                .path("/oauth/token")
+                .fromUriString("https://kapi.kakao.com")
+                .path("/v2/user/me")
                 .encode()
                 .build()
                 .toUri();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer%" + accessToken);
+        headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity

@@ -126,6 +126,7 @@ public class UserController {
 
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        System.out.println(code);
 
         // jwt 토큰 반환
         String token = kaKaoService.kakaoLogin(code);
