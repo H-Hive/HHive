@@ -4,6 +4,7 @@ import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.domain.user.service.EmailService;
 import com.HHive.hhive.domain.user.service.KakaoService;
 import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
@@ -12,7 +13,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final KakaoService kaKaoService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<Void>> signup(
@@ -36,6 +39,14 @@ public class UserController {
 
         userService.signup(requestDTO);
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "회원가입 성공", null));
+    }
+
+    @PostMapping("/emailConfirm")
+    public ResponseEntity<CommonResponse<Integer>> mailConfirm(@RequestBody EmailCheckRequestDTO emailCheckRequestDTO) {
+
+        int num = emailService.sendEmail(emailCheckRequestDTO.getEmail());
+
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "인증코드 발급 성공", num));
     }
 
     @PostMapping("/login")
@@ -130,12 +141,13 @@ public class UserController {
 
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        System.out.println(code);
 
         // jwt 토큰 반환
         String token = kaKaoService.kakaoLogin(code);
 
         // 반환된 토큰을 쿠키에 넣음
-        Cookie cookie = new Cookie(jwtUtil.JWT_COOKIE_NAME, token);
+        Cookie cookie = new Cookie(jwtUtil.JWT_COOKIE_NAME, token.substring(7));
         cookie.setPath("/");
 
         // + response 객체에 넣음
