@@ -44,7 +44,6 @@ public class UserController {
 
         int num = emailService.sendEmail(emailCheckRequestDTO.getEmail());
 
-//        return "인증 코드가 발급되었습니다. : " + num;
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "인증코드 발급 성공", num));
     }
 

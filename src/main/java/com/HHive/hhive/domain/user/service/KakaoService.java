@@ -58,8 +58,8 @@ public class KakaoService {
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "${social.api.key.google}");
-        body.add("redirect_uri", "http://localhost:8080/api/users/kakao/callback");
+        body.add("client_id", "${social.api.key.kakao}");
+        body.add("redirect_uri", "http://15.165.158.12/api/users/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -117,8 +117,7 @@ public class KakaoService {
 
         // 중복된 Kakao Id가 DB에 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
-        User kakaoUser = userRepository.findByKakaoId(kakaoId)
-                .orElseThrow(AlreadyExistKakaoIdException::new);
+        User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
             // 카카오로 로그인한 사용자의 이메일과 동일한 이메일을 가진 유저가 있는지 확인
