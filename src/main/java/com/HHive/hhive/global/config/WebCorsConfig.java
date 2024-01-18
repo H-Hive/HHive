@@ -9,11 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebCorsConfig implements WebMvcConfigurer {
 
+    private static final String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOrigins("http://hhive.s3-website.ap-northeast-2.amazonaws.com")
+                .allowedOrigins(FRONT_URL)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("Origin", "Content-Type", "Accept")
                 .allowCredentials(true)
