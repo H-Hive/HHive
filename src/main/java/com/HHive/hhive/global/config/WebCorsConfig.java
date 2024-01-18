@@ -9,12 +9,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebCorsConfig implements WebMvcConfigurer {
 
-    private static final String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
+    private final String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
+        String LOCALHOST_URL_FOR_TEST = "http://localhost:8082";
+
+        String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
+
         registry.addMapping("/**")
-                .allowedOrigins(FRONT_URL)
+//                .allowedOrigins(FRONT_URL)
+                .allowedOrigins(LOCALHOST_URL_FOR_TEST)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("Origin", "Content-Type", "Accept")
                 .allowCredentials(true)
