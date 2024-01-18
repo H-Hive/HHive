@@ -4,6 +4,7 @@ import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.domain.user.service.EmailService;
 import com.HHive.hhive.domain.user.service.KakaoService;
 import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
@@ -12,12 +13,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final KakaoService kaKaoService;
+    private final EmailService emailService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<Void>> signup(
@@ -34,6 +37,15 @@ public class UserController {
 
         userService.signup(requestDTO);
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "회원가입 성공", null));
+    }
+
+    @PostMapping("/emailConfirm")
+    public ResponseEntity<CommonResponse<Integer>> mailConfirm(@RequestBody EmailCheckRequestDTO emailCheckRequestDTO) {
+
+        int num = emailService.sendEmail(emailCheckRequestDTO.getEmail());
+
+//        return "인증 코드가 발급되었습니다. : " + num;
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "인증코드 발급 성공", num));
     }
 
     @PostMapping("/login")
