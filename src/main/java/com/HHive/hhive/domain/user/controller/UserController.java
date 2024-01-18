@@ -14,7 +14,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +47,21 @@ public class UserController {
         Cookie tokenCookie = jwtUtil.createTokenCookie(requestDTO.getUsername());
         Cookie userInfoCookie = jwtUtil.createUserInfoCookie(userInfo);
 
-        response.addCookie(tokenCookie);
-        response.addCookie(userInfoCookie);
+        ResponseCookie cookie1 = ResponseCookie.from(userInfoCookie.getName(),userInfoCookie.getValue())
+                .sameSite("")
+                .path("/")
+                .maxAge(3600)
+                .build();
+
+        ResponseCookie cookie2 = ResponseCookie.from(tokenCookie.getName(), tokenCookie.getValue())
+                .path("/")
+                .maxAge(3600)
+                .build();
+
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie1 + "; SameSite=");
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie2 + "; SameSite=");
+//        response.addCookie(tokenCookie);
+//        response.addCookie(userInfoCookie);
 
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", userInfo));
