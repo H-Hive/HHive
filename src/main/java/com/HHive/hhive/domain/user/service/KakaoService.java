@@ -3,7 +3,6 @@ package com.HHive.hhive.domain.user.service;
 import com.HHive.hhive.domain.user.dto.KakaoUserInfoDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
-import com.HHive.hhive.global.exception.user.AlreadyExistEmailException;
 import com.HHive.hhive.global.exception.user.AlreadyExistKakaoIdException;
 import com.HHive.hhive.global.jwt.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -60,7 +59,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "${social.api.key.google}");
-        body.add("redirect_uri", "http://15.165.158.12/api/users/kakao/callback");
+        body.add("redirect_uri", "http://localhost:8080/api/users/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -124,8 +123,7 @@ public class KakaoService {
         if (kakaoUser == null) {
             // 카카오로 로그인한 사용자의 이메일과 동일한 이메일을 가진 유저가 있는지 확인
             String kakaoEmail = kakaoUserInfo.getEmail();
-            User sameEmailUser = userRepository.findByEmail(kakaoEmail)
-                    .orElseThrow(AlreadyExistEmailException::new);
+            User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
 
             if (sameEmailUser != null) {
                 kakaoUser = sameEmailUser;
