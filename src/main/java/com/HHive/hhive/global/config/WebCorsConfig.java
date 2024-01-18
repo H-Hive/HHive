@@ -19,8 +19,8 @@ public class WebCorsConfig implements WebMvcConfigurer {
         String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
 
         registry.addMapping("/**")
-//                .allowedOrigins(FRONT_URL)
-                .allowedOrigins(LOCALHOST_URL_FOR_TEST)
+                .allowedOrigins(FRONT_URL)
+//                .allowedOrigins(LOCALHOST_URL_FOR_TEST)
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("Origin", "Content-Type", "Accept")
                 .allowCredentials(true)
