@@ -88,7 +88,7 @@ public class PartyService {
         List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
                 .filter(p -> !p.isDeleted() && p.getHive().equals(hive))
                 .collect(Collectors.toList());
-
+      
         for (Party party : partyList) {
             UserInfoResponseDTO userDto = new UserInfoResponseDTO(party.getUser());
             List<MemberResponseDTO> members = getPartyMembers(party.getId());
