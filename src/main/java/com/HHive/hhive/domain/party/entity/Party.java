@@ -61,11 +61,6 @@ public class Party extends BaseTimeEntity {
         this.user = user;
     }
 
-    // 날짜 설정 메서드
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
     // 서비스 메서드
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
