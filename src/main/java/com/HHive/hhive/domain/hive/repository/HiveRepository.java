@@ -12,6 +12,8 @@ public interface HiveRepository extends JpaRepository<Hive, Long> {
 
     Optional<Hive> findByIdAndIsDeletedIsFalse(Long hive_id);
 
+    Optional<Hive> findByTitle(String title);
+
     @Query("SELECT h FROM Hive h WHERE h.isDeleted = false")
     List<Hive> findAllHiveNotDeleted();
 

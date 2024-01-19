@@ -22,7 +22,7 @@ public class HiveUser {
     private HiveUserPK hiveUserPK;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     @MapsId("userId")
     private User user;
 
@@ -32,10 +32,10 @@ public class HiveUser {
     private Hive hive;
 
     @Builder
-    public HiveUser(User user , Hive hive){
-        this.user= user;
-        this.hive=hive;
-        this.hiveUserPK=HiveUserPK.builder()
+    public HiveUser(User user, Hive hive) {
+        this.user = user;
+        this.hive = hive;
+        this.hiveUserPK = HiveUserPK.builder()
                 .userId(user.getId())
                 .hiveId(hive.getId())
                 .build();

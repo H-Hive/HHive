@@ -1,7 +1,7 @@
 package com.HHive.hhive.domain.hive.entity;
 
 
-import com.HHive.hhive.domain.hive.dto.HiveUpdateRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -32,7 +32,7 @@ public class Hive extends BaseTimeEntity {
     @Column(nullable = false)
     private Long creatorId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column
@@ -51,13 +51,13 @@ public class Hive extends BaseTimeEntity {
 //    private Category category;
 
 
-    public void update(HiveUpdateRequestDTO hiveUpdateRequestDTO) {
-        if (hiveUpdateRequestDTO.getTitle() != null) {
-            this.title = hiveUpdateRequestDTO.getTitle();
+    public void update(UpdateHiveRequestDTO updateHiveRequestDTO) {
+        if (updateHiveRequestDTO.getTitle() != null) {
+            this.title = updateHiveRequestDTO.getTitle();
         }
 
-        if (hiveUpdateRequestDTO.getIntroduction() != null) {
-            this.introduction = hiveUpdateRequestDTO.getIntroduction();
+        if (updateHiveRequestDTO.getIntroduction() != null) {
+            this.introduction = updateHiveRequestDTO.getIntroduction();
         }
     }
 

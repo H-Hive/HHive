@@ -15,6 +15,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    @Query("SELECT u FROM User u WHERE u.is_deleted = false and u.email = :email")
+    Optional<User> findUserByEmailAndIs_deletedFalse(@Param("email") String email);
+
+    @Query("SELECT u FROM User u WHERE u.is_deleted = false and u.username = :username")
+    Optional<User> findUserByUsernameAndIs_deletedFalse(@Param("username") String username);
+
     @Query("SELECT u FROM User u WHERE u.is_deleted = :isDeleted AND u.deletedAt < :dateTime")
     List<User> findByIsDeletedAndDeletedAtBefore(@Param("isDeleted") boolean is_deleted, @Param("dateTime") LocalDateTime dateTime);
+
+    Optional<User> findByKakaoId(Long kakaoId);
 }

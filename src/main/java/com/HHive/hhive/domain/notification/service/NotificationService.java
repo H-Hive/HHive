@@ -15,8 +15,8 @@ import com.HHive.hhive.domain.relationship.partyuser.repository.PartyUserReposit
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.global.common.CommonResponse;
+import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
 import com.HHive.hhive.global.exception.notification.NotificationNotFoundException;
-import com.HHive.hhive.global.exception.party.HiveNotFoundException;
 import com.HHive.hhive.global.exception.party.PartyNotFoundException;
 import com.HHive.hhive.global.exception.user.UserNotFoundException;
 import jakarta.transaction.Transactional;
@@ -54,8 +54,8 @@ public class NotificationService {
             sendNotificationToUserListParty(partyUserList, notification);
         } else if (type.equals("hive")) {
             hiveRepository.findById(notificationRequestDTO.getId())
-                    .orElseThrow(HiveNotFoundException::new);
-            List<HiveUser> hiveUserList = hiveUserRepository.findUsersByHiveId(
+                    .orElseThrow(NotFoundHiveException::new);
+            List<HiveUser> hiveUserList = hiveUserRepository.findHiveUsersByHiveId(
                     notificationRequestDTO.getId());
             sendNotificationToUserListHive(hiveUserList, notification);
         }

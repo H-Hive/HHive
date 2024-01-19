@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "\"USER\"")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
@@ -37,6 +38,8 @@ public class User extends BaseTimeEntity {
     private boolean is_deleted = false;
     private LocalDateTime deletedAt;
 
+    private Long kakaoId;
+
     //TODO: 이미지
 
     //TODO: 카테고리
@@ -47,6 +50,19 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.email = email;
         this.description = description;
+    }
+
+    // 카카오
+    public User(String username, String password, String email, Long kakaoId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.kakaoId = kakaoId;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
     public void updateProfile(UpdateUserProfileRequestDTO requestDTO) {

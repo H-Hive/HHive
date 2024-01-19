@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HiveCreateRequestDTO {
+public class CreateHiveRequestDTO {
 
     @NotBlank
     private String title;

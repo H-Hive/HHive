@@ -1,5 +1,8 @@
 package com.HHive.hhive.domain.user.service;
 
+import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
+import com.HHive.hhive.domain.hive.entity.Hive;
+import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
@@ -21,6 +24,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final HiveUserService hiveUserService;
 
     @Transactional
     public void signup(UserSignupRequestDTO requestDTO) {
@@ -51,7 +56,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(UserLoginRequestDTO requestDTO) {
+    public UserInfoResponseDTO login(UserLoginRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
         String password = requestDTO.getPassword();
 
@@ -62,6 +67,9 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UserNotFoundException();
         }
+
+        // 로그인 성공시 UserInfoResponseDTO로 변환하여 반환
+        return new UserInfoResponseDTO(user);
     }
 
     public UserInfoResponseDTO getProfile(Long user_id) {
@@ -132,5 +140,23 @@ public class UserService {
 
     public User getUser(Long user_id) {
         return userRepository.findById(user_id).orElseThrow(UserNotFoundException::new);
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmailAndIs_deletedFalse(email)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsernameAndIs_deletedFalse(username)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    public List<HiveResponseDTO> getMyHives(Long user_Id) {
+        User user = getUser(user_Id);
+
+        List<Hive> myHives = hiveUserService.findAllHivesByHiveUser(user);
+        return myHives.stream().map(HiveResponseDTO::of).toList();
+
     }
 }

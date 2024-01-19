@@ -1,5 +1,7 @@
 package com.HHive.hhive.domain.category.controller;
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.category.service.CategoryService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
