@@ -59,18 +59,22 @@ public class UserController {
         Cookie userInfoCookie = jwtUtil.createUserInfoCookie(userInfo);
 
         ResponseCookie cookie1 = ResponseCookie.from(userInfoCookie.getName(),userInfoCookie.getValue())
-                .sameSite("")
+                .sameSite("none")
+                .secure(true)
                 .path("/")
                 .maxAge(3600)
                 .build();
 
         ResponseCookie cookie2 = ResponseCookie.from(tokenCookie.getName(), tokenCookie.getValue())
+                .sameSite("none")
+                .httpOnly(true)
+                .secure(true)
                 .path("/")
                 .maxAge(3600)
                 .build();
 
-        response.setHeader(HttpHeaders.SET_COOKIE, cookie1 + "; SameSite=");
-        response.addHeader(HttpHeaders.SET_COOKIE, cookie2 + "; SameSite=");
+        response.setHeader(HttpHeaders.SET_COOKIE, cookie1.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie2.toString());
 //        response.addCookie(tokenCookie);
 //        response.addCookie(userInfoCookie);
 
