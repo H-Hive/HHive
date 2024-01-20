@@ -32,18 +32,19 @@ public class PartyController {
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 생성 성공", responseDto));
     }
 
-    @GetMapping("/{partyId}")
-    public ResponseEntity<CommonResponse<PartyResponseDTO>> getParty(@PathVariable Long partyId) {
+    @GetMapping("/{hiveId}/{partyId}")
+    public ResponseEntity<CommonResponse<PartyResponseDTO>> getParty(@PathVariable Long hiveId, @PathVariable Long partyId) {
 
-        PartyResponseDTO responseDto = partyService.getPartyDto(partyId);
+        PartyResponseDTO responseDto = partyService.getPartyDto(hiveId, partyId);
 
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 조회 성공", responseDto));
     }
 
-    @GetMapping
-    public ResponseEntity<CommonResponse<List<PartyListResponseDTO>>> getPartyList() {
 
-        List<PartyListResponseDTO> response = partyService.getUserPartyMap().entrySet().stream()
+    @GetMapping("/{hiveId}")
+    public ResponseEntity<CommonResponse<List<PartyListResponseDTO>>> getPartyList(@PathVariable Long hiveId) {
+
+        List<PartyListResponseDTO> response = partyService.getUserPartyMap(hiveId).entrySet().stream()
                 .map(entry -> new PartyListResponseDTO(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
 

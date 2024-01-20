@@ -1,6 +1,6 @@
 package com.HHive.hhive.domain.party.dto;
 
-import com.HHive.hhive.domain.party.entity.Party;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,19 +17,13 @@ public class PartyResponseDTO {
     private String title;
     private String username;
     private String content;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTime; // 약속 날짜,시간
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedAt;
     private List<MemberResponseDTO> members;
 
-
-    public PartyResponseDTO(Party party) {
-        this.id = party.getId();
-        this.title = party.getTitle();
-        this.username = party.getUsername();
-        this.content = party.getContent();
-        this.dateTime = party.getDateTime();
-        this.createAt = party.getCreatedAt();
-        this.modifiedAt = party.getModifiedAt();
-    }
 }
