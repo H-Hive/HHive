@@ -55,29 +55,9 @@ public class UserController {
 
         UserInfoResponseDTO userInfo = userService.login(requestDTO);
 
-        Cookie tokenCookie = jwtUtil.createTokenCookie(requestDTO.getUsername());
-        Cookie userInfoCookie = jwtUtil.createUserInfoCookie(userInfo);
-
-        ResponseCookie cookie1 = ResponseCookie.from(userInfoCookie.getName(),userInfoCookie.getValue())
-                .sameSite("none")
-                .secure(true)
-                .path("/")
-                .domain(".hhive.store")
-                .maxAge(3600)
-                .build();
-
-        ResponseCookie cookie2 = ResponseCookie.from(tokenCookie.getName(), tokenCookie.getValue())
-                .sameSite("none")
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(3600)
-                .build();
-
-        response.setHeader(HttpHeaders.SET_COOKIE, cookie1.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, cookie2.toString());
-//        response.addCookie(tokenCookie);
-//        response.addCookie(userInfoCookie);
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(requestDTO.getUsername()));
+//        Cookie tokenCookie = jwtUtil.createTokenCookie(requestDTO.getUsername());
+//        Cookie userInfoCookie = jwtUtil.createUserInfoCookie(userInfo);
 
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", userInfo));

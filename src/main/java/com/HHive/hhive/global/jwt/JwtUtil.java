@@ -35,7 +35,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     // Token 식별자
-    public static final String BEARER_PREFIX = "Bearer%";
+    public static final String BEARER_PREFIX = "Bearer ";
 
     // 쿠키 이름
     public static final String USER_INFO_COOKIE_NAME = "userinfo";
@@ -59,18 +59,23 @@ public class JwtUtil {
 
     public String resolveToken(HttpServletRequest request) {
 
-        Cookie[] cookies = request.getCookies();
+//        Cookie[] cookies = request.getCookies();
+//
+//        if (cookies == null) {
+//            return null;
+//        }
+//
+//        String bearerToken = Arrays.stream(cookies)
+//                .filter(cookie -> cookie.getName().equals(JWT_COOKIE_NAME))
+//                .findFirst()
+//                .map(Cookie::getValue)
+//                .orElse(null);
+//
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+//            return bearerToken.substring(7);
+//        }
 
-        if (cookies == null) {
-            return null;
-        }
-
-        String bearerToken = Arrays.stream(cookies)
-                .filter(cookie -> cookie.getName().equals(JWT_COOKIE_NAME))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null);
-
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
@@ -97,40 +102,40 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public Cookie createTokenCookie(String username) {
-
-        long EXPIRED_TIME = 60 * 60;
-
-        String jwtToken = createToken(username);
-
-        Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
-        cookie.setPath("/api");
-        cookie.setMaxAge((int) EXPIRED_TIME);
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
-
-    public Cookie createUserInfoCookie(UserInfoResponseDTO responseDTO) {
-
-        long EXPIRED_TIME = 60 * 60;
-
-        String responseToString = null;
-
-        try {
-            responseToString = objectMapper.writeValueAsString(responseDTO);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        String encodedUserInfo = Base64.getEncoder().encodeToString(responseToString.getBytes());
-
-        Cookie cookie = new Cookie(USER_INFO_COOKIE_NAME, encodedUserInfo);
-        cookie.setPath("/");
-        cookie.setMaxAge((int) EXPIRED_TIME);
-
-        return cookie;
-    }
+//    public Cookie createTokenCookie(String username) {
+//
+//        long EXPIRED_TIME = 60 * 60;
+//
+//        String jwtToken = createToken(username);
+//
+//        Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
+//        cookie.setPath("/api");
+//        cookie.setMaxAge((int) EXPIRED_TIME);
+//        cookie.setHttpOnly(true);
+//
+//        return cookie;
+//    }
+//
+//    public Cookie createUserInfoCookie(UserInfoResponseDTO responseDTO) {
+//
+//        long EXPIRED_TIME = 60 * 60;
+//
+//        String responseToString = null;
+//
+//        try {
+//            responseToString = objectMapper.writeValueAsString(responseDTO);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        String encodedUserInfo = Base64.getEncoder().encodeToString(responseToString.getBytes());
+//
+//        Cookie cookie = new Cookie(USER_INFO_COOKIE_NAME, encodedUserInfo);
+//        cookie.setPath("/");
+//        cookie.setMaxAge((int) EXPIRED_TIME);
+//
+//        return cookie;
+//    }
 
     public String createToken(String username) {
         Date date = new Date();
