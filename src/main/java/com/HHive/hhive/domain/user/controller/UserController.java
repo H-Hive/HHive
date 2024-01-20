@@ -62,6 +62,7 @@ public class UserController {
                 .sameSite("none")
                 .secure(true)
                 .path("/")
+                .domain(".hhive.store")
                 .maxAge(3600)
                 .build();
 
