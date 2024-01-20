@@ -9,14 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebCorsConfig implements WebMvcConfigurer {
 
-    private final String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
         String LOCALHOST_URL_FOR_TEST = "http://localhost:8082";
 
-        String FRONT_URL = "http://hhive.s3-website.ap-northeast-2.amazonaws.com";
+        String FRONT_URL = "https://hhive.store";
 
         registry.addMapping("/**")
                 .allowedOrigins(FRONT_URL)

@@ -131,7 +131,7 @@ public class UserService {
         userRepository.save(userToDelete);
     }
 
-    @Scheduled(fixedRate = 60 * 1000) // 1분마다 실행
+//    @Scheduled(fixedRate = 60 * 1000) // 1분마다 실행
     public void processPendingDeletions() {
         List<User> userToDelete = userRepository.findByIsDeletedAndDeletedAtBefore(true, LocalDateTime.now().minusMinutes(1));
 
