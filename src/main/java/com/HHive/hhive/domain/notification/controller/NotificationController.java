@@ -41,23 +41,23 @@ public class NotificationController {
                 .body(CommonResponse.of(HttpStatus.CREATED.value(), "메시지 전송 성공", response));
     }
 
-    @GetMapping(value = "/get" )
+    @GetMapping(value = "/{userId}/get" )
     public  ResponseEntity<SseEmitter>  handleNotifications(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @PathVariable(name = "userId") Long userId
     ) {
-        CustomSseEmitter emitter = notificationService.createUserEmitter(userDetails.getUser().getId());
+        CustomSseEmitter emitter = notificationService.createUserEmitter(userId);
 
         notificationService.addSseEmitter(emitter);
 
         return ResponseEntity.ok(emitter);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/getAll")
     public ResponseEntity<CommonResponse> getNotificationsByUserId(
-            @PathVariable(name = "userId") Long userId
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(
-                userId);
+                userDetails.getUser().getId());
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "알림 출력 성공", notifications));
     }
@@ -81,7 +81,7 @@ public class NotificationController {
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "알림 개수 조회 완료", null));
     }
-    @PatchMapping("/read")
+    @GetMapping("/read")
     public ResponseEntity<CommonResponse> readNotification(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
