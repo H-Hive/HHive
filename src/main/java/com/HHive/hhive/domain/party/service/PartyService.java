@@ -34,8 +34,7 @@ public class PartyService {
 
     public PartyResponseDTO createParty(Long hiveId, PartyRequestDTO dto, User user) {
         // Hive 존재 여부 확인
-        Hive hive = hiveRepository.findById(hiveId)
-                .orElseThrow(NotFoundHiveException::new);
+        Hive hive = getHive(hiveId);
 
         // DTO에서 날짜와 시간 정보를 가져와서 LocalDateTime 객체 생성
         LocalDateTime dateTime = LocalDateTime.of(dto.getYear(), dto.getMonth(), dto.getDay(), dto.getHours(), dto.getMinutes());
@@ -80,8 +79,7 @@ public class PartyService {
     //전체 조회
     @Transactional
     public Map<UserInfoResponseDTO, List<PartyResponseDTO>> getUserPartyMap(Long hiveId) {
-        Hive hive = hiveRepository.findById(hiveId)
-                .orElseThrow(NotFoundHiveException::new);
+        Hive hive = getHive(hiveId);
 
         Map<UserInfoResponseDTO, List<PartyResponseDTO>> userPartyMap = new LinkedHashMap<>();
 
@@ -177,6 +175,11 @@ public class PartyService {
     private Party getUserParty(Long partyId, User user) {
         return partyRepository.findById(partyId)
                 .orElseThrow(PartyNotFoundException::new);
+    }
+
+    private Hive getHive(Long hiveId) {
+        return hiveRepository.findById(hiveId)
+                .orElseThrow(NotFoundHiveException::new);
     }
 
     // 파티 조회 및 예외 처리
