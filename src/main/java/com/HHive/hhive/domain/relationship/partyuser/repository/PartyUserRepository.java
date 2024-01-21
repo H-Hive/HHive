@@ -1,5 +1,6 @@
 package com.HHive.hhive.domain.relationship.partyuser.repository;
 
+import com.HHive.hhive.domain.party.entity.Party;
 import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
 import com.HHive.hhive.domain.relationship.partyuser.pk.PartyUserPK;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,7 @@ public interface PartyUserRepository extends JpaRepository<PartyUser, PartyUserP
     boolean existsByUserIdAndPartyId(Long id, Long partyId);
 
     boolean existsByPartyUserPK_UserIdAndPartyUserPK_PartyId(Long id, Long id1);
+
+    @Query("SELECT pu.party FROM PartyUser pu WHERE pu.user.id = :userId")
+    List<Party> findPartiesByUserId(Long userId);
 }

@@ -88,5 +88,15 @@ public class PartyController {
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 탈퇴 성공", null));
     }
 
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<CommonResponse<List<PartyResponseDTO>>> getPartiesByUserId(
+            @PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        List<PartyResponseDTO> response = partyService.getPartiesByUserId(userId);
+
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(),
+                "유저의 파티 조회 성공", response));
+    }
+
 }
 
