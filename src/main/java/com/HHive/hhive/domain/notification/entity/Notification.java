@@ -24,14 +24,19 @@ public class Notification extends BaseTimeEntity {
     @Column(name = "message")
     private String message;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "group_name")
+    private String groupName;
 
     @Builder
-    public Notification(String message, String status) {
+    public Notification(String message) {
         this.message = message;
-        this.status = "unread";
+        this.groupName = "group";
     }
+
+    public void setGroupName(String groupName){
+        this.groupName=groupName;
+    }
+
 
 
 }

@@ -3,6 +3,7 @@ package com.HHive.hhive.domain.relationship.notificationuser.entity;
 import com.HHive.hhive.domain.notification.entity.Notification;
 import com.HHive.hhive.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,6 +32,9 @@ public class UserNotification {
     @MapsId("notificationId")
     private Notification notification;
 
+    @Column(name = "status")
+    private String status;
+
     @Builder
     public UserNotification(User user,Notification notification){
         this.user=user;
@@ -39,6 +43,10 @@ public class UserNotification {
                 .userId(user.getId())
                 .notificationId(notification.getId())
                 .build();
+        this.status="unread";
+    }
+    public void changeStatus(){
+        this.status="read";
     }
 
 }

@@ -12,13 +12,13 @@ public class NotificationResponseDTO {
 
     private Long notificationId;
     private String message;
-    private String status;
+    private String groupName;
 
     public static NotificationResponseDTO fromEntity(Notification notification) {
         return new NotificationResponseDTO(
                 notification.getId(),
                 notification.getMessage(),
-                notification.getStatus()
+                notification.getGroupName()
         );
 
 
