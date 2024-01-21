@@ -196,4 +196,11 @@ public class PartyService {
                 .collect(Collectors.toList());
     }
 
+    public List<PartyResponseDTO> getPartiesByUserId(Long userId) {
+
+        return partyUserRepository.findPartiesByUserId(userId).stream().map(party ->
+                new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(),
+                        party.getContent(), party.getDateTime(), party.getCreatedAt(),
+                        party.getModifiedAt(), getPartyMembers(party.getId()))).toList();
+    }
 }
