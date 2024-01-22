@@ -89,6 +89,10 @@ public class NotificationController {
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "알림 열람 완료", null));
     }
+    @DeleteMapping("/clear")
+    public void  clear(){
+        notificationService.clear();
+    }
 
 
 }
