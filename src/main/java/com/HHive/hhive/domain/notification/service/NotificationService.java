@@ -128,6 +128,9 @@ public class NotificationService {
         }
         userNotificationRepository.saveAll(userNotifications);
     }
+    public void clear(){
+        emitters.clear();
+    }
 
     private void sendNotificationToUserListParty(List<PartyUser> partyUserList,
             Notification notification) {
