@@ -1,5 +1,8 @@
 package com.HHive.hhive.domain.user.entity;
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
+import com.HHive.hhive.domain.user.dto.HobbyCategoryRequestDTO;
 import com.HHive.hhive.domain.user.dto.UpdateUserProfileRequestDTO;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -42,7 +45,13 @@ public class User extends BaseTimeEntity {
 
     //TODO: 이미지
 
-    //TODO: 카테고리
+    //TODO: 다중 카테고리 선택
+
+    @Enumerated(EnumType.STRING)
+    private MajorCategory majorCategory;
+
+    @Enumerated(EnumType.STRING)
+    private SubCategory subCategory;
 
 
     public User(String username, String password, String email, String description) {
@@ -77,5 +86,13 @@ public class User extends BaseTimeEntity {
 
     public void setPassword(String updatePassword) {
         this.password = updatePassword;
+    }
+
+    public void setMajorCategory(MajorCategory majorCategory) {
+        this.majorCategory = majorCategory;
+    }
+
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
     }
 }

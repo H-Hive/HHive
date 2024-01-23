@@ -119,7 +119,18 @@ public class UserController {
     }
 
 
-    //TODO: 카테고리 선택
+    // 카테고리 설정
+    @PostMapping("/{userId}/category")
+    public ResponseEntity<CommonResponse<UserCategoryResponseDTO>> setCategory(
+            @PathVariable Long userId, @RequestBody HobbyCategoryRequestDTO requestDTO
+            , @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        User loginUser = userDetails.getUser();
+        UserCategoryResponseDTO response = userService.setCategory(userId, requestDTO, loginUser);
+
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "카테고리 설정 성공", response));
+    }
 
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {

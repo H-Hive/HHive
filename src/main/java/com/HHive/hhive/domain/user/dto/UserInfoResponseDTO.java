@@ -12,11 +12,20 @@ public class UserInfoResponseDTO {
     private String username;
     private String email;
     private String description;
+    private String majorCategory;
+    private String subCategory;
 
     public UserInfoResponseDTO(User user) {
         this.userId = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.description = user.getDescription();
+
+        if (user.getMajorCategory() != null) {
+            this.majorCategory = user.getMajorCategory().name();
+        }
+        if (user.getSubCategory() != null) {
+            this.subCategory = user.getSubCategory().name();
+        }
     }
 }
