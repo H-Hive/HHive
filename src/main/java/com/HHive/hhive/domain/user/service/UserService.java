@@ -166,10 +166,6 @@ public class UserService {
     @Transactional
     public UserCategoryResponseDTO setCategory(Long userId, HobbyCategoryRequestDTO requestDTO, User loginUser) {
 
-        if (loginUser == null) {
-            throw new CustomException(ErrorCode.LOGIN_REQUIRED_EXCEPTION);
-        }
-
         if (!userId.equals(loginUser.getId())) {
             throw new CustomException(ErrorCode.AUTHENTICATION_MISMATCH_EXCEPTION);
         }
