@@ -1,5 +1,7 @@
 package com.HHive.hhive.domain.user.service;
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
@@ -8,7 +10,6 @@ import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.global.exception.user.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,8 +73,8 @@ public class UserService {
         return new UserInfoResponseDTO(user);
     }
 
-    public UserInfoResponseDTO getProfile(Long user_id) {
-        User user = getUser(user_id);
+    public UserInfoResponseDTO getProfile(Long userId) {
+        User user = getUser(userId);
         return new UserInfoResponseDTO(user);
     }
 
@@ -82,8 +83,7 @@ public class UserService {
 
         User user = getUser(user_id);
 
-        // 로그인한 유저 == 수정한 프로필의 유저 확인
-        if (!loginUser.getUsername().equals(user.getUsername())) {
+        if (!loginUser.getId().equals(user.getId())) {
             throw new AuthenticationMismatchException();
         }
 
@@ -158,5 +158,28 @@ public class UserService {
         List<Hive> myHives = hiveUserService.findAllHivesByHiveUser(user);
         return myHives.stream().map(HiveResponseDTO::of).toList();
 
+    }
+
+    // 카테고리 설정
+    @Transactional
+    public UserCategoryResponseDTO setCategory(Long userId, HobbyCategoryRequestDTO requestDTO, User loginUser) {
+        User user = getUser(userId);
+
+        // TODO: 예외처리
+//        if (!loginUser.getUsername().equals(user.getUsername())) {
+//            throw new AuthenticationMismatchException();
+//        }
+
+        MajorCategory majorCategory = MajorCategory.valueOf(requestDTO.getMajorCategory());
+        SubCategory subCategory = SubCategory.valueOf(requestDTO.getSubCategory());
+
+        user.setMajorCategory(majorCategory);
+        user.setSubCategory(subCategory);
+
+        UserCategoryResponseDTO response = new UserCategoryResponseDTO();
+        response.setMajorCategory(user.getMajorCategory().name());
+        response.setSubCategory(user.getSubCategory().name());
+
+        return response;
     }
 }
