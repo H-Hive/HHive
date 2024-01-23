@@ -20,7 +20,12 @@ public class UserInfoResponseDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.description = user.getDescription();
-        this.majorCategory = user.getMajorCategory().name();
-        this.subCategory = user.getSubCategory().name();
+
+        if (user.getMajorCategory() != null) {
+            this.majorCategory = user.getMajorCategory().name();
+        }
+        if (user.getSubCategory() != null) {
+            this.subCategory = user.getSubCategory().name();
+        }
     }
 }

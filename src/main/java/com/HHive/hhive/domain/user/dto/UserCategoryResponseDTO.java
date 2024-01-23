@@ -1,18 +1,17 @@
 package com.HHive.hhive.domain.user.dto;
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
 import lombok.Getter;
 
 @Getter
 public class UserCategoryResponseDTO {
 
-    private String majorCategory;
-    private String subCategory;
+    private MajorCategory majorCategory;
+    private SubCategory subCategory;
 
-    public void setMajorCategory(String majorCategory) {
+    public UserCategoryResponseDTO(MajorCategory majorCategory, SubCategory subCategory) {
         this.majorCategory = majorCategory;
-    }
-
-    public void setSubCategory(String subCategory) {
         this.subCategory = subCategory;
     }
 }

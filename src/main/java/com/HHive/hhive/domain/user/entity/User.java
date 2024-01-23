@@ -2,6 +2,7 @@ package com.HHive.hhive.domain.user.entity;
 
 import com.HHive.hhive.domain.category.data.MajorCategory;
 import com.HHive.hhive.domain.category.data.SubCategory;
+import com.HHive.hhive.domain.user.dto.HobbyCategoryRequestDTO;
 import com.HHive.hhive.domain.user.dto.UpdateUserProfileRequestDTO;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -43,6 +44,8 @@ public class User extends BaseTimeEntity {
     private Long kakaoId;
 
     //TODO: 이미지
+
+    //TODO: 다중 카테고리 선택
 
     @Enumerated(EnumType.STRING)
     private MajorCategory majorCategory;

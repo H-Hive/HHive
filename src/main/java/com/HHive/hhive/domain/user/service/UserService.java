@@ -8,6 +8,8 @@ import com.HHive.hhive.domain.relationship.hiveuser.service.HiveUserService;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
+import com.HHive.hhive.global.exception.common.CustomException;
+import com.HHive.hhive.global.exception.common.ErrorCode;
 import com.HHive.hhive.global.exception.user.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -162,20 +164,22 @@ public class UserService {
 
     // 카테고리 설정
     @Transactional
-    public UserCategoryResponseDTO setCategory(Long userId, HobbyCategoryRequestDTO requestDTO) {
+    public UserCategoryResponseDTO setCategory(Long userId, HobbyCategoryRequestDTO requestDTO, User loginUser) {
 
-        User user = getUser(userId);
+        if (loginUser == null) {
+            throw new CustomException(ErrorCode.LOGIN_REQUIRED_EXCEPTION);
+        }
 
-        MajorCategory majorCategory = MajorCategory.valueOf(requestDTO.getMajorCategory());
-        SubCategory subCategory = SubCategory.valueOf(requestDTO.getSubCategory());
+        if (!userId.equals(loginUser.getId())) {
+            throw new CustomException(ErrorCode.AUTHENTICATION_MISMATCH_EXCEPTION);
+        }
 
-        user.setMajorCategory(majorCategory);
-        user.setSubCategory(subCategory);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+        user.setMajorCategory(MajorCategory.valueOf(requestDTO.getMajorCategory()));
+        user.setSubCategory(SubCategory.valueOf(requestDTO.getSubCategory()));
+        userRepository.save(user);
 
-        UserCategoryResponseDTO response = new UserCategoryResponseDTO();
-        response.setMajorCategory(user.getMajorCategory().name());
-        response.setSubCategory(user.getSubCategory().name());
-
-        return response;
+        return new UserCategoryResponseDTO(user.getMajorCategory(), user.getSubCategory());
     }
 }

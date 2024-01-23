@@ -122,9 +122,10 @@ public class UserController {
     // 카테고리 설정
     @PostMapping("/{userId}/category")
     public ResponseEntity<CommonResponse<UserCategoryResponseDTO>> setCategory(
-            @PathVariable Long userId, @RequestBody HobbyCategoryRequestDTO requestDTO,
-            @AuthenticationPrincipal User loginUser) {
+            @PathVariable Long userId, @RequestBody HobbyCategoryRequestDTO requestDTO
+            , @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
+        User loginUser = userDetails.getUser();
         UserCategoryResponseDTO response = userService.setCategory(userId, requestDTO, loginUser);
 
         return ResponseEntity.ok()
