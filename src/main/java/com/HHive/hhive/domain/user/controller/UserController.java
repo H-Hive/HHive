@@ -10,13 +10,10 @@ import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
 import com.HHive.hhive.global.jwt.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -126,18 +123,12 @@ public class UserController {
 
     @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        System.out.println(code);
 
         // jwt 토큰 반환
         String token = kaKaoService.kakaoLogin(code);
 
-        // 반환된 토큰을 쿠키에 넣음
-        Cookie cookie = new Cookie(jwtUtil.JWT_COOKIE_NAME, token.substring(7));
-        cookie.setPath("/");
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, JwtUtil.BEARER_PREFIX + token);
 
-        // + response 객체에 넣음
-        response.addCookie(cookie);
-
-        return "redirect:/";
+        return "redirect:https://hhive.store/";
     }
 }
