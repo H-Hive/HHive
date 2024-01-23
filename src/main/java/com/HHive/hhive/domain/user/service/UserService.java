@@ -162,13 +162,9 @@ public class UserService {
 
     // 카테고리 설정
     @Transactional
-    public UserCategoryResponseDTO setCategory(Long userId, HobbyCategoryRequestDTO requestDTO, User loginUser) {
-        User user = getUser(userId);
+    public UserCategoryResponseDTO setCategory(Long userId, HobbyCategoryRequestDTO requestDTO) {
 
-        // TODO: 예외처리
-//        if (!loginUser.getUsername().equals(user.getUsername())) {
-//            throw new AuthenticationMismatchException();
-//        }
+        User user = getUser(userId);
 
         MajorCategory majorCategory = MajorCategory.valueOf(requestDTO.getMajorCategory());
         SubCategory subCategory = SubCategory.valueOf(requestDTO.getSubCategory());
