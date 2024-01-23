@@ -19,7 +19,6 @@ public enum ErrorCode {
     AUTHENTICATION_MISMATCH_EXCEPTION(401, "권한이 없습니다."),
     PASSWORD_CONFIRMATION_EXCEPTION(401, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다"),
-    LOGIN_REQUIRED_EXCEPTION(401, "로그인이 필요한 서비스입니다."),
 
     //Hive
     ALREADY_EXIST_HIVE_EXCEPTION(401, "중복된 타이틀입니다."),
