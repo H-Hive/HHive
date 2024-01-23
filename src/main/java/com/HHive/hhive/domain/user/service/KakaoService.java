@@ -3,7 +3,6 @@ package com.HHive.hhive.domain.user.service;
 import com.HHive.hhive.domain.user.dto.KakaoUserInfoDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
-import com.HHive.hhive.global.exception.user.AlreadyExistKakaoIdException;
 import com.HHive.hhive.global.jwt.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,7 +62,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoApiKey);
-        body.add("redirect_uri", "http://localhost:8080/api/users/kakao/callback");
+        body.add("redirect_uri", "https://hhive.shop/api/users/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
