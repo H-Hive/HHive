@@ -7,9 +7,12 @@ import lombok.Setter;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class CustomSseEmitter extends SseEmitter {
     private Long userId;
-
+    private static final Long DEFAULT_TIMEOUT = 300000L;
+    public CustomSseEmitter(Long userId) {
+        super(DEFAULT_TIMEOUT);
+        this.userId = userId;
+    }
 }
