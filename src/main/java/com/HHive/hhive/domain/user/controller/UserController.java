@@ -133,13 +133,15 @@ public class UserController {
     }
 
     @GetMapping("/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public ResponseEntity<CommonResponse<String>> kakaoLogin(@RequestParam String code, HttpServletResponse response)
+            throws JsonProcessingException {
 
         // jwt 토큰 반환
         String token = kaKaoService.kakaoLogin(code);
 
-        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, JwtUtil.BEARER_PREFIX + token);
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, JwtUtil.BEARER_PREFIX + token.substring(7));
 
-        return "redirect:https://hhive.store/";
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.CREATED.value(), "카카오 로그인 성공", token));
     }
 }
