@@ -1,11 +1,15 @@
 package com.HHive.hhive.domain.hive.entity;
 
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,6 +38,14 @@ public class Hive extends BaseTimeEntity {
 
     @Column(nullable = false, unique = true)
     private String title;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private MajorCategory majorCategory;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private SubCategory subCategory;
 
     @Column
     private String introduction;

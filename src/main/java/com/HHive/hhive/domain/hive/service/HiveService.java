@@ -1,5 +1,7 @@
 package com.HHive.hhive.domain.hive.service;
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
@@ -65,6 +67,18 @@ public class HiveService {
         return hives.stream().map(HiveResponseDTO::of).toList();
     }
 
+    public List<HiveResponseDTO> getHivesByCategory(MajorCategory majorCategory,
+            SubCategory subCategory) {
+        List<Hive> hives = hiveRepository.findAllByMajorCategoryAndSubCategoryContaining(
+                majorCategory, subCategory);
+
+        if (hives.isEmpty()) {
+            throw new NotFoundHiveException();
+        }
+
+        return hives.stream().map(HiveResponseDTO::of).toList();
+    }
+
     @Transactional
     public void deleteHive(User user, Long hiveId) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
@@ -119,5 +133,6 @@ public class HiveService {
         return hiveRepository.findByIdAndIsDeletedIsFalse(hiveId).orElseThrow(
                 NotFoundHiveException::new);
     }
+
 
 }
