@@ -2,6 +2,7 @@ package com.HHive.hhive.domain.category.data;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import java.util.Arrays;
 
 public enum SubCategory {
 
@@ -29,5 +30,9 @@ public enum SubCategory {
 
     public String getTitle() {
         return title;
+    }
+
+    public static SubCategory findByStringName(String categoryName) {
+        return Arrays.stream(SubCategory.values()).filter(subCategory -> subCategory.name().equals(categoryName)).findFirst().orElse(null);
     }
 }

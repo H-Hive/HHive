@@ -77,7 +77,7 @@ public class HiveController {
             @RequestParam(required = false) String majorCategory,
             @RequestParam(required = false) String subCategory) {
         List<HiveResponseDTO> responses = hiveService.getHivesByCategory(
-                MajorCategory.valueOf(majorCategory), SubCategory.valueOf(subCategory));
+                MajorCategory.findByStringName(majorCategory), SubCategory.findByStringName(subCategory));
         return ResponseEntity.ok()
                 .body(new CommonResponse<>(200, "하이브들이 조회되었습니다.", responses));
     }
