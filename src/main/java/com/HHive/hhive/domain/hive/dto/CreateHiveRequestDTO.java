@@ -5,7 +5,6 @@ import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

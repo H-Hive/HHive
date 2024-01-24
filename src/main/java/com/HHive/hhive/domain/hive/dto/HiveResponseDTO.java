@@ -37,9 +37,10 @@ public class HiveResponseDTO {
     private LocalDateTime modifiedAt;
 
     public static HiveResponseDTO of(Hive hive) {
-        String majorName = hive.getMajorCategory() == null? "": hive.getMajorCategory().getTitle();
+        String majorName =
+                hive.getMajorCategory() == null ? "" : hive.getMajorCategory().getTitle();
 
-        String subName = hive.getSubCategory() == null? "": hive.getSubCategory().getTitle();
+        String subName = hive.getSubCategory() == null ? "" : hive.getSubCategory().getTitle();
 
         return HiveResponseDTO.builder()
                 .id(hive.getId())
