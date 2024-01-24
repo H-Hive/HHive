@@ -1,6 +1,7 @@
 package com.HHive.hhive.domain.hive.dto;
 
 import com.HHive.hhive.domain.hive.entity.Hive;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,10 @@ public class HiveResponseDTO {
 
     private String title;
 
+    private String majorCategory;
+
+    private String subCategory;
+
     private String introduction;
 
     private Long hostId;
@@ -26,14 +31,19 @@ public class HiveResponseDTO {
 
     private List<String> hivePlayers;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
-
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedAt;
 
     public static HiveResponseDTO of(Hive hive) {
         return HiveResponseDTO.builder()
                 .id(hive.getId())
                 .title(hive.getTitle())
+//                .majorCategory(String.valueOf(hive.getMajorCategory()))
+//                .subCategory(String.valueOf(hive.getSubCategory()))
+                .majorCategory(hive.getMajorCategory().getTitle())
+                .subCategory(hive.getSubCategory().getTitle())
                 .introduction(hive.getIntroduction())
                 .hostId(hive.getId())
                 .hostName(hive.getUser().getEmail())

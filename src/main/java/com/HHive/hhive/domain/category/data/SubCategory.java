@@ -1,5 +1,8 @@
 package com.HHive.hhive.domain.category.data;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 public enum SubCategory {
 
     //GAME
@@ -11,6 +14,7 @@ public enum SubCategory {
     SOCCER(MajorCategory.SPORTS, "축구"),
     BASEBALL(MajorCategory.SPORTS, "야구");
 
+    @Enumerated(EnumType.STRING)
     private final MajorCategory majorCategory;
     private final String title;
 

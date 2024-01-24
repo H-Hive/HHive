@@ -1,5 +1,7 @@
 package com.HHive.hhive.domain.hive.controller;
 
+import com.HHive.hhive.domain.category.data.MajorCategory;
+import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
@@ -70,7 +72,18 @@ public class HiveController {
                 .body(new CommonResponse<>(200, "하이브들이 조회되었습니다.", responses));
     }
 
-    @PatchMapping("{hive_id}")
+    @GetMapping("/search")
+    public ResponseEntity<CommonResponse> getHivesByCategory(
+            @RequestParam(required = false) String majorCategory,
+            @RequestParam(required = false) String subCategory) {
+        List<HiveResponseDTO> responses = hiveService.getHivesByCategory(
+                MajorCategory.valueOf(majorCategory), SubCategory.valueOf(subCategory));
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>(200, "하이브들이 조회되었습니다.", responses));
+    }
+
+
+    @DeleteMapping("{hive_id}")
     public ResponseEntity<CommonResponse> deleteHive(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long hive_id) {
