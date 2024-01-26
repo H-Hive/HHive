@@ -39,8 +39,6 @@ public class HiveController {
     public ResponseEntity<CommonResponse<HiveResponseDTO>> createHive(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody @Valid CreateHiveRequestDTO createHiveRequestDTO) {
-
-        SubCategory.findByStringName(createHiveRequestDTO.getSubCategoryName());
         HiveResponseDTO response = hiveService.createHive(userDetails.getUser(),
                 createHiveRequestDTO);
         return ResponseEntity.ok()

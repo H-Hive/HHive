@@ -48,8 +48,8 @@ public class HiveResponseDTO {
                 .majorCategory(majorName)
                 .subCategory(subName)
                 .introduction(hive.getIntroduction())
-                .hostId(hive.getCreatorId())
-                .hostName(hive.getUser().getUsername())
+                .hostId(hive.getId())
+                .hostName(hive.getUser().getEmail())
                 .createdAt(hive.getCreatedAt())
                 .modifiedAt(hive.getModifiedAt())
                 .build();
