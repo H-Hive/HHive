@@ -4,7 +4,8 @@ import com.HHive.hhive.domain.category.data.MajorCategory;
 import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
-import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveInfoRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveTitleRequestDTO;
 import com.HHive.hhive.domain.hive.service.HiveService;
 import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
@@ -47,12 +48,22 @@ public class HiveController {
                 .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 작성되었습니다.", response));
     }
 
-    @PatchMapping("{hive_id}/update")
-    public ResponseEntity<CommonResponse<HiveResponseDTO>> updateHive(
+    @PatchMapping("{hive_id}/title")
+    public ResponseEntity<CommonResponse<HiveResponseDTO>> updateHiveTitle(
             @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long hive_id,
-            @RequestBody @Valid UpdateHiveRequestDTO updateRequest) {
-        HiveResponseDTO response = hiveService.updateHive(userDetails.getUser(), hive_id,
-                updateRequest);
+            @RequestBody @Valid UpdateHiveTitleRequestDTO updateHiveTitleRequest) {
+        HiveResponseDTO response = hiveService.updateHiveTitle(userDetails.getUser(), hive_id,
+                updateHiveTitleRequest);
+        return ResponseEntity.ok()
+                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 수정되었습니다.", response));
+    }
+
+    @PatchMapping("{hive_id}/info")
+    public ResponseEntity<CommonResponse<HiveResponseDTO>> updateHiveInfo(
+            @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long hive_id,
+            @RequestBody @Valid UpdateHiveInfoRequestDTO updateHiveInfoRequest) {
+        HiveResponseDTO response = hiveService.updateHiveInfo(userDetails.getUser(), hive_id,
+                updateHiveInfoRequest);
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 수정되었습니다.", response));
     }
