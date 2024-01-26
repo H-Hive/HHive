@@ -40,7 +40,9 @@ public class HiveService {
         if (hiveRepository.findByTitle(createHiveRequestDTO.getTitle()).isPresent()) {
             throw new AlreadyExistHiveException();
         }
-        Hive saveHive = hiveRepository.save(createHiveRequestDTO.toEntity(createBy));
+        Hive saveHive = hiveRepository.save(createHiveRequestDTO.toEntity(createBy
+                ,MajorCategory.findByTitle(createHiveRequestDTO.getMajorCategoryName())
+                ,SubCategory.findByTitle(createHiveRequestDTO.getSubCategoryName())));
         hiveUserService.saveHiveUser(saveHive, createBy);
 
         return HiveResponseDTO.of(saveHive);
@@ -51,6 +53,9 @@ public class HiveService {
     public HiveResponseDTO updateHive(User user, Long hiveId,
             @Valid UpdateHiveRequestDTO updateHiveRequest) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
+        if (hiveRepository.findByTitle(updateHiveRequest.getTitle()).isPresent()) {
+            throw new AlreadyExistHiveException();
+        }
 
         hive.update(updateHiveRequest);
         return HiveResponseDTO.of(hive);

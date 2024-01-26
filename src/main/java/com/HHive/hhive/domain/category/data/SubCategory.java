@@ -35,4 +35,10 @@ public enum SubCategory {
     public static SubCategory findByStringName(String categoryName) {
         return Arrays.stream(SubCategory.values()).filter(subCategory -> subCategory.name().equals(categoryName)).findFirst().orElse(null);
     }
+    public static SubCategory findByTitle(String title) {
+        return Arrays.stream(SubCategory.values())
+                .filter(subCategory -> subCategory.title.equals(title))
+                .findFirst()
+                .orElse(null);
+    }
 }
