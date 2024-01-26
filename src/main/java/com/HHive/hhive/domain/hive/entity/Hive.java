@@ -3,7 +3,8 @@ package com.HHive.hhive.domain.hive.entity;
 
 import com.HHive.hhive.domain.category.data.MajorCategory;
 import com.HHive.hhive.domain.category.data.SubCategory;
-import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveInfoRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveTitleRequestDTO;
 import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -63,13 +64,15 @@ public class Hive extends BaseTimeEntity {
 //    private Category category;
 
 
-    public void update(UpdateHiveRequestDTO updateHiveRequestDTO) {
-        if (updateHiveRequestDTO.getTitle() != null) {
-            this.title = updateHiveRequestDTO.getTitle();
+    public void updateHiveTitle(UpdateHiveTitleRequestDTO updateHiveTitleRequestDTO) {
+        if (updateHiveTitleRequestDTO.getTitle() != null) {
+            this.title = updateHiveTitleRequestDTO.getTitle();
         }
+    }
 
-        if (updateHiveRequestDTO.getIntroduction() != null) {
-            this.introduction = updateHiveRequestDTO.getIntroduction();
+    public void updateHiveInfo(UpdateHiveInfoRequestDTO updateHiveInfoRequest) {
+        if (updateHiveInfoRequest.getIntroduction() != null) {
+            this.introduction = updateHiveInfoRequest.getIntroduction();
         }
     }
 
