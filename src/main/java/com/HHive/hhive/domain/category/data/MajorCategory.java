@@ -20,4 +20,10 @@ public enum MajorCategory {
     public static MajorCategory findByStringName(String categoryName) {
         return Arrays.stream(MajorCategory.values()).filter(majorCategory -> majorCategory.name().equals(categoryName)).findFirst().orElse(null);
     }
+    public static MajorCategory findByTitle(String title) {
+        return Arrays.stream(MajorCategory.values())
+                .filter(majorCategory -> majorCategory.title.equals(title))
+                .findFirst()
+                .orElse(null);
+    }
 }

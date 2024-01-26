@@ -19,11 +19,11 @@ public class CreateHiveRequestDTO {
     @NotBlank
     private String title;
 
-    private MajorCategory majorCategory;
+    private String majorCategoryName;
 
-    private SubCategory subCategory;
+    private String subCategoryName;
 
-    public Hive toEntity(User createdBy) {
+    public Hive toEntity(User createdBy,MajorCategory majorCategory,SubCategory subCategory) {
         return Hive.builder()
                 .title(title)
                 .majorCategory(majorCategory)
