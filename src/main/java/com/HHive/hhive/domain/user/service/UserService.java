@@ -12,6 +12,7 @@ import com.HHive.hhive.global.exception.common.CustomException;
 import com.HHive.hhive.global.exception.common.ErrorCode;
 import com.HHive.hhive.global.exception.user.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +76,18 @@ public class UserService {
         return new UserInfoResponseDTO(user);
     }
 
+    public UserInfoResponseDTO kakaoLogin(String username) {
+
+        // username으로 User 객체를 찾음
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        // User 객체를 UserInfoResponseDTO로 변환
+        UserInfoResponseDTO userInfo = new UserInfoResponseDTO(user);
+
+        return userInfo;
+    }
+
     public UserInfoResponseDTO getProfile(Long userId) {
         User user = getUser(userId);
         return new UserInfoResponseDTO(user);
@@ -133,7 +146,8 @@ public class UserService {
         userRepository.save(userToDelete);
     }
 
-//    @Scheduled(fixedRate = 60 * 1000) // 1분마다 실행
+
+    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
     public void processPendingDeletions() {
         List<User> userToDelete = userRepository.findByIsDeletedAndDeletedAtBefore(true, LocalDateTime.now().minusMinutes(1));
 
