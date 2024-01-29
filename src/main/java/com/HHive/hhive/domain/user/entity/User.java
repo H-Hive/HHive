@@ -54,11 +54,11 @@ public class User extends BaseTimeEntity {
 
     // 이메일 인증 여부 필드 추가
     @Column(nullable = false)
-    private boolean email_verified = false;
+    private boolean emailVerified = false;
 
     // 이메일 인증 코드 필드 추가
     @Column
-    private String email_verification_code;
+    private String emailVerificationCode;
 
     public User(String username, String password, String email, String description) {
         this.username = username;
@@ -104,16 +104,16 @@ public class User extends BaseTimeEntity {
 
     // 이메일 인증 상태를 업데이트하는 메서드 추가
     public void setEmailVerified(boolean emailVerified) {
-        this.email_verified = emailVerified;
+        this.emailVerified = emailVerified;
     }
 
     // 이메일 인증 코드를 업데이트하는 메서드 추가
     public void setEmailVerificationCode(String emailVerificationCode) {
-        this.email_verification_code = emailVerificationCode;
+        this.emailVerificationCode = emailVerificationCode;
     }
 
     // 이메일 인증 코드를 가져오는 메서드 추가
     public String getEmailVerificationCode() {
-        return this.email_verification_code;
+        return this.emailVerificationCode;
     }
 }

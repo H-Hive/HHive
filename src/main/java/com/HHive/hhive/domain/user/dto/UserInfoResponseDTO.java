@@ -14,6 +14,7 @@ public class UserInfoResponseDTO {
     private String description;
     private String majorCategory;
     private String subCategory;
+    private boolean emailVerified;
 
     public UserInfoResponseDTO(User user) {
         this.userId = user.getId();
@@ -27,5 +28,7 @@ public class UserInfoResponseDTO {
         if (user.getSubCategory() != null) {
             this.subCategory = user.getSubCategory().name();
         }
+
+        this.emailVerified = user.isEmailVerified();
     }
 }
