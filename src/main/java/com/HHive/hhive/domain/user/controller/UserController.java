@@ -38,13 +38,30 @@ public class UserController {
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "회원가입 성공", null));
     }
 
-    @PostMapping("/email-confirm")
-    public ResponseEntity<CommonResponse<Integer>> mailConfirm(@RequestBody EmailCheckRequestDTO emailCheckRequestDTO) {
+    // 이메일 인증 코드 생성
+    @PostMapping("/{userId}/email-verification")
+    public ResponseEntity<CommonResponse<Integer>> mailConfirm(@PathVariable Long userId,
+                                                               @RequestBody EmailCheckRequestDTO emailCheckRequestDTO) {
 
-        int num = emailService.sendEmail(emailCheckRequestDTO.getEmail());
+        // 이메일 인증 코드 생성 및 이메일 전송
+        int verificationCode = emailService.sendEmail(emailCheckRequestDTO.getEmail());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "인증코드 발급 성공", num));
+        // 생성된 이메일 인증 코드를 사용자 엔티티에 저장
+        userService.requestEmailVerification(userId, verificationCode);
+
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "인증코드 발급 성공", verificationCode));
     }
+
+    // 이메일 인증 코드 검증
+    @PostMapping("/{userId}/email-verification/verify")
+    public ResponseEntity<CommonResponse<Void>> verifyEmail(@PathVariable Long userId, @RequestBody EmailCheckRequestDTO requestDTO) {
+
+        userService.verifyEmail(userId, requestDTO.getVerificationCode());
+
+        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "이메일 인증 성공", null));
+    }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<CommonResponse<UserInfoResponseDTO>> login(
@@ -139,7 +156,7 @@ public class UserController {
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
         // 토큰에서 username을 추출
-        String username = jwtUtil.getUserInfoFromToken(token).getSubject();
+        String username = jwtUtil.getUserInfoFromToken(token.substring(7)).getSubject();
 
         // username으로 UserInfoResponseDTO를 얻음
         UserInfoResponseDTO userInfo = userService.kakaoLogin(username);

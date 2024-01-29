@@ -31,6 +31,8 @@ public class UserService {
 
     private final HiveUserService hiveUserService;
 
+    private final EmailService emailService;
+
     @Transactional
     public void signup(UserSignupRequestDTO requestDTO) {
         String username = requestDTO.getUsername();
@@ -191,5 +193,37 @@ public class UserService {
         userRepository.save(user);
 
         return new UserCategoryResponseDTO(user.getMajorCategory(), user.getSubCategory());
+    }
+
+    // 이메일 인증 요청
+    @Transactional
+    public void requestEmailVerification(Long userId, int verificationCode) {
+        User user = getUser(userId);
+
+        // User 엔터티의 email_verification_code 필드를 업데이트
+        user.setEmailVerificationCode(String.valueOf(verificationCode));
+    }
+
+    // 이메일 인증 코드 검증
+    @Transactional
+    public void verifyEmail(Long userId, String inputCode) {
+        User user = getUser(userId);
+
+        // 입력한 코드와 User 엔터티의 email_verification_code를 비교
+        if (!inputCode.equals(user.getEmailVerificationCode())) {
+            throw new InvalidEmailVerificationCodeException();
+        }
+
+        // 코드가 일치하면 email_verified 값을 true로 업데이트
+        user.setEmailVerified(true);
+    }
+
+    // email_verification_code 필드 업데이트
+    @Transactional
+    public void updateEmailVerificationCode(Long userId, String code) {
+
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        user.setEmailVerificationCode(code);
     }
 }

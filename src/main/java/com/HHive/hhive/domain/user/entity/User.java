@@ -2,7 +2,6 @@ package com.HHive.hhive.domain.user.entity;
 
 import com.HHive.hhive.domain.category.data.MajorCategory;
 import com.HHive.hhive.domain.category.data.SubCategory;
-import com.HHive.hhive.domain.user.dto.HobbyCategoryRequestDTO;
 import com.HHive.hhive.domain.user.dto.UpdateUserProfileRequestDTO;
 import com.HHive.hhive.global.auditing.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -53,6 +52,13 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private SubCategory subCategory;
 
+    // 이메일 인증 여부 필드 추가
+    @Column(nullable = false)
+    private boolean email_verified = false;
+
+    // 이메일 인증 코드 필드 추가
+    @Column
+    private String email_verification_code;
 
     public User(String username, String password, String email, String description) {
         this.username = username;
@@ -94,5 +100,20 @@ public class User extends BaseTimeEntity {
 
     public void setSubCategory(SubCategory subCategory) {
         this.subCategory = subCategory;
+    }
+
+    // 이메일 인증 상태를 업데이트하는 메서드 추가
+    public void setEmailVerified(boolean emailVerified) {
+        this.email_verified = emailVerified;
+    }
+
+    // 이메일 인증 코드를 업데이트하는 메서드 추가
+    public void setEmailVerificationCode(String emailVerificationCode) {
+        this.email_verification_code = emailVerificationCode;
+    }
+
+    // 이메일 인증 코드를 가져오는 메서드 추가
+    public String getEmailVerificationCode() {
+        return this.email_verification_code;
     }
 }
