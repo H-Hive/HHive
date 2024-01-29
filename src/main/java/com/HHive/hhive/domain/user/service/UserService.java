@@ -188,8 +188,8 @@ public class UserService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
-        user.setMajorCategory(MajorCategory.valueOf(requestDTO.getMajorCategory()));
-        user.setSubCategory(SubCategory.valueOf(requestDTO.getSubCategory()));
+        user.setMajorCategory(MajorCategory.findByTitle(requestDTO.getMajorCategory()));
+        user.setSubCategory(SubCategory.findByTitle(requestDTO.getSubCategory()));
         userRepository.save(user);
 
         return new UserCategoryResponseDTO(user.getMajorCategory(), user.getSubCategory());
