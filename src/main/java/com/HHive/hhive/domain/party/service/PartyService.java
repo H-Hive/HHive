@@ -32,6 +32,7 @@ public class PartyService {
     private final PartyUserRepository partyUserRepository;
 
 
+    @Transactional
     public PartyResponseDTO createParty(Long hiveId, PartyRequestDTO dto, User user) {
         // Hive 존재 여부 확인
         Hive hive = getHive(hiveId);
