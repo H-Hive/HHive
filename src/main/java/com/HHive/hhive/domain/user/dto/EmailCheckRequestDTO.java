@@ -12,4 +12,5 @@ import org.springframework.stereotype.Service;
 public class EmailCheckRequestDTO {
 
     private String email;
+    private String verificationCode;
 }
