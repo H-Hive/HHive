@@ -32,7 +32,7 @@ public class PartyController {
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 생성 성공", responseDto));
     }
 
-    @GetMapping("/{hiveId}/{partyId}")
+    @GetMapping("/{partyId}/hives/{hiveId}")
     public ResponseEntity<CommonResponse<PartyResponseDTO>> getParty(@PathVariable Long hiveId, @PathVariable Long partyId) {
 
         PartyResponseDTO responseDto = partyService.getPartyDto(hiveId, partyId);
