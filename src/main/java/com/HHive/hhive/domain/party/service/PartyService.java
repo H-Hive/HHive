@@ -38,12 +38,17 @@ public class PartyService {
         Hive hive = getHive(hiveId);
 
         // DTO에서 날짜와 시간 정보를 가져와서 LocalDateTime 객체 생성
-        LocalDateTime dateTime = LocalDateTime.of(dto.getYear(), dto.getMonth(), dto.getDay(), dto.getHours(), dto.getMinutes());
+        LocalDateTime dateTime = LocalDateTime.of(
+                dto.getYear(),
+                dto.getMonth(),
+                dto.getDay(),
+                dto.getHours(),
+                dto.getMinutes());
 
-        // 현재 시간을 가져옵니다.
+        // 현재 시간을 가져옴
         LocalDateTime now = LocalDateTime.now();
 
-        // 설정하려는 약속 시간이 과거인지 확인합니다.
+        // 설정하려는 약속 시간이 과거인지 확인
         if (dateTime.isBefore(now)) {
             throw new InvalidPartyTimeException();
         }
@@ -63,8 +68,11 @@ public class PartyService {
         partyUserRepository.save(partyUser);
 
         // 호스트 정보를 members 목록에 포함하여 PartyResponseDTO 생성
-        List<MemberResponseDTO> members = Collections.singletonList(new MemberResponseDTO(user.getUsername(), user.getEmail()));
-        return new PartyResponseDTO(savedParty.getId(), savedParty.getTitle(), savedParty.getUsername(), savedParty.getContent(), savedParty.getDateTime(), savedParty.getCreatedAt(), savedParty.getModifiedAt(), members);
+        List<MemberResponseDTO> members = Collections.singletonList(
+                new MemberResponseDTO(user.getUsername(), user.getEmail()));
+        return new PartyResponseDTO(savedParty.getId(), savedParty.getTitle(),
+                savedParty.getUsername(), savedParty.getContent(), savedParty.getDateTime(),
+                savedParty.getCreatedAt(), savedParty.getModifiedAt(), members);
     }
 
     //단건 조회
@@ -73,7 +81,9 @@ public class PartyService {
         Party party = getParty(hiveId, partyId);
         List<MemberResponseDTO> members = getPartyMembers(partyId);
 
-        return new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getDateTime(), party.getCreatedAt(), party.getModifiedAt(), members);
+        return new PartyResponseDTO(party.getId(), party.getTitle(),
+                party.getUsername(), party.getContent(), party.getDateTime(),
+                party.getCreatedAt(), party.getModifiedAt(), members);
     }
 
 
@@ -111,9 +121,32 @@ public class PartyService {
         party.setTitle(partyRequestDto.getTitle());
         party.setContent(partyRequestDto.getContent());
 
+        // DTO에서 날짜와 시간 정보를 가져와 LocalDateTime 객체 생성
+        LocalDateTime newDateTime = LocalDateTime.of(
+                partyRequestDto.getYear(),
+                partyRequestDto.getMonth(),
+                partyRequestDto.getDay(),
+                partyRequestDto.getHours(),
+                partyRequestDto.getMinutes()
+        );
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (newDateTime.isBefore(now)) {
+            throw new InvalidPartyTimeException();
+        }
+
+        // 파티 날짜 및 시간 업데이트
+        party.setDateTime(newDateTime);
+
+        // 파티 저장
+        partyRepository.save(party);
+
         List<MemberResponseDTO> members = getPartyMembers(partyId);
 
-        return new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getDateTime(), party.getCreatedAt(), party.getModifiedAt(), members);
+        return new PartyResponseDTO(party.getId(), party.getTitle(),
+                party.getUsername(), party.getContent(), party.getDateTime(),
+                party.getCreatedAt(), party.getModifiedAt(), members);
     }
 
     @Transactional
