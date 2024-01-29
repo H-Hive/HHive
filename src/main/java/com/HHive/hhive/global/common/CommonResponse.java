@@ -7,13 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommonResponse<T> {
 
-    private final int statusCode;
-
     private final String message;
 
     private final T payload;
 
-    public static <T> CommonResponse<T> of(int statusCode, String message, T payload) {
-        return new CommonResponse<>(statusCode, message, payload);
+    public static <T> CommonResponse<T> of(String message, T payload) {
+        return new CommonResponse<>(message, payload);
     }
 }

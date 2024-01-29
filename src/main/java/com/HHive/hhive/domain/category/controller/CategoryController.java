@@ -28,7 +28,7 @@ public class CategoryController {
 
         Map<String, List<String>> categories = categoryService.getAllCategories();
 
-        return ResponseEntity.ok().body(CommonResponse.of(200, "카테고리 조회 성공", categories));
+        return ResponseEntity.ok().body(CommonResponse.of("카테고리 조회 성공", categories));
     }
 
 }

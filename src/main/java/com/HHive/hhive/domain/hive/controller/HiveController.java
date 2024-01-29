@@ -44,8 +44,8 @@ public class HiveController {
         SubCategory.findByStringName(createHiveRequestDTO.getSubCategoryName());
         HiveResponseDTO response = hiveService.createHive(userDetails.getUser(),
                 createHiveRequestDTO);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 작성되었습니다.", response));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of("하이브가 작성되었습니다.", response));
     }
 
     @PatchMapping("{hive_id}/title")
@@ -54,8 +54,7 @@ public class HiveController {
             @RequestBody @Valid UpdateHiveTitleRequestDTO updateHiveTitleRequest) {
         HiveResponseDTO response = hiveService.updateHiveTitle(userDetails.getUser(), hive_id,
                 updateHiveTitleRequest);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 수정되었습니다.", response));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브가 수정되었습니다.", response));
     }
 
     @PatchMapping("{hive_id}/info")
@@ -64,8 +63,7 @@ public class HiveController {
             @RequestBody @Valid UpdateHiveInfoRequestDTO updateHiveInfoRequest) {
         HiveResponseDTO response = hiveService.updateHiveInfo(userDetails.getUser(), hive_id,
                 updateHiveInfoRequest);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 수정되었습니다.", response));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브가 수정되었습니다.", response));
     }
 
     @GetMapping("/{hive_id}")
@@ -73,15 +71,13 @@ public class HiveController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long hive_id) {
         HiveResponseDTO response = hiveService.getHive(userDetails.getUser(), hive_id);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 조회되었습니다.", response));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브가 조회되었습니다.", response));
     }
 
     @GetMapping("")
     public ResponseEntity<CommonResponse<List<HiveResponseDTO>>> gethives() {
         List<HiveResponseDTO> responses = hiveService.getHives();
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브들이 조회되었습니다.", responses));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브들이 조회되었습니다.", responses));
     }
 
     @GetMapping("/search")
@@ -91,8 +87,7 @@ public class HiveController {
         List<HiveResponseDTO> responses = hiveService.getHivesByCategory(
                 MajorCategory.findByStringName(majorCategory),
                 SubCategory.findByStringName(subCategory));
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브들이 조회되었습니다.", responses));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브들이 조회되었습니다.", responses));
     }
 
 
@@ -101,8 +96,7 @@ public class HiveController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long hive_id) {
         hiveService.deleteHive(userDetails.getUser(), hive_id);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브가 삭제되었습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브가 삭제되었습니다.", null));
     }
 
     @PostMapping("/{hive_id}")
@@ -111,8 +105,7 @@ public class HiveController {
             @PathVariable Long hive_id,
             @RequestBody @Valid HiveUserInviteRequestDTO requestDTO) {
         hiveService.inviteNewUser(userDetails.getUser(), hive_id, requestDTO);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브에 참여하였습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.of("하이브에 참여하였습니다.", null));
     }
 
     @GetMapping("/{hive_id}/hiveUsers")
@@ -122,8 +115,7 @@ public class HiveController {
         List<UserInfoResponseDTO> hiveUserResponses = hiveService.searchUsersInHive(
                 userDetails.getUser(), hive_id);
         return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브 유저들이 조회되었습니다.",
-                        hiveUserResponses));
+                .body(CommonResponse.of("하이브 유저들이 조회되었습니다.", hiveUserResponses));
     }
 
     @GetMapping("/{hive_id}/hiveUsers/search")
@@ -134,8 +126,7 @@ public class HiveController {
         UserInfoResponseDTO hiveUserResponse = hiveService.searchUserInHive(userDetails.getUser(),
                 hive_id, username);
         return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브 유저가 조회되었습니다.",
-                        hiveUserResponse));
+                .body(CommonResponse.of("하이브 유저가 조회되었습니다.", hiveUserResponse));
     }
 
     @DeleteMapping("{hive_id}/hiveUsers")
@@ -145,7 +136,7 @@ public class HiveController {
             @RequestParam String username) {
         hiveService.deleteHiveUser(userDetails.getUser(), hive_id, username);
         return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "하이브 유저가 탈퇴되었습니다.", null));
+                .body(CommonResponse.of("하이브 유저가 탈퇴되었습니다.", null));
     }
 
 }
