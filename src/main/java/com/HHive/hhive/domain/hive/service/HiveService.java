@@ -4,7 +4,8 @@ import com.HHive.hhive.domain.category.data.MajorCategory;
 import com.HHive.hhive.domain.category.data.SubCategory;
 import com.HHive.hhive.domain.hive.dto.CreateHiveRequestDTO;
 import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
-import com.HHive.hhive.domain.hive.dto.UpdateHiveRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveInfoRequestDTO;
+import com.HHive.hhive.domain.hive.dto.UpdateHiveTitleRequestDTO;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.relationship.hiveuser.dto.HiveUserInviteRequestDTO;
@@ -50,14 +51,20 @@ public class HiveService {
     }
 
     @Transactional
-    public HiveResponseDTO updateHive(User user, Long hiveId,
-            @Valid UpdateHiveRequestDTO updateHiveRequest) {
+    public HiveResponseDTO updateHiveTitle(User user, Long hiveId,
+            @Valid UpdateHiveTitleRequestDTO updateHiveTitleRequest) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
-        if (hiveRepository.findByTitle(updateHiveRequest.getTitle()).isPresent()) {
+        if (hiveRepository.findByTitle(updateHiveTitleRequest.getTitle()).isPresent()) {
             throw new AlreadyExistHiveException();
         }
 
-        hive.update(updateHiveRequest);
+        hive.updateHiveTitle(updateHiveTitleRequest);
+        return HiveResponseDTO.of(hive);
+    }
+
+    public HiveResponseDTO updateHiveInfo(User user, Long hiveId, UpdateHiveInfoRequestDTO updateHiveInfoRequest) {
+        Hive hive = getHiveAndCheckAuth(user, hiveId);
+        hive.updateHiveInfo(updateHiveInfoRequest);
         return HiveResponseDTO.of(hive);
     }
 
@@ -138,6 +145,5 @@ public class HiveService {
         return hiveRepository.findByIdAndIsDeletedIsFalse(hiveId).orElseThrow(
                 NotFoundHiveException::new);
     }
-
 
 }

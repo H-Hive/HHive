@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateHiveRequestDTO {
+public class UpdateHiveTitleRequestDTO {
 
     private String title;
-
-    private String introduction;
-
 }

@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "회원가입 성공", null));
     }
 
-    @PostMapping("/emailConfirm")
+    @PostMapping("/email-confirm")
     public ResponseEntity<CommonResponse<Integer>> mailConfirm(@RequestBody EmailCheckRequestDTO emailCheckRequestDTO) {
 
         int num = emailService.sendEmail(emailCheckRequestDTO.getEmail());
@@ -53,8 +53,6 @@ public class UserController {
         UserInfoResponseDTO userInfo = userService.login(requestDTO);
 
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(requestDTO.getUsername()));
-//        Cookie tokenCookie = jwtUtil.createTokenCookie(requestDTO.getUsername());
-//        Cookie userInfoCookie = jwtUtil.createUserInfoCookie(userInfo);
 
         return ResponseEntity.ok()
                 .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", userInfo));
@@ -133,15 +131,20 @@ public class UserController {
     }
 
     @GetMapping("/kakao/callback")
-    public ResponseEntity<CommonResponse<String>> kakaoLogin(@RequestParam String code, HttpServletResponse response)
+    public ResponseEntity<CommonResponse<UserInfoResponseDTO>> kakaoLogin(@RequestParam String code, HttpServletResponse response)
             throws JsonProcessingException {
 
         // jwt 토큰 반환
         String token = kaKaoService.kakaoLogin(code);
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
-        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, JwtUtil.BEARER_PREFIX + token.substring(7));
+        // 토큰에서 username을 추출
+        String username = jwtUtil.getUserInfoFromToken(token).getSubject();
+
+        // username으로 UserInfoResponseDTO를 얻음
+        UserInfoResponseDTO userInfo = userService.kakaoLogin(username);
 
         return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.CREATED.value(), "카카오 로그인 성공", token));
+                .body(CommonResponse.of(HttpStatus.CREATED.value(), "카카오 로그인 성공", userInfo));
     }
 }
