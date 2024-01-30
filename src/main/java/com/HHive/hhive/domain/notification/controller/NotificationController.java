@@ -38,7 +38,7 @@ public class NotificationController {
                 notificationRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CommonResponse.of(HttpStatus.CREATED.value(), "메시지 전송 성공", response));
+                .body(CommonResponse.of("메시지 전송 성공", response));
     }
 
     @GetMapping(value = "/{userId}/get" )
@@ -58,8 +58,7 @@ public class NotificationController {
     ) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(
                 userDetails.getUser().getId());
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 출력 성공", notifications));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 출력 성공", notifications));
     }
 
     @GetMapping("/count")
@@ -69,8 +68,7 @@ public class NotificationController {
         Long notificationCount = notificationService.showUnreadNotificationCountForUser(
                 userDetails.getUser()
                         .getId());
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 출력 성공", notificationCount));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 출력 성공", notificationCount));
     }
 
     @DeleteMapping("/{notificationId}")
@@ -78,16 +76,14 @@ public class NotificationController {
             @PathVariable(name = "notificationId") Long notificationId
     ) {
         notificationService.deleteNotification(notificationId);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 개수 조회 완료", null));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 개수 조회 완료", null));
     }
     @GetMapping("/read")
     public ResponseEntity<CommonResponse> readNotification(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
         notificationService.readNotification(userDetails.getUser().getId());
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "알림 열람 완료", null));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 열람 완료", null));
     }
     @DeleteMapping("/clear")
     public void  clear(){

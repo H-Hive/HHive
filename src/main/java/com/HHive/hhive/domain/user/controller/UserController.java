@@ -35,7 +35,8 @@ public class UserController {
             @Valid @RequestBody UserSignupRequestDTO requestDTO) {
 
         userService.signup(requestDTO);
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "회원가입 성공", null));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of("회원가입 성공", null));
     }
 
     // 이메일 인증 코드 생성
@@ -49,7 +50,8 @@ public class UserController {
         // 생성된 이메일 인증 코드를 사용자 엔티티에 저장
         userService.requestEmailVerification(userId, verificationCode);
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.CREATED.value(), "인증코드 발급 성공", verificationCode));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of("인증코드 발급 성공", verificationCode));
     }
 
     // 이메일 인증 코드 검증
@@ -58,7 +60,7 @@ public class UserController {
 
         userService.verifyEmail(userId, requestDTO.getVerificationCode());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "이메일 인증 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("이메일 인증 성공", null));
     }
 
 
@@ -71,16 +73,14 @@ public class UserController {
 
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(requestDTO.getUsername()));
 
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "로그인 성공", userInfo));
+        return ResponseEntity.ok().body(CommonResponse.of("로그인 성공", userInfo));
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<CommonResponse<UserInfoResponseDTO>> getProfile(@PathVariable Long userId) {
 
         UserInfoResponseDTO responseDTO = userService.getProfile(userId);
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "프로필 조회 성공", responseDTO));
+        return ResponseEntity.ok().body(CommonResponse.of("프로필 조회 성공", responseDTO));
     }
 
 
@@ -94,8 +94,7 @@ public class UserController {
         User loginUser = userDetails.getUser();
         userService.updateProfile(userId, requestDTO, loginUser);
 
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "프로필 수정 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("프로필 수정 성공", null));
     }
 
     @PatchMapping("/{userId}/password")
@@ -107,8 +106,7 @@ public class UserController {
         User loginUser = userDetails.getUser();
         userService.updatePassword(userId, requestDTO, loginUser);
 
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "비밀번호 수정 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("비밀번호 수정 성공", null));
     }
 
     @DeleteMapping("/{userId}")
@@ -119,18 +117,17 @@ public class UserController {
         User loginUser = userDetails.getUser();
         userService.deleteUser(userId, loginUser);
 
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "회원 탈퇴 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("회원 탈퇴 성공", null));
     }
 
     @GetMapping("/{userId}/hives")
-    public ResponseEntity<CommonResponse> getMyHives(
+    public ResponseEntity<CommonResponse<List<HiveResponseDTO>>> getMyHives(
 
             @PathVariable Long userId) {
         List<HiveResponseDTO> hivesResponses = userService.getMyHives(
                 userId);
         return ResponseEntity.ok()
-                .body(new CommonResponse<>(200, "참여 목록들이 조회되었습니다.", hivesResponses));
+                .body(CommonResponse.of("참여 목록들이 조회되었습니다.", hivesResponses));
     }
 
 
@@ -143,8 +140,7 @@ public class UserController {
         User loginUser = userDetails.getUser();
         UserCategoryResponseDTO response = userService.setCategory(userId, requestDTO, loginUser);
 
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.OK.value(), "카테고리 설정 성공", response));
+        return ResponseEntity.ok().body(CommonResponse.of("카테고리 설정 성공", response));
     }
 
     @GetMapping("/kakao/callback")
@@ -161,7 +157,6 @@ public class UserController {
         // username으로 UserInfoResponseDTO를 얻음
         UserInfoResponseDTO userInfo = userService.kakaoLogin(username);
 
-        return ResponseEntity.ok()
-                .body(CommonResponse.of(HttpStatus.CREATED.value(), "카카오 로그인 성공", userInfo));
+        return ResponseEntity.ok().body(CommonResponse.of("카카오 로그인 성공", userInfo));
     }
 }

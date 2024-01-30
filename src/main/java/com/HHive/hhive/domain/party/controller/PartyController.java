@@ -29,7 +29,8 @@ public class PartyController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         PartyResponseDTO responseDto = partyService.createParty(hiveId, partyRequestDto, userDetails.getUser());
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 생성 성공", responseDto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.of("파티 생성 성공", responseDto));
     }
 
     @GetMapping("/{partyId}/hives/{hiveId}")
@@ -37,7 +38,7 @@ public class PartyController {
 
         PartyResponseDTO responseDto = partyService.getPartyDto(hiveId, partyId);
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 조회 성공", responseDto));
+        return ResponseEntity.ok().body(CommonResponse.of("파티 조회 성공", responseDto));
     }
 
 
@@ -48,7 +49,7 @@ public class PartyController {
                 .map(entry -> new PartyListResponseDTO(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 목록 조회 성공", response));
+        return ResponseEntity.ok().body(CommonResponse.of("파티 목록 조회 성공", response));
     }
 
     @PatchMapping("/{partyId}")
@@ -58,7 +59,7 @@ public class PartyController {
 
         PartyResponseDTO responseDto = partyService.updateParty(partyId, partyRequestDto, userDetails.getUser());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "업데이트 성공", responseDto));
+        return ResponseEntity.ok().body(CommonResponse.of("업데이트 성공", responseDto));
     }
 
     @DeleteMapping("/{partyId}")
@@ -67,7 +68,7 @@ public class PartyController {
 
         partyService.deleteParty(partyId, userDetails.getUser());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "정상적으로 삭제 되었습니다.", null));
+        return ResponseEntity.ok().body(CommonResponse.of("정상적으로 삭제 되었습니다.", null));
     }
 
     @PostMapping("/{partyId}/join")
@@ -76,7 +77,7 @@ public class PartyController {
 
         partyService.joinParty(partyId, userDetails.getUser());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 가입 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("파티 가입 성공", null));
     }
 
     @DeleteMapping("/{partyId}/resign")
@@ -85,7 +86,7 @@ public class PartyController {
 
         partyService.resignParty(partyId, userDetails.getUser());
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(), "파티 탈퇴 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("파티 탈퇴 성공", null));
     }
 
     @GetMapping("/users/{userId}")
@@ -94,8 +95,7 @@ public class PartyController {
 
         List<PartyResponseDTO> response = partyService.getPartiesByUserId(userId);
 
-        return ResponseEntity.ok().body(CommonResponse.of(HttpStatus.OK.value(),
-                "유저의 파티 조회 성공", response));
+        return ResponseEntity.ok().body(CommonResponse.of("유저의 파티 조회 성공", response));
     }
 
 }

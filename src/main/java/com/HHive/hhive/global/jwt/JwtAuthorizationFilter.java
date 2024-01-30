@@ -59,7 +59,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.setContext(context);
             } else { // 유효하지 않은 인증 토큰일 경우
                 CommonResponse commonResponse = new CommonResponse(
-                        401, "토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
+                        "토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("application/json; charset=UTF-8");
                 response.getWriter().write(objectMapper.writeValueAsString(commonResponse));

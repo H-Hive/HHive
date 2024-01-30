@@ -34,8 +34,8 @@ public class ChatMessageController {
 
         chatMessageService.sendChatMessages(hiveId, requestDTO, userDetails.getUser());
 
-        return ResponseEntity.ok().body(
-                CommonResponse.of(HttpStatus.CREATED.value(), "메시지 전송 성공", null));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                CommonResponse.of("메시지 전송 성공", null));
     }
 
     @GetMapping("/hives/{hiveId}")
@@ -46,8 +46,7 @@ public class ChatMessageController {
         List<ChatMessageResponseDTO> responseDTOList =
                 chatMessageService.getChatMessages(hiveId, userDetails.getUser());
 
-        return ResponseEntity.ok().body(
-                CommonResponse.of(HttpStatus.OK.value(), "메시지 조회 성공", responseDTOList));
+        return ResponseEntity.ok().body(CommonResponse.of("메시지 조회 성공", responseDTOList));
     }
 
     @DeleteMapping("/{chat-messagesId}")
@@ -57,7 +56,6 @@ public class ChatMessageController {
 
         chatMessageService.deleteChatMessage(chatMessageId, userDetails.getUser());
 
-        return ResponseEntity.ok().body(
-                CommonResponse.of(HttpStatus.NO_CONTENT.value(), "메시지 삭제 성공", null));
+        return ResponseEntity.ok().body(CommonResponse.of("메시지 삭제 성공", null));
     }
 }
