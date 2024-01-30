@@ -62,6 +62,7 @@ public class HiveService {
         return HiveResponseDTO.of(hive);
     }
 
+    @Transactional
     public HiveResponseDTO updateHiveInfo(User user, Long hiveId, UpdateHiveInfoRequestDTO updateHiveInfoRequest) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
         hive.updateHiveInfo(updateHiveInfoRequest);
