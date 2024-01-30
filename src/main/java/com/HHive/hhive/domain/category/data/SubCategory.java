@@ -13,7 +13,31 @@ public enum SubCategory {
 
     //SPORTS
     SOCCER(MajorCategory.SPORTS, "축구"),
-    BASEBALL(MajorCategory.SPORTS, "야구");
+    BASEBALL(MajorCategory.SPORTS, "야구"),
+
+    //TRAVEL
+    CAMPING(MajorCategory.TRAVEL,"캠핑"),
+    GLAMPING(MajorCategory.TRAVEL,"글램핑"),
+
+    //MUSIC
+    BAND(MajorCategory.MUSIC,"밴드"),
+    PIANO(MajorCategory.MUSIC,"피아노 동호회"),
+
+    //DANCE
+    KPOP(MajorCategory.DANCE,"케이팝 댄스"),
+    BELLY(MajorCategory.DANCE,"벨리 댄스"),
+
+    //SOCIAL
+    STOCK(MajorCategory.SOCIAL,"주식"),
+    BITCOIN(MajorCategory.SOCIAL,"가상 화폐"),
+
+    //MEDIA
+    PHOTO(MajorCategory.MEDIA,"사진 동호회"),
+    MOVIE(MajorCategory.MEDIA,"영화 동호회"),
+
+    //PET
+    DOG(MajorCategory.PET,"강아지,개 모임"),
+    CAT(MajorCategory.PET,"고양이 모임");
 
     @Enumerated(EnumType.STRING)
     private final MajorCategory majorCategory;
