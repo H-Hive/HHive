@@ -32,6 +32,6 @@ public interface HiveUserRepository extends JpaRepository<HiveUser, HiveUserPK>,
     @Query("DELETE FROM HiveUser hu WHERE hu.hive.id = :hiveId and hu.user.id = :userId")
     void deleteHiveUserByHiveIdAndUserId(Long hiveId, Long userId);
 
-    @Query("SELECT hu.hive FROM HiveUser hu WHERE hu.user.id = :userId")
+    @Query("SELECT hu.hive FROM HiveUser hu WHERE hu.user.id = :userId and hu.hive.isDeleted = false ")
     List<Hive> findAllHiveByHiveUser(Long userId);
 }
