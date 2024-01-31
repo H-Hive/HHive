@@ -130,7 +130,7 @@ public class HiveService {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
         User hiveUser = userService.findUserByUsername(username);
 
-        if (user.getId().equals(hive.getId())) {
+        if (user.getId().equals(hive.getCreatorId())) {
             throw new HostNotResignHiveException();
         }
 
