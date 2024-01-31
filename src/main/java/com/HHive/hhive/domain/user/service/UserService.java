@@ -96,24 +96,29 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(Long user_id, UpdateUserProfileRequestDTO requestDTO, User loginUser) {
+    public void updateProfile(Long userId, UpdateUserProfileRequestDTO requestDTO, User loginUser) {
 
-        User user = getUser(user_id);
+        User user = getUser(userId);
 
         if (!loginUser.getId().equals(user.getId())) {
             throw new AuthenticationMismatchException();
+        }
+
+        // 카카오 로그인한 유저인 경우 이메일 수정을 허용하지 않음
+        if (userRepository.findByKakaoId(user.getKakaoId()).isPresent() && requestDTO.getEmail() != null) {
+            throw new KakaoUserEmailModificationException();
         }
 
         user.updateProfile(requestDTO);
     }
 
     @Transactional
-    public void updatePassword(Long user_id, UpdateUserPasswordRequestDTO requestDTO, User loginUser) {
+    public void updatePassword(Long userId, UpdateUserPasswordRequestDTO requestDTO, User loginUser) {
         String password = requestDTO.getPassword();
         String updatePassword = requestDTO.getUpdatePassword();
         String checkUpdatePassword = requestDTO.getCheckUpdatePassword();
 
-        User user = getUser(user_id);
+        User user = getUser(userId);
 
         if (!loginUser.getUsername().equals(user.getUsername())) {
             throw new AuthenticationMismatchException();
@@ -156,8 +161,8 @@ public class UserService {
         userRepository.deleteAll(userToDelete);
     }
 
-    public User getUser(Long user_id) {
-        return userRepository.findById(user_id).orElseThrow(UserNotFoundException::new);
+    public User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     public User findUserByEmail(String email) {
@@ -170,8 +175,8 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    public List<HiveResponseDTO> getMyHives(Long user_Id) {
-        User user = getUser(user_Id);
+    public List<HiveResponseDTO> getMyHives(Long userId) {
+        User user = getUser(userId);
 
         List<Hive> myHives = hiveUserService.findAllHivesByHiveUser(user);
         return myHives.stream().map(HiveResponseDTO::of).toList();
