@@ -33,10 +33,9 @@ public class Notification extends BaseTimeEntity {
         this.groupName = "group";
     }
 
-    public void setGroupName(String groupName){
-        this.groupName=groupName;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
-
 
 
 }

@@ -2,20 +2,16 @@ package com.HHive.hhive.domain.notification.controller;
 
 import com.HHive.hhive.domain.notification.dto.NotificationRequestDTO;
 import com.HHive.hhive.domain.notification.dto.NotificationResponseDTO;
-import com.HHive.hhive.domain.notification.entity.CustomSseEmitter;
 import com.HHive.hhive.domain.notification.service.NotificationService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,22 +28,21 @@ public class NotificationController {
 
     @PostMapping("/send")
     public ResponseEntity<CommonResponse> sendNotification(
-            @RequestBody NotificationRequestDTO notificationRequestDTO)
-    {
-        List<CustomSseEmitter> response = notificationService.sendNotification(
+            @RequestBody NotificationRequestDTO notificationRequestDTO) {
+        NotificationResponseDTO responseDTO = notificationService.sendNotification(
                 notificationRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(CommonResponse.of("메시지 전송 성공", response));
+                .body(CommonResponse.of("메시지 전송 성공", responseDTO));
     }
 
-    @GetMapping(value = "/{userId}/get" )
-    public  ResponseEntity<SseEmitter>  handleNotifications(
+
+    @GetMapping(value = "/{userId}/get")
+    public ResponseEntity<SseEmitter> handleNotifications(
             @PathVariable(name = "userId") Long userId
     ) {
-        CustomSseEmitter emitter = notificationService.createUserEmitter(userId);
 
-        notificationService.addSseEmitter(emitter);
+        SseEmitter emitter = notificationService.addSseEmitter(userId);
 
         return ResponseEntity.ok(emitter);
     }
@@ -78,18 +73,14 @@ public class NotificationController {
         notificationService.deleteNotification(notificationId);
         return ResponseEntity.ok().body(CommonResponse.of("알림 개수 조회 완료", null));
     }
+
     @GetMapping("/read")
     public ResponseEntity<CommonResponse> readNotification(
             @AuthenticationPrincipal UserDetailsImpl userDetails
-    ){
+    ) {
         notificationService.readNotification(userDetails.getUser().getId());
         return ResponseEntity.ok().body(CommonResponse.of("알림 열람 완료", null));
     }
-    @DeleteMapping("/clear")
-    public void  clear(){
-        notificationService.clear();
-    }
-
 
 }
 
