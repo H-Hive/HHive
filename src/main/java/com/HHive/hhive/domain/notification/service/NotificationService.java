@@ -40,7 +40,7 @@ public class NotificationService {
 
 
     public SseEmitter addSseEmitter(Long userId) {
-        SseEmitter emitter = new SseEmitter(600000L);
+        SseEmitter emitter = new SseEmitter();
         emitterRepository.add(userId, emitter);
         emitter.onCompletion(() -> {
             emitterRepository.remove(userId);
