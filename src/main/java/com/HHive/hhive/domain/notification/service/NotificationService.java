@@ -48,7 +48,7 @@ public class NotificationService {
         emitter.onTimeout(() -> {
             emitterRepository.remove(userId);
         });
-        System.out.println("SseEmitter가 추가 되었습니다");
+        System.out.println("SseEmitter가 추가 되었습니다"+userId);
         return emitter;
     }
 
