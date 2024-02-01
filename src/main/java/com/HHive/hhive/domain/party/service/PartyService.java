@@ -3,6 +3,7 @@ package com.HHive.hhive.domain.party.service;
 import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.party.dto.MemberResponseDTO;
+import com.HHive.hhive.domain.party.dto.MyPartyResponseDTO;
 import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
 import com.HHive.hhive.domain.party.dto.PartyResponseDTO;
 import com.HHive.hhive.domain.party.entity.Party;
@@ -233,11 +234,11 @@ public class PartyService {
                 .collect(Collectors.toList());
     }
 
-    public List<PartyResponseDTO> getPartiesByUserId(Long userId) {
+    public List<MyPartyResponseDTO> getPartiesByUserId(Long userId) {
 
         return partyUserRepository.findPartiesByUserId(userId).stream().map(party ->
-                new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(),
-                        party.getContent(), party.getDateTime(), party.getCreatedAt(),
+                new MyPartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(),
+                        party.getContent(),party.getHive().getId(),party.getHostId(), party.getDateTime(), party.getCreatedAt(),
                         party.getModifiedAt(), getPartyMembers(party.getId()))).toList();
     }
 }

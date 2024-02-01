@@ -3,8 +3,8 @@ package com.HHive.hhive.domain.notification.service;
 import com.HHive.hhive.domain.hive.repository.HiveRepository;
 import com.HHive.hhive.domain.notification.dto.NotificationRequestDTO;
 import com.HHive.hhive.domain.notification.dto.NotificationResponseDTO;
-import com.HHive.hhive.domain.notification.entity.CustomSseEmitter;
 import com.HHive.hhive.domain.notification.entity.Notification;
+import com.HHive.hhive.domain.notification.repository.EmitterRepository;
 import com.HHive.hhive.domain.notification.repository.NotificationRepository;
 import com.HHive.hhive.domain.party.repository.PartyRepository;
 import com.HHive.hhive.domain.relationship.hiveuser.entity.HiveUser;
@@ -14,13 +14,10 @@ import com.HHive.hhive.domain.relationship.notificationuser.repository.UserNotif
 import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
 import com.HHive.hhive.domain.relationship.partyuser.repository.PartyUserRepository;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
-import com.HHive.hhive.global.exception.notification.EmitterNotFoundException;
 import com.HHive.hhive.global.exception.notification.NotificationNotFoundException;
 import com.HHive.hhive.global.exception.party.PartyNotFoundException;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,32 +36,24 @@ public class NotificationService {
     private final PartyRepository partyRepository;
     private final HiveRepository hiveRepository;
 
+    private final EmitterRepository emitterRepository;
 
-    private final List<CustomSseEmitter> emitters = new ArrayList<>();
 
-
-    public void addSseEmitter(CustomSseEmitter emitter) {
-        emitters.add(emitter);
+    public SseEmitter addSseEmitter(Long userId) {
+        SseEmitter emitter = new SseEmitter(600000L);
+        emitterRepository.add(userId, emitter);
         emitter.onCompletion(() -> {
-            emitters.remove(emitter);
+            emitterRepository.remove(userId);
         });
         emitter.onTimeout(() -> {
-            emitters.remove(emitter);
+            emitterRepository.remove(userId);
         });
-        System.out.println("SseEmitter가 추가 되었습니다" + emitter.getUserId());
-    }
-
-    public void sendNotificationToClients(CustomSseEmitter emitter, Notification notification) {
-        try {
-            emitter.send(notification);
-            System.out.println("알림 전송 성공");
-        } catch (Exception e) {
-            System.err.println("전송 실패");
-        }
+        System.out.println("SseEmitter가 추가 되었습니다");
+        return emitter;
     }
 
     @Transactional
-    public List<CustomSseEmitter> sendNotification(NotificationRequestDTO notificationRequestDTO) {
+    public NotificationResponseDTO sendNotification(NotificationRequestDTO notificationRequestDTO) {
 
         String type = notificationRequestDTO.getType();
         Notification notification = Notification.builder()
@@ -86,13 +75,9 @@ public class NotificationService {
                     notificationRequestDTO.getId());
             sendNotificationToUserListHive(hiveUserList, notification);
         }
-        return emitters;
+        return NotificationResponseDTO.fromEntity(notification);
     }
 
-
-    public CustomSseEmitter createUserEmitter(Long userId) {
-        return new CustomSseEmitter(userId);
-    }
     public List<NotificationResponseDTO> getNotificationsByUserId(Long userId) {
         List<Notification> notifications = userNotificationRepository
                 .findNotificationsByUserId(userId);
@@ -121,15 +106,14 @@ public class NotificationService {
         return userNotificationRepository
                 .countUnreadNotificationsByUserId(userId, "unread");
     }
-    public void readNotification(Long userId){
-        List<UserNotification> userNotifications =userNotificationRepository.findByUserIdAndNotificationId(userId);
+
+    public void readNotification(Long userId) {
+        List<UserNotification> userNotifications = userNotificationRepository.findByUserIdAndNotificationId(
+                userId);
         for (UserNotification userNotification : userNotifications) {
             userNotification.changeStatus();
         }
         userNotificationRepository.saveAll(userNotifications);
-    }
-    public void clear(){
-        emitters.clear();
     }
 
     private void sendNotificationToUserListParty(List<PartyUser> partyUserList,
@@ -137,8 +121,9 @@ public class NotificationService {
 
         for (PartyUser partyUser : partyUserList) {
             Long userId = partyUser.getUser().getId();
-            CustomSseEmitter emitter = findSseEmitterByUserId(userId);
-            sendNotificationToClients(emitter,notification);
+            if (emitterRepository.containsUserId(userId)) {
+                sendNotificationToClients(userId, notification);
+            }
             UserNotification userNotification = UserNotification.builder()
                     .user(partyUser.getUser())
                     .notification(notification)
@@ -152,9 +137,8 @@ public class NotificationService {
 
         for (HiveUser hiveUser : hiveUserList) {
             Long userId = hiveUser.getUser().getId();
-            CustomSseEmitter emitter = findSseEmitterByUserId(userId);
-            if(emitter.getUserId().equals(userId)) {
-                sendNotificationToClients(emitter, notification);
+            if (emitterRepository.containsUserId(userId)) {
+                sendNotificationToClients(userId, notification);
             }
             UserNotification userNotification = UserNotification.builder()
                     .user(hiveUser.getUser())
@@ -166,10 +150,13 @@ public class NotificationService {
         }
     }
 
-    private CustomSseEmitter findSseEmitterByUserId(Long userId) {
-        return emitters.stream()
-                .filter(emitter -> userId.equals(emitter.getUserId()))
-                .findFirst()
-                .orElse(createUserEmitter(0L));
+    private void sendNotificationToClients(Long userId, Notification notification) {
+        SseEmitter emitter = emitterRepository.getEmitter(userId);
+        try {
+            emitter.send(notification);
+            System.out.println("알림 전송 성공");
+        } catch (Exception e) {
+            System.err.println("전송 실패");
+        }
     }
 }

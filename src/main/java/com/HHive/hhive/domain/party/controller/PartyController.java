@@ -1,5 +1,6 @@
 package com.HHive.hhive.domain.party.controller;
 
+import com.HHive.hhive.domain.party.dto.MyPartyResponseDTO;
 import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
 import com.HHive.hhive.domain.party.dto.PartyListResponseDTO;
 import com.HHive.hhive.domain.party.dto.PartyResponseDTO;
@@ -90,10 +91,10 @@ public class PartyController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<CommonResponse<List<PartyResponseDTO>>> getPartiesByUserId(
+    public ResponseEntity<CommonResponse<List<MyPartyResponseDTO>>> getPartiesByUserId(
             @PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        List<PartyResponseDTO> response = partyService.getPartiesByUserId(userId);
+        List<MyPartyResponseDTO> response = partyService.getPartiesByUserId(userId);
 
         return ResponseEntity.ok().body(CommonResponse.of("유저의 파티 조회 성공", response));
     }
