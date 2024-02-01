@@ -20,11 +20,13 @@ public enum ErrorCode {
     PASSWORD_CONFIRMATION_EXCEPTION(401, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     NOT_FOUND_USER_EXCEPTION(400, "해당 유저가 존재하지 않습니다"),
     INVALID_EMAIL_VERIFICATION_CODE_EXCEPTION(400, "입력하신 이메일 인증 코드가 유효하지 않습니다"),
+    KAKAO_USER_EMAIL_MODIFICATION_EXCEPTION(400, "카카오 로그인한 유저는 이메일을 수정할 수 없습니다."),
 
     //Hive
     ALREADY_EXIST_HIVE_EXCEPTION(401, "중복된 타이틀입니다."),
     FORBIDDEN_ABOUT_HIVE_EXCEPTION(403, "해당 하이브에 대한 권한이 없습니다."),
     NOT_FOUND_HIVE_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
+    HIVE_HOST_NOT_RESIGN_EXCEPTION(403,"호스트는 하이브 탈퇴가 불가능합니다."),
 
     //Party
     PARTY_NOT_FOUND_EXCEPTION(404, "해당 파티를 찾을 수 없습니다."),

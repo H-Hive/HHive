@@ -8,10 +8,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
 @Getter
 @Table(name = "\"USER\"")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

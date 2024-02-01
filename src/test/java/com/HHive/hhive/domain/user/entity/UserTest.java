@@ -32,8 +32,10 @@ class UserTest {
         @DisplayName("프로필 업데이트")
         void updateProfile() {
             // given
-            User user = new User("testUser", "testPassword", "testEmail@email.com", "testDescription");
-            UpdateUserProfileRequestDTO requestDTO = new UpdateUserProfileRequestDTO();
+            User user = new User(
+                    "testUser", "testPassword", "testEmail@email.com", "testDescription");
+            UpdateUserProfileRequestDTO requestDTO = new UpdateUserProfileRequestDTO(
+                    "updateEmail@email.com", "updateDescription");
 
             // when
             user.updateProfile(requestDTO);
@@ -47,7 +49,8 @@ class UserTest {
         @DisplayName("계정 삭제 업데이트")
         void updateDeletedAt() {
             // given
-            User user = new User("testUser", "testPassword", "testEmail@email.com", "testDescription");
+            User user = new User(
+                    "testUser", "testPassword", "testEmail@email.com", "testDescription");
             assertFalse(user.is_deleted());
 
             // when
@@ -67,7 +70,8 @@ class UserTest {
         @DisplayName("비밀번호 설정")
         void setPassword() {
             // given
-            User user = new User("testUser", "testPassword", "testEmail@email.com", "testDescription");
+            User user = new User(
+                    "testUser", "testPassword", "testEmail@email.com", "testDescription");
             String newPassword = "newPassword";
 
             // when
@@ -81,7 +85,8 @@ class UserTest {
         @DisplayName("major 카테고리 설정")
         void setMajorCategory() {
             // given
-            User user = new User("testUser", "testPassword", "testEmail@email.com", "testDescription");
+            User user = new User(
+                    "testUser", "testPassword", "testEmail@email.com", "testDescription");
             MajorCategory majorCategory = MajorCategory.GAME;
 
             // when
@@ -95,7 +100,8 @@ class UserTest {
         @DisplayName("sub 카테고리 설정")
         void setSubCategory() {
             // given
-            User user = new User("testUser", "testPassword", "testEmail@email.com", "testDescription");
+            User user = new User(
+                    "testUser", "testPassword", "testEmail@email.com", "testDescription");
             SubCategory subCategory = SubCategory.LOL;
 
             // when

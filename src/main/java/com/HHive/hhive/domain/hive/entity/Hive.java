@@ -59,11 +59,6 @@ public class Hive extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    private Category category;
-
-
     public void updateHiveTitle(UpdateHiveTitleRequestDTO updateHiveTitleRequestDTO) {
         if (updateHiveTitleRequestDTO.getTitle() != null) {
             this.title = updateHiveTitleRequestDTO.getTitle();
