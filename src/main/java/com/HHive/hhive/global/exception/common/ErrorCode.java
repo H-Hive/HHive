@@ -25,6 +25,7 @@ public enum ErrorCode {
     ALREADY_EXIST_HIVE_EXCEPTION(401, "중복된 타이틀입니다."),
     FORBIDDEN_ABOUT_HIVE_EXCEPTION(403, "해당 하이브에 대한 권한이 없습니다."),
     NOT_FOUND_HIVE_EXCEPTION(404, "해당 하이브를 찾을 수 없습니다."),
+    HIVE_HOST_NOT_RESIGN_EXCEPTION(403,"호스트는 하이브 탈퇴가 불가능합니다."),
 
     //Party
     PARTY_NOT_FOUND_EXCEPTION(404, "해당 파티를 찾을 수 없습니다."),

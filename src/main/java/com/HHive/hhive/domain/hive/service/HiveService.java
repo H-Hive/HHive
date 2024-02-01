@@ -16,6 +16,7 @@ import com.HHive.hhive.domain.user.entity.User;
 import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.exception.hive.AlreadyExistHiveException;
+import com.HHive.hhive.global.exception.hive.HostNotResignHiveException;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
 import com.HHive.hhive.global.exception.user.AlreadyExistEmailException;
 import com.HHive.hhive.global.exception.user.NotFoundUserException;
@@ -128,6 +129,10 @@ public class HiveService {
     public void deleteHiveUser(User user, Long hiveId, String username) {
         Hive hive = getHiveAndCheckAuth(user, hiveId);
         User hiveUser = userService.findUserByUsername(username);
+
+        if (user.getId().equals(hive.getCreatorId())) {
+            throw new HostNotResignHiveException();
+        }
 
         if (!hiveUserService.isExistedUser(hiveUser, hive)) {
             throw new NotFoundUserException();
