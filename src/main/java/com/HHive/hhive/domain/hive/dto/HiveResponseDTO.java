@@ -23,8 +23,6 @@ public class HiveResponseDTO {
 
     private String subCategory;
 
-    private String fullAddress;
-
     private String roadAddress;
 
     private String introduction;
@@ -51,7 +49,6 @@ public class HiveResponseDTO {
                 .title(hive.getTitle())
                 .majorCategory(majorName)
                 .subCategory(subName)
-                .fullAddress(hive.getFullAddress())
                 .roadAddress(hive.getRoadAddress())
                 .introduction(hive.getIntroduction())
                 .hostId(hive.getCreatorId())
