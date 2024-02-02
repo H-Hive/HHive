@@ -40,7 +40,6 @@ public class NotificationService {
 
 
     public SseEmitter addSseEmitter(Long userId) {
-        Notification notification = Notification.builder().message("dummy").build();
         SseEmitter emitter = new SseEmitter(300000L);
         try {
             emitter.send(SseEmitter.event().name("connect").data("connect"));
