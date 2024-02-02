@@ -1,9 +1,6 @@
 package com.HHive.hhive.domain.party.controller;
 
-import com.HHive.hhive.domain.party.dto.MyPartyResponseDTO;
-import com.HHive.hhive.domain.party.dto.PartyRequestDTO;
-import com.HHive.hhive.domain.party.dto.PartyListResponseDTO;
-import com.HHive.hhive.domain.party.dto.PartyResponseDTO;
+import com.HHive.hhive.domain.party.dto.*;
 import com.HHive.hhive.domain.party.service.PartyService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
@@ -55,10 +52,10 @@ public class PartyController {
 
     @PatchMapping("/{partyId}")
     public ResponseEntity<CommonResponse<PartyResponseDTO>> updateParty(@PathVariable Long partyId,
-                                                                        @RequestBody PartyRequestDTO partyRequestDto,
+                                                                        @RequestBody PartyUpdateRequestDTO partyUpdateRequestDTO,
                                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        PartyResponseDTO responseDto = partyService.updateParty(partyId, partyRequestDto, userDetails.getUser());
+        PartyResponseDTO responseDto = partyService.updateParty(partyId, partyUpdateRequestDTO, userDetails.getUser());
 
         return ResponseEntity.ok().body(CommonResponse.of("업데이트 성공", responseDto));
     }
@@ -72,11 +69,11 @@ public class PartyController {
         return ResponseEntity.ok().body(CommonResponse.of("정상적으로 삭제 되었습니다.", null));
     }
 
-    @PostMapping("/{partyId}/join")
-    public ResponseEntity<CommonResponse<String>> joinParty(@PathVariable Long partyId,
+    @PostMapping("/{partyId}/hives/{hiveId}/join")
+    public ResponseEntity<CommonResponse<String>> joinParty(@PathVariable Long partyId,@PathVariable Long hiveId,
                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        partyService.joinParty(partyId, userDetails.getUser());
+        partyService.joinParty(partyId, hiveId, userDetails.getUser());
 
         return ResponseEntity.ok().body(CommonResponse.of("파티 가입 성공", null));
     }

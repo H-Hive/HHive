@@ -31,6 +31,7 @@ public enum ErrorCode {
     //Party
     PARTY_NOT_FOUND_EXCEPTION(404, "해당 파티를 찾을 수 없습니다."),
     UNAUTHORIZED_ACCESS_EXCEPTION(403,"해당 파티에 대한 권한이 없습니다."),
+    NOT_MEMBER_OF_HIVE_EXCEPTION(403,"하이브에 가입 되어 있지 않습니다."),
     PARTY_HOST_NOT_RESIGN_EXCEPTION(403,"리더는 파티 탈퇴가 불가능합니다."),
     PARTY_HOST_NOT_JOIN_EXCEPTION(403,"리더는 파티 가입이 불가능합니다."),
     END_PARTY_NOT_JOIN_EXCEPTION(403,"가입 기간이 끝난 파티 입니다."),

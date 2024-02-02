@@ -18,7 +18,7 @@ public class PartyResponseDTO {
     private String username;
     private String content;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy년 MM월 dd일 / HH시 mm분")
     private LocalDateTime dateTime; // 약속 날짜,시간
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createAt;
