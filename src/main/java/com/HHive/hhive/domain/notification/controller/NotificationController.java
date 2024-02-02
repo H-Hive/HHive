@@ -8,6 +8,7 @@ import com.HHive.hhive.global.common.CommonResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,11 +38,10 @@ public class NotificationController {
     }
 
 
-    @GetMapping(value = "/{userId}/get")
+    @GetMapping(value = "/{userId}/get",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> handleNotifications(
             @PathVariable(name = "userId") Long userId
     ) {
-
         SseEmitter emitter = notificationService.addSseEmitter(userId);
 
         return ResponseEntity.ok(emitter);

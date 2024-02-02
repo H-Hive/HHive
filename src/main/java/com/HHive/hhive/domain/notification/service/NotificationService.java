@@ -40,7 +40,13 @@ public class NotificationService {
 
 
     public SseEmitter addSseEmitter(Long userId) {
-        SseEmitter emitter = new SseEmitter();
+        Notification notification = Notification.builder().message("dummy").build();
+        SseEmitter emitter = new SseEmitter(300000L);
+        try {
+            emitter.send(SseEmitter.event().name("connect").data("connect"));
+        } catch (Exception e) {
+            System.err.println("연결 실패");
+        }
         emitterRepository.add(userId, emitter);
         emitter.onCompletion(() -> {
             emitterRepository.remove(userId);
