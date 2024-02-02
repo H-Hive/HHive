@@ -49,6 +49,12 @@ public class Hive extends BaseTimeEntity {
     private SubCategory subCategory;
 
     @Column
+    private String fullAddress;
+
+    @Column
+    private String roadAddress;
+
+    @Column
     private String introduction;
 
     @Column
