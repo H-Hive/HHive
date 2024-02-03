@@ -1,31 +1,23 @@
 package com.HHive.hhive.global.jwt;
 
-import com.HHive.hhive.domain.user.dto.UserInfoResponseDTO;
 import com.HHive.hhive.global.exception.jwt.ExpiredJwtTokenException;
 import com.HHive.hhive.global.exception.jwt.InvalidJwtSignatureException;
 import com.HHive.hhive.global.exception.jwt.InvalidJwtTokenException;
 import com.HHive.hhive.global.exception.jwt.UnsupportedJwtTokenException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.security.Key;
+import java.util.Base64;
+import java.util.Date;
 
 @Component
 @Slf4j
@@ -98,5 +90,17 @@ public class JwtUtil {
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
                         .compact();
+    }
+
+    public String createToken(String username, long validityInMillis) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + validityInMillis);
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 }

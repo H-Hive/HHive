@@ -4,6 +4,7 @@ import com.HHive.hhive.domain.hive.dto.HiveResponseDTO;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.domain.user.dto.*;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.domain.user.service.AuthService;
 import com.HHive.hhive.domain.user.service.EmailService;
 import com.HHive.hhive.domain.user.service.KakaoService;
 import com.HHive.hhive.domain.user.service.UserService;
@@ -29,6 +30,7 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final KakaoService kaKaoService;
     private final EmailService emailService;
+    private final AuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<Void>> signup(
@@ -71,10 +73,15 @@ public class UserController {
 
         UserInfoResponseDTO userInfo = userService.login(requestDTO);
 
+        // 액세스 토큰 생성 및 헤더에 저장
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(requestDTO.getUsername()));
+
+        // 리프레시 토큰 생성 및 DB에 저장
+        authService.createRefreshToken(userInfo.getUserId());
 
         return ResponseEntity.ok().body(CommonResponse.of("로그인 성공", userInfo));
     }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<CommonResponse<UserInfoResponseDTO>> getProfile(@PathVariable Long userId) {
@@ -158,5 +165,14 @@ public class UserController {
         UserInfoResponseDTO userInfo = userService.kakaoLogin(username);
 
         return ResponseEntity.ok().body(CommonResponse.of("카카오 로그인 성공", userInfo));
+    }
+
+    // 리프레시 토큰을 이용한 액세스 토큰 갱신
+    @PostMapping("/refresh-token")
+    public ResponseEntity<CommonResponse<String>> refreshToken(@RequestBody String refreshToken) {
+
+        String newAccessToken = authService.createAccessTokenWithRefreshToken(refreshToken);
+
+        return ResponseEntity.ok().body(CommonResponse.of("액세스 토큰 갱신 성공", newAccessToken));
     }
 }
