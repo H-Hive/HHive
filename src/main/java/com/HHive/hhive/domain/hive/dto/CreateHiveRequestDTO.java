@@ -23,8 +23,6 @@ public class CreateHiveRequestDTO {
 
     private String subCategoryName;
 
-    private String fullAddress;
-
     private String roadAddress;
 
     public Hive toEntity(User createdBy,MajorCategory majorCategory,SubCategory subCategory) {
@@ -32,7 +30,6 @@ public class CreateHiveRequestDTO {
                 .title(title)
                 .majorCategory(majorCategory)
                 .subCategory(subCategory)
-                .fullAddress(fullAddress)
                 .roadAddress(roadAddress)
                 .creatorId(createdBy.getId())
                 .introduction("내용을 넣어주세요")
