@@ -12,10 +12,12 @@ public interface PartyUserRepository extends JpaRepository<PartyUser, PartyUserP
     @Query("SELECT pu FROM PartyUser pu JOIN FETCH pu.user WHERE pu.party.id = :partyId")
     List<PartyUser> findUsersByPartyId(Long partyId);
 
+    List<PartyUser> findByUserId(Long userId);
     boolean existsByUserIdAndPartyId(Long id, Long partyId);
 
     boolean existsByPartyUserPK_UserIdAndPartyUserPK_PartyId(Long id, Long id1);
 
     @Query("SELECT pu.party FROM PartyUser pu WHERE pu.user.id = :userId")
     List<Party> findPartiesByUserId(Long userId);
+
 }
