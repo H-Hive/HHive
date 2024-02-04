@@ -11,7 +11,8 @@ public enum MajorCategory {
     DANCE("댄스/무용"),
     SOCIAL("사교/인맥"),
     MEDIA("사진/영상"),
-    PET("반려동물");
+    PET("반려동물"),
+    ETC("기타");
 
     private final String title;
 
