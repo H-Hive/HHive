@@ -46,10 +46,10 @@ public class PartyService {
         Party party = new Party(hive, partyRequestDTO, user, dateTime);
         party.setUser(user);
 
+        partyRepository.save(party);
+
         // 파티 생성자(호스트)를 파티의 멤버로 추가
         partyUserService.addPartyUser(user, party);
-
-        partyRepository.save(party);
 
         return PartyResponseDTO.of(party);
     }
