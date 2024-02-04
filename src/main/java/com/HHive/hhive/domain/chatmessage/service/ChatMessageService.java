@@ -8,8 +8,10 @@ import com.HHive.hhive.domain.hive.entity.Hive;
 import com.HHive.hhive.domain.hive.service.HiveService;
 import com.HHive.hhive.domain.relationship.hiveuser.validator.HiveUserValidator;
 import com.HHive.hhive.domain.user.entity.User;
+import com.HHive.hhive.domain.user.repository.UserRepository;
 import com.HHive.hhive.global.exception.chatmessage.NotFoundChatMessageException;
 import com.HHive.hhive.global.exception.chatmessage.NotSenderOfChatMessageException;
+import com.HHive.hhive.global.exception.user.NotFoundUserException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,19 +23,24 @@ public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
 
+    private final UserRepository userRepository;
+
     private final HiveService hiveService;
 
     private final HiveUserValidator hiveUserValidator;
 
-    public void sendChatMessages(Long hiveId, ChatMessageRequestDTO requestDTO, User user) {
+    public ChatMessage receiveAndSaveMessage(ChatMessageRequestDTO requestDTO) {
 
-        Hive hive = hiveService.findHiveById(hiveId);
+        User user = userRepository.findByUsername(requestDTO.getUsername()).orElseThrow(
+                NotFoundUserException::new);
 
-        hiveUserValidator.validateHiveUser(hive, user);
+        Hive hive = hiveService.findHiveById(requestDTO.getHiveId());
 
-        ChatMessage chatMessage = makeChatMessage(hive, requestDTO.getMessage(), user);
+        ChatMessage chatMessage = makeChatMessage(hive, user, requestDTO.getMessage());
 
         chatMessageRepository.save(chatMessage);
+
+        return chatMessage;
     }
 
     public List<ChatMessageResponseDTO> getChatMessages(Long hiveId, User user) {
@@ -58,14 +65,14 @@ public class ChatMessageService {
         chatMessage.updateDeletedAt();
     }
 
-    public void validateLoginUserEqualsMessageSender(ChatMessage chatMessage, User user) {
+    private void validateLoginUserEqualsMessageSender(ChatMessage chatMessage, User user) {
 
-        if(!chatMessage.getSenderId().equals(user.getId())) {
+        if (!chatMessage.getSenderId().equals(user.getId())) {
             throw new NotSenderOfChatMessageException();
         }
     }
 
-    private ChatMessage makeChatMessage(Hive hive, String message, User sender) {
+    private ChatMessage makeChatMessage(Hive hive, User sender, String message) {
 
         return ChatMessage.builder()
                 .hive(hive)
