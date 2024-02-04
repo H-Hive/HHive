@@ -160,6 +160,7 @@ public class PartyService {
 
         partyUserService.removePartyUser(user.getId(), party.getId());
     }
+    
     @Transactional
     public List<PartyResponseDTO> getPartiesCreatedByUser(Long userId) {
 

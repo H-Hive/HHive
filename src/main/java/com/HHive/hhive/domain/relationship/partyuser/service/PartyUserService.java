@@ -23,22 +23,27 @@ public class PartyUserService {
 
     @Transactional
     public boolean isUserMemberOfHive(Long userId, Long hiveId) {
+
         return hiveUserRepository.existsByUserIdAndHiveId(userId, hiveId);
     }
     @Transactional
     public void addPartyUser(User user, Party party) {
+
         PartyUser partyUser = new PartyUser(user, party);
         partyUserRepository.save(partyUser);
     }
     @Transactional
     public void removePartyUser(Long userId, Long partyId) {
+
         PartyUserPK partyUserPK = new PartyUserPK(userId, partyId);
         partyUserRepository.deleteById(partyUserPK);
     }
     @Transactional
     public List<PartyResponseDTO> getPartiesJoinedByUser(Long userId) {
+
         List<PartyUser> partyUsers = partyUserRepository.findByUserId(userId);
         List<Party> parties = partyUsers.stream().map(PartyUser::getParty).collect(Collectors.toList());
+
         return parties.stream().map(PartyResponseDTO::of).collect(Collectors.toList());
     }
 
