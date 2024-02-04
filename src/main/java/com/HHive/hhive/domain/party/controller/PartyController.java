@@ -24,11 +24,13 @@ public class PartyController {
 
     @PostMapping("/hives/{hiveId}")
     public ResponseEntity<CommonResponse<PartyResponseDTO>> createParty(
+
             @PathVariable Long hiveId,
             @RequestBody PartyRequestDTO partyRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         PartyResponseDTO responseDto = partyService.createParty(hiveId, partyRequestDto, userDetails.getUser());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(CommonResponse.of("파티 생성 성공", responseDto));
     }

@@ -66,6 +66,7 @@ public class PartyService {
     //전체 조회
     @Transactional
     public List<PartyResponseDTO> getUserParties(Long hiveId) {
+
         Hive hive = getHive(hiveId);
         List<Party> partyList = partyRepository.findByHiveAndIsDeletedFalse(hive);
 
