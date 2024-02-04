@@ -2,6 +2,7 @@ package com.HHive.hhive.domain.party.controller;
 
 import com.HHive.hhive.domain.party.dto.*;
 import com.HHive.hhive.domain.party.service.PartyService;
+import com.HHive.hhive.domain.relationship.partyuser.service.PartyUserService;
 import com.HHive.hhive.domain.user.UserDetailsImpl;
 import com.HHive.hhive.global.common.CommonResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class PartyController {
 
     private final PartyService partyService;
+    private final PartyUserService partyUserService;
 
     @PostMapping("/hives/{hiveId}")
     public ResponseEntity<CommonResponse<PartyResponseDTO>> createParty(
@@ -82,18 +84,34 @@ public class PartyController {
     public ResponseEntity<CommonResponse<String>> resignParty(@PathVariable Long partyId,
                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        partyService.resignParty(partyId, userDetails.getUser());
+        partyService.leaveParty(partyId, userDetails.getUser());
 
         return ResponseEntity.ok().body(CommonResponse.of("파티 탈퇴 성공", null));
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<CommonResponse<List<MyPartyResponseDTO>>> getPartiesByUserId(
+    public ResponseEntity<List<PartyResponseDTO>> getPartiesCreatedByUser(@PathVariable Long userId) {
+        List<PartyResponseDTO> parties = partyService.getPartiesCreatedByUser(userId);
+
+        return ResponseEntity.ok(parties);
+    }
+
+    @GetMapping("/users/createdParties/{userId}")
+    public ResponseEntity<CommonResponse<List<PartyResponseDTO>>> getPartiesCreatedByUser(
             @PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        List<MyPartyResponseDTO> response = partyService.getPartiesByUserId(userId);
+        List<PartyResponseDTO> createdParties = partyService.getPartiesCreatedByUser(userId);
 
-        return ResponseEntity.ok().body(CommonResponse.of("유저의 파티 조회 성공", response));
+        return ResponseEntity.ok().body(CommonResponse.of("유저가 생성한 파티 조회 성공", createdParties));
+    }
+
+    @GetMapping("/users/joinedParties/{userId}")
+    public ResponseEntity<CommonResponse<List<PartyResponseDTO>>> getPartiesJoinedByUser(
+            @PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        List<PartyResponseDTO> joinedParties = partyUserService.getPartiesJoinedByUser(userId);
+
+        return ResponseEntity.ok().body(CommonResponse.of("유저가 가입한 파티 조회 성공", joinedParties));
     }
 
 }
