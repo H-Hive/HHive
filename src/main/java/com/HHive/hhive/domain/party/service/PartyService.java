@@ -75,9 +75,7 @@ public class PartyService {
     }
 
     @Transactional
-    public PartyResponseDTO updateParty(Long partyId,
-                                        PartyUpdateRequestDTO partyUpdateRequestDto,
-                                        User user) {
+    public PartyResponseDTO updateParty(Long partyId, PartyUpdateRequestDTO partyUpdateRequestDto, User user) {
 
         Party party = getUserParty(partyId, user);
 
