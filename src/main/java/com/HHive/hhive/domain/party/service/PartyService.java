@@ -50,6 +50,7 @@ public class PartyService {
         partyUserService.addPartyUser(user, party);
 
         partyRepository.save(party);
+
         return PartyResponseDTO.of(party);
     }
 
@@ -58,6 +59,7 @@ public class PartyService {
     public PartyResponseDTO getPartyDto(Long hiveId, Long partyId) {
 
         Party party = getParty(hiveId, partyId);
+
         return PartyResponseDTO.of(party);
     }
 
@@ -105,6 +107,7 @@ public class PartyService {
         party.setDateTime(newDateTime);
 
         partyRepository.save(party);
+
         return PartyResponseDTO.of(party);
     }
 
@@ -118,6 +121,7 @@ public class PartyService {
         }
 
         party.setIsDeleted(true);
+
         partyRepository.save(party);
     }
 
@@ -167,7 +171,9 @@ public class PartyService {
     }
     @Transactional
     public List<PartyResponseDTO> getPartiesCreatedByUser(Long userId) {
+
         List<Party> parties = partyRepository.findByUserIdAndIsDeletedIsFalse(userId);
+
         return parties.stream().map(PartyResponseDTO::of).collect(Collectors.toList());
     }
 
