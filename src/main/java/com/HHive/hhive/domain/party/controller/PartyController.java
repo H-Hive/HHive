@@ -43,11 +43,9 @@ public class PartyController {
 
 
     @GetMapping("/{hiveId}")
-    public ResponseEntity<CommonResponse<List<PartyListResponseDTO>>> getPartyList(@PathVariable Long hiveId) {
+    public ResponseEntity<CommonResponse<List<PartyResponseDTO>>> getPartyList(@PathVariable Long hiveId) {
 
-        List<PartyListResponseDTO> response = partyService.getUserPartyMap(hiveId).entrySet().stream()
-                .map(entry -> new PartyListResponseDTO(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+        List<PartyResponseDTO> response = partyService.getUserParties(hiveId);
 
         return ResponseEntity.ok().body(CommonResponse.of("파티 목록 조회 성공", response));
     }

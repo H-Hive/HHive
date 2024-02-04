@@ -65,27 +65,19 @@ public class PartyService {
 
     //전체 조회
     @Transactional
-    public Map<UserInfoResponseDTO, List<PartyResponseDTO>> getUserPartyMap(Long hiveId) {
-
+    public List<PartyResponseDTO> getUserParties(Long hiveId) {
         Hive hive = getHive(hiveId);
+        List<Party> partyList = partyRepository.findByHiveAndIsDeletedFalse(hive);
 
-        Map<UserInfoResponseDTO, List<PartyResponseDTO>> userPartyMap = new LinkedHashMap<>();
-
-        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
-                .filter(p -> !p.isDeleted() && p.getHive().equals(hive))
+        return partyList.stream()
+                .map(PartyResponseDTO::of)
                 .collect(Collectors.toList());
-
-        for (Party party : partyList) {
-            UserInfoResponseDTO userDto = new UserInfoResponseDTO(party.getUser());
-            PartyResponseDTO partyDto = PartyResponseDTO.of(party);
-            userPartyMap.computeIfAbsent(userDto, k -> new ArrayList<>()).add(partyDto);
-        }
-
-        return userPartyMap;
     }
 
     @Transactional
-    public PartyResponseDTO updateParty(Long partyId, PartyUpdateRequestDTO partyUpdateRequestDto, User user) {
+    public PartyResponseDTO updateParty(Long partyId,
+                                        PartyUpdateRequestDTO partyUpdateRequestDto,
+                                        User user) {
 
         Party party = getUserParty(partyId, user);
 
