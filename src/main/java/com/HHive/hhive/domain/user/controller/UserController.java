@@ -11,6 +11,7 @@ import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
 import com.HHive.hhive.global.jwt.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,13 +76,27 @@ public class UserController {
         UserInfoResponseDTO userInfo = userService.login(requestDTO);
 
         // 액세스 토큰 생성 및 헤더에 저장
-        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(requestDTO.getUsername()));
+        String accessToken = jwtUtil.createToken(requestDTO.getUsername());
+        response.setHeader("Access-Token", accessToken);
 
         // 리프레시 토큰 생성 및 DB에 저장
-        authService.createRefreshToken(userInfo.getUserId());
+        String refreshToken = authService.createRefreshToken(userInfo.getUserId());
+        response.setHeader("Refresh-Token", refreshToken);
 
         return ResponseEntity.ok().body(CommonResponse.of("로그인 성공", userInfo));
     }
+
+
+//
+//    // 로그아웃 메서드
+//    @PostMapping("/logout")
+//    public ResponseEntity<CommonResponse<Void>> logout(HttpServletRequest request) {
+//        String refreshToken = request.getHeader("Authorization");
+//        System.out.println("Refresh token: " + refreshToken);
+//        authService.logout(refreshToken);
+//        return ResponseEntity.ok().body(CommonResponse.of("로그아웃 성공", null));
+//    }
+
 
 
     @GetMapping("/{userId}")
@@ -169,9 +185,9 @@ public class UserController {
 
     // 리프레시 토큰을 이용한 액세스 토큰 갱신
     @PostMapping("/refresh-token")
-    public ResponseEntity<CommonResponse<String>> refreshToken(@RequestBody String refreshToken) {
+    public ResponseEntity<CommonResponse<String>> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDTO) {
 
-        String newAccessToken = authService.createAccessTokenWithRefreshToken(refreshToken);
+        String newAccessToken = authService.createAccessTokenWithRefreshToken(refreshTokenDTO.getRefreshToken());
 
         return ResponseEntity.ok().body(CommonResponse.of("액세스 토큰 갱신 성공", newAccessToken));
     }

@@ -1,18 +1,18 @@
 package com.HHive.hhive.global.config;
 
 import com.HHive.hhive.domain.user.UserDetailsService;
+import com.HHive.hhive.domain.user.service.LogoutService;
 import com.HHive.hhive.global.jwt.JwtAuthorizationFilter;
 import com.HHive.hhive.global.jwt.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,15 +21,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
-
     private final UserDetailsService userDetailsService;
-
     private final ObjectMapper objectMapper;
+    private final LogoutService logoutService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -80,6 +83,18 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/notifications/**").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
+
+        http.logout(logout -> {
+            logout
+                    .logoutUrl("/api/users/logout")
+                    .addLogoutHandler(logoutService)
+                    .logoutSuccessHandler((request, response, authentication) -> {
+                        SecurityContextHolder.clearContext();
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.setContentType("application/json; charset=UTF-8");
+                        response.getWriter().write("로그아웃 성공");
+                    });
+        });
 
         // 필터 처리
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

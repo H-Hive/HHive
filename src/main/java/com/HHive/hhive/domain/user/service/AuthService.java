@@ -14,12 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class AuthService {
 
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
@@ -44,7 +42,7 @@ public class AuthService {
         String refreshToken = jwtUtil.createToken(user.getUsername(), TOKEN_VALIDITY);
 
         Token tokenEntity = Token.builder()
-                .token(refreshToken)
+                .refreshToken(refreshToken)
                 .user(user)
                 .expired(false)
                 .revoked(false)
@@ -52,21 +50,20 @@ public class AuthService {
 
         tokenRepository.save(tokenEntity);
 
-        return refreshToken;
+        return "Bearer " + refreshToken;
     }
 
     @Transactional
     public String createAccessTokenWithRefreshToken(String refreshToken) {
 
+        System.out.println(refreshToken);
+
         // 데이터베이스에서 리프레시 토큰 조회
-        Optional<Token> tokenOptional = tokenRepository.findByToken(refreshToken);
+        Token tokenEntity = tokenRepository.findByRefreshToken(refreshToken);
 
-        if (tokenOptional.isEmpty()) {
+        if (tokenEntity == null) {
             throw new RefreshTokenNotFoundException();
-
         }
-
-        Token tokenEntity = tokenOptional.get();
 
         try {
             // 리프레시 토큰을 검증
@@ -80,7 +77,7 @@ public class AuthService {
             // 액세스 토큰의 유효시간을 1시간으로 설정
             long TOKEN_VALIDITY = 60 * 60 * 1000L;
 
-            // 새로운 액세스 토큰을 생성하고 반환합니다.
+            // 새로운 액세스 토큰을 생성하고 반환
             return jwtUtil.createToken(tokenEntity.getUser().getUsername(), TOKEN_VALIDITY);
 
         } catch (ExpiredJwtException e) {
