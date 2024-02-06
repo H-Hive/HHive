@@ -14,6 +14,8 @@ import com.HHive.hhive.domain.relationship.notificationuser.repository.UserNotif
 import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
 import com.HHive.hhive.domain.relationship.partyuser.repository.PartyUserRepository;
 import com.HHive.hhive.global.exception.hive.NotFoundHiveException;
+import com.HHive.hhive.global.exception.notification.EmitterNotFoundException;
+import com.HHive.hhive.global.exception.notification.EmitterSendErrorException;
 import com.HHive.hhive.global.exception.notification.NotificationNotFoundException;
 import com.HHive.hhive.global.exception.party.PartyNotFoundException;
 import jakarta.transaction.Transactional;
@@ -35,7 +37,6 @@ public class NotificationService {
     private final UserNotificationRepository userNotificationRepository;
     private final PartyRepository partyRepository;
     private final HiveRepository hiveRepository;
-
     private final EmitterRepository emitterRepository;
 
 
@@ -44,7 +45,7 @@ public class NotificationService {
         try {
             emitter.send(SseEmitter.event().name("connect").data("connect"));
         } catch (Exception e) {
-            System.err.println("연결 실패");
+            throw new EmitterSendErrorException();
         }
         emitterRepository.add(userId, emitter);
         emitter.onCompletion(() -> {
@@ -53,7 +54,6 @@ public class NotificationService {
         emitter.onTimeout(() -> {
             emitterRepository.remove(userId);
         });
-        System.out.println("SseEmitter가 추가 되었습니다"+userId);
         return emitter;
     }
 
@@ -159,9 +159,8 @@ public class NotificationService {
         SseEmitter emitter = emitterRepository.getEmitter(userId);
         try {
             emitter.send(notification);
-            System.out.println("알림 전송 성공");
         } catch (Exception e) {
-            System.err.println("전송 실패");
+            throw new EmitterSendErrorException();
         }
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PostMapping("/send")
+    @PostMapping
     public ResponseEntity<CommonResponse> sendNotification(
             @RequestBody NotificationRequestDTO notificationRequestDTO) {
         NotificationResponseDTO responseDTO = notificationService.sendNotification(
@@ -39,7 +40,7 @@ public class NotificationController {
     }
 
 
-    @GetMapping(value = "/{userId}/get", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/{userId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> handleNotifications(@PathVariable(name = "userId") Long userId) {
         SseEmitter emitter = notificationService.addSseEmitter(userId);
 
@@ -51,23 +52,23 @@ public class NotificationController {
                 .body(emitter);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping
     public ResponseEntity<CommonResponse> getNotificationsByUserId(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(
                 userDetails.getUser().getId());
-        return ResponseEntity.ok().body(CommonResponse.of("알림 출력 성공", notifications));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 개수 조회 완료", notifications));
     }
 
-    @GetMapping("/count")
+    @GetMapping("/unread")
     public ResponseEntity<CommonResponse> showUnreadNotificationCountForUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Long notificationCount = notificationService.showUnreadNotificationCountForUser(
                 userDetails.getUser()
                         .getId());
-        return ResponseEntity.ok().body(CommonResponse.of("알림 출력 성공", notificationCount));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 개수 출력 성공", notificationCount));
     }
 
     @DeleteMapping("/{notificationId}")
@@ -75,10 +76,10 @@ public class NotificationController {
             @PathVariable(name = "notificationId") Long notificationId
     ) {
         notificationService.deleteNotification(notificationId);
-        return ResponseEntity.ok().body(CommonResponse.of("알림 개수 조회 완료", null));
+        return ResponseEntity.ok().body(CommonResponse.of("알림 삭제 완료", null));
     }
 
-    @GetMapping("/read")
+    @PatchMapping("/read")
     public ResponseEntity<CommonResponse> readNotification(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
