@@ -32,8 +32,21 @@
 | [창다은](https://github.com/de123456sdf)  | 기능구현 및 프론트 보조 / Party API          |
 | [김대영](https://github.com/kdy9960)      | 기능구현 및 프론트 보조 / Hive API               |
 
-## 🐝 Wire frame
-<img width="779" alt="image" src="![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/83c75a39-3aba-4ba4-a792-7aefe4b07895/ff4116b7-34c2-4466-8f41-3ba4b7a3e40a/Untitled.png)">
+## 🐝 Service Preview
+|  제목  |  내용   |
+|:----:|:-----:|
+| 메인페이지 | <img width="1867" alt="스크린샷 2024-02-06 오후 7 14 35" src="https://github.com/H-Hive/HHive/assets/129070298/3c5a1e76-3ec6-492a-a284-f7c67c504fae"> |
+| 로그인 페이지 | <img width="1757" alt="스크린샷 2024-02-06 오후 7 16 50" src="https://github.com/H-Hive/HHive/assets/129070298/08744fb0-4f22-4a93-b4d3-0ab850062cf5"> |
+| 하이브 조회 + 만들기 페이지 | <img width="1837" alt="스크린샷 2024-02-06 오후 7 18 17" src="https://github.com/H-Hive/HHive/assets/129070298/eeb1ac20-a61b-4f32-b5ba-8dc2d875f221"> |
+| 프로필 페이지 | <img width="1829" alt="스크린샷 2024-02-06 오후 7 18 58" src="https://github.com/H-Hive/HHive/assets/129070298/b795322f-c168-4f04-9dcd-56f8a084e487"> |
+| 내 하이브 페이지 | <img width="1856" alt="스크린샷 2024-02-06 오후 7 19 25" src="https://github.com/H-Hive/HHive/assets/129070298/44fe827a-f7e3-43c1-92c4-48374c444145"> |
+| 내 파티 페이지 | <img width="1818" alt="스크린샷 2024-02-06 오후 7 20 03" src="https://github.com/H-Hive/HHive/assets/129070298/271fe955-5b54-4ae3-8642-0c451ec8e675"> |
+| 카테고리별 하이브 조회 | <img width="1823" alt="스크린샷 2024-02-06 오후 7 20 34" src="https://github.com/H-Hive/HHive/assets/129070298/08fe2dd6-a6a8-4ca9-a673-857fe87189aa"> |
+| 지도 상에서 하이브 생성 | <img width="1815" alt="스크린샷 2024-02-06 오후 7 21 03" src="https://github.com/H-Hive/HHive/assets/129070298/a2d594a0-f1c1-450b-97bd-b5161cacd4e0"> |
+| 하이브 상세 페이지 | <img width="1861" alt="스크린샷 2024-02-06 오후 7 21 42" src="https://github.com/H-Hive/HHive/assets/129070298/24c998b7-7db6-41e7-9aaa-10f3f9841f97"> |
+| 채팅방 페이지 | <img width="1873" alt="스크린샷 2024-02-06 오후 7 22 28" src="https://github.com/H-Hive/HHive/assets/129070298/cecc6d31-2cef-453c-ae60-4e3f32e2846b"> |
+| 알림 기능 |  |
+| 파티 상세 페이지 | <img width="1835" alt="스크린샷 2024-02-06 오후 7 24 51" src="https://github.com/H-Hive/HHive/assets/129070298/62f0ef3b-dc9c-4082-8edc-215a8681c5eb"> |
 
 
 ### ⏰ 타임라인
@@ -81,10 +94,13 @@
 
 ---
 #### Design
+<span>
 <img src="https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=CSS3&logoColor=white">
 <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
+</span>
 
 #### Back-end
+<span>
 <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
 <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
 <img src="https://img.shields.io/badge/spring security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
@@ -95,16 +111,19 @@
 <img src="https://img.shields.io/badge/Querydsl-178dd0?style=for-the-badge&logo=Querydsl&logoColor=white">
 <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white">
 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white">
-
+</span>
 
 #### Front-end
 <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=Vue.js&logoColor=white">
 
 #### Database
+<span>
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 <img src="https://img.shields.io/badge/h2-0A4568?style=for-the-badge&logo=h2&logoColor=white">
+</span>
 
 #### Infra
+<span>
 <img src="https://img.shields.io/badge/amazon route53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white">
 <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
 <img src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
@@ -112,11 +131,14 @@
 <img src="https://img.shields.io/badge/lets encrypt-003A70?style=for-the-badge&logo=letsencrypt&logoColor=white">
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/amazon ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
+</span>
 
 #### Dev tools
+<span>
 <img src="https://img.shields.io/badge/IntelliJ-000000?style=for-the-badge&logo=IntelliJ IDEA&logoColor=white">
 <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
 <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white">
 <img src="https://img.shields.io/badge/visual studio code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
 <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">
 <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
+</span>
