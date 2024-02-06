@@ -1,5 +1,7 @@
 package com.HHive.hhive.global.exception.common;
 
+import com.HHive.hhive.global.exception.jwt.ExpiredJwtTokenException;
+import com.HHive.hhive.global.exception.jwt.InvalidJwtTokenException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,5 +38,15 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .map(error -> error.getDefaultMessage())
                 .orElse("Validation failed");
+    }
+
+    @ExceptionHandler(ExpiredJwtTokenException.class)
+    public ResponseEntity<String> handleExpiredJwtTokenException(ExpiredJwtTokenException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<String> handleInvalidJwtTokenException(InvalidJwtTokenException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 }

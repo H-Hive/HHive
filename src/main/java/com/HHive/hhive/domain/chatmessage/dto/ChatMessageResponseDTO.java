@@ -1,7 +1,7 @@
 package com.HHive.hhive.domain.chatmessage.dto;
 
 import com.HHive.hhive.domain.chatmessage.entity.ChatMessage;
-import com.HHive.hhive.domain.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,18 +12,16 @@ public class ChatMessageResponseDTO {
 
     private String message;
 
-    private Long senderId;
+    private String username;
 
-    private String senderName;
-
+    @JsonFormat(pattern = "MM월 dd일 / HH시 mm분")
     private LocalDateTime createdAt;
 
     public static ChatMessageResponseDTO from(ChatMessage chatMessage) {
 
         return ChatMessageResponseDTO.builder()
                 .message(chatMessage.getMessage())
-                .senderId(chatMessage.getSenderId())
-                .senderName(chatMessage.getSenderName())
+                .username(chatMessage.getSenderName())
                 .createdAt(chatMessage.getCreatedAt())
                 .build();
     }
