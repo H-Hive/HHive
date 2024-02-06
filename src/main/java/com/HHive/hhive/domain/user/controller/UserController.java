@@ -86,19 +86,6 @@ public class UserController {
         return ResponseEntity.ok().body(CommonResponse.of("로그인 성공", userInfo));
     }
 
-
-//
-//    // 로그아웃 메서드
-//    @PostMapping("/logout")
-//    public ResponseEntity<CommonResponse<Void>> logout(HttpServletRequest request) {
-//        String refreshToken = request.getHeader("Authorization");
-//        System.out.println("Refresh token: " + refreshToken);
-//        authService.logout(refreshToken);
-//        return ResponseEntity.ok().body(CommonResponse.of("로그아웃 성공", null));
-//    }
-
-
-
     @GetMapping("/{userId}")
     public ResponseEntity<CommonResponse<UserInfoResponseDTO>> getProfile(@PathVariable Long userId) {
 
