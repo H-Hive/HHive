@@ -16,23 +16,22 @@
 
 
 
-## 🐝 Links
+### 🐝 Links
 - [Github](https://github.com/H-Hive/HHive)
 - [Notion](https://www.notion.so/HHive-56f9924035a34b94ae3b5e4ec4d1421a)
 - [Figma](https://www.figma.com/file/JFhNAGxwSTJAg6lnOlDXXX/HHive-team-library?type=design&node-id=0-1&mode=design&t=1EqS5JfMFRVOKFT9-0)
-- [ERD Cloud](https://www.erdcloud.com/d/Q8Cx34o4oEutuhB52)
-- [Postman](https://universal-comet-344748.postman.co/workspace/Team-Workspace~c43626f4-d8a8-4e3f-8689-03585237ebc7/collection/31674523-d80de786-5160-4f5d-9677-b58e70e79f1b?action=share&creator=31348504)
 
-## 🐝 Personal Role
-| Name                                   | Role                                |
-|----------------------------------------|-------------------------------------|
-| [장동하](https://github.com/wkdehdgk159)  | 프로젝트 전체적인 조율 담당 / Category API      |
-| [박시원](https://github.com/mixedtape)    | 기능구현 및 백엔드 보조 | Notification API         |
-| [김은채](https://github.com/EUNCHAEv1006) | 기능구현 및 서버관리 / User API        |
-| [창다은](https://github.com/de123456sdf)  | 기능구현 및 프론트 보조 / Party API          |
-| [김대영](https://github.com/kdy9960)      | 기능구현 및 프론트 보조 / Hive API               |
+### 🐝 Personal Role
+| Name                                   | Role                                | API                                |
+|----------------------------------------|:-------------------------------------:|:-------------------------------------:|
+| [장동하](https://github.com/wkdehdgk159)  | 프로젝트 전체적인 조율 담당 | Category API | 
+| [박시원](https://github.com/mixedtape)    | 기능구현 및 백엔드 보조 | Notification API |
+| [김은채](https://github.com/EUNCHAEv1006) | 기능구현 및 서버관리 | User API | 
+| [창다은](https://github.com/de123456sdf)  | 기능구현 및 프론트 보조 | Party API | 
+| [김대영](https://github.com/kdy9960)      | 기능구현 및 프론트 보조 | Hive API |
 
-## 🐝 Service Preview
+
+### 🐝 Service Preview
 |  제목  |  내용   |
 |:----:|:-----:|
 | 메인페이지 | <img width="1867" alt="스크린샷 2024-02-06 오후 7 14 35" src="https://github.com/H-Hive/HHive/assets/129070298/3c5a1e76-3ec6-492a-a284-f7c67c504fae"> |
@@ -111,10 +110,15 @@
 <img src="https://img.shields.io/badge/Querydsl-178dd0?style=for-the-badge&logo=Querydsl&logoColor=white">
 <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white">
 <img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white">
+<img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white">
+<img src="https://img.shields.io/badge/kakaotalk-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=white">
 </span>
 
 #### Front-end
+<span>
 <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=Vue.js&logoColor=white">
+<img src="https://img.shields.io/badge/kakao-FFCD00?style=for-the-badge&logo=kakao&logoColor=white">
+</span>
 
 #### Database
 <span>
@@ -131,6 +135,7 @@
 <img src="https://img.shields.io/badge/lets encrypt-003A70?style=for-the-badge&logo=letsencrypt&logoColor=white">
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/amazon ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
+<img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white">
 </span>
 
 #### Dev tools
