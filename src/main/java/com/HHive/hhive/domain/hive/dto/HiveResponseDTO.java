@@ -35,10 +35,13 @@ public class HiveResponseDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime modifiedAt;
 
+    // TODO of 에서 from 으로 바꾸기
     public static HiveResponseDTO of(Hive hive) {
+
         String majorName =
                 hive.getMajorCategory() == null ? "" : hive.getMajorCategory().getTitle();
 

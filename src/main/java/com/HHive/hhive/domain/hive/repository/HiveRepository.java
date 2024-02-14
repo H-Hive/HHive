@@ -20,8 +20,9 @@ public interface HiveRepository extends JpaRepository<Hive, Long> {
     @Query("SELECT h FROM Hive h WHERE h.isDeleted = false")
     List<Hive> findAllHiveNotDeleted();
 
-    @Query("SELECT h FROM Hive h WHERE (:majorCategory is null OR h.majorCategory = :majorCategory) "
-            + "AND (:subCategory is null OR h.subCategory = :subCategory) AND (:majorCategory is not null OR :subCategory is not null)")
+    @Query("SELECT h FROM Hive h WHERE (:majorCategory is null OR h.majorCategory = :majorCategory)"
+            + "AND (:subCategory is null OR h.subCategory = :subCategory) "
+            + "AND (:majorCategory is not null OR :subCategory is not null)")
     List<Hive> findAllByMajorCategoryAndSubCategoryContaining(
             @Param("majorCategory") MajorCategory majorCategory,
             @Param("subCategory")SubCategory subCategory
