@@ -33,66 +33,51 @@ public class PartyService {
 
 
     @Transactional
-    public PartyResponseDTO createParty(Long hiveId, PartyRequestDTO dto, User user) {
+    public PartyResponseDTO createParty(Long hiveId, PartyRequestDTO partyRequestDTO, User user) {
 
         // Hive 존재 여부 확인
         Hive hive = getHive(hiveId);
 
         // DTO에서 날짜와 시간 정보를 가져와서 LocalDateTime 객체 생성
-        LocalDateTime dateTime = getDateTimeFromDto(dto);
-
+        LocalDateTime dateTime = getDateTimeFromDto(partyRequestDTO);
         // 설정하려는 약속 시간이 과거인지 확인
         validatePartyTime(dateTime);
 
-        Party party = new Party(hive, dto, user, dateTime);
+        Party party = new Party(hive, partyRequestDTO, user, dateTime);
         party.setUser(user);
 
-        var savedParty = partyRepository.save(party);
+        partyRepository.save(party);
 
         // 파티 생성자(호스트)를 파티의 멤버로 추가
-        PartyUser partyUser = PartyUser.builder()
-                .user(user)
-                .party(savedParty)
-                .build();
-        partyUserRepository.save(partyUser);
+        partyUserService.addPartyUser(user, party);
 
-        // 호스트 정보를 members 목록에 포함하여 PartyResponseDTO 생성
-        PartyResponseDTO partyResponseDTO = createPartyResponseDTO(savedParty);
-        return partyResponseDTO;
+        return PartyResponseDTO.of(party);
     }
 
     //단건 조회
     @Transactional
     public PartyResponseDTO getPartyDto(Long hiveId, Long partyId) {
+
         Party party = getParty(hiveId, partyId);
-        return createPartyResponseDTO(party);
+
+        return PartyResponseDTO.of(party);
     }
 
     //전체 조회
     @Transactional
-    public Map<UserInfoResponseDTO, List<PartyResponseDTO>> getUserPartyMap(Long hiveId) {
+    public List<PartyResponseDTO> getUserParties(Long hiveId) {
+
         Hive hive = getHive(hiveId);
+        List<Party> partyList = partyRepository.findByHiveAndIsDeletedFalse(hive);
 
-        Map<UserInfoResponseDTO, List<PartyResponseDTO>> userPartyMap = new LinkedHashMap<>();
-
-        List<Party> partyList = partyRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream()
-                .filter(p -> !p.isDeleted() && p.getHive().equals(hive))
+        return partyList.stream()
+                .map(PartyResponseDTO::of)
                 .collect(Collectors.toList());
-
-        for (Party party : partyList) {
-            UserInfoResponseDTO userDto = new UserInfoResponseDTO(party.getUser());
-            List<MemberResponseDTO> members = getPartyMembers(party.getId());
-
-            PartyResponseDTO partyDto = new PartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(), party.getContent(), party.getDateTime(), party.getCreatedAt(), party.getModifiedAt(), members);
-
-            userPartyMap.computeIfAbsent(userDto, k -> new ArrayList<>()).add(partyDto);
-        }
-
-        return userPartyMap;
     }
 
     @Transactional
     public PartyResponseDTO updateParty(Long partyId, PartyUpdateRequestDTO partyUpdateRequestDto, User user) {
+
         Party party = getUserParty(partyId, user);
 
         if (!party.getHostId().equals(user.getId())) {
@@ -107,20 +92,19 @@ public class PartyService {
         }
 
         LocalDateTime newDateTime = getLocalDateTime(partyUpdateRequestDto, party);
-
         validatePartyTime(newDateTime);
 
         // 파티 날짜 및 시간 업데이트
         party.setDateTime(newDateTime);
 
-        // 파티 저장
         partyRepository.save(party);
 
-        return createPartyResponseDTO(party);
+        return PartyResponseDTO.of(party);
     }
 
     @Transactional
     public void deleteParty(Long partyId, User user) {
+
         Party party = getUserParty(partyId, user);
 
         if (!party.getHostId().equals(user.getId())) {
@@ -128,26 +112,25 @@ public class PartyService {
         }
 
         party.setIsDeleted(true);
+
         partyRepository.save(party);
     }
 
     @Transactional
     public void joinParty(Long partyId, Long hiveId, User user) {
+
         Party party = getUserParty(partyId, user);
 
-        // 현재 날짜를 가져옴
         LocalDateTime now = LocalDateTime.now();
 
         // Hive에 가입되어 있는지 확인
         if (!partyUserService.isUserMemberOfHive(user.getId(), hiveId)) {
             throw new NotMemberOfHiveException();
         }
-
         // 파티 호스트가 파티에 가입하는 것을 방지
         if (party.getHostId().equals(user.getId())) {
             throw new PartyHostNotJoinException();
         }
-
         // 파티 날짜가 현재 날짜보다 이전인 경우, 가입 불가 처리
         if (party.getDateTime().isBefore(now)) {
             throw new EndPartyNotJoinException();
@@ -163,7 +146,8 @@ public class PartyService {
     }
 
     @Transactional
-    public void resignParty(Long partyId, User user) {
+    public void leaveParty(Long partyId, User user) {
+
         Party party = getUserParty(partyId, user);
 
         if (party.getHostId().equals(user.getId())) {
@@ -176,20 +160,21 @@ public class PartyService {
 
         partyUserService.removePartyUser(user.getId(), party.getId());
     }
+    
+    @Transactional
+    public List<PartyResponseDTO> getPartiesCreatedByUser(Long userId) {
+
+        List<Party> parties = partyRepository.findByUserIdAndIsDeletedIsFalse(userId);
+
+        return parties.stream().map(PartyResponseDTO::of).collect(Collectors.toList());
+    }
 
 
     //공통 메서드
-
     private Hive getHive(Long hiveId) {
 
         return hiveRepository.findById(hiveId)
                 .orElseThrow(NotFoundHiveException::new);
-    }
-
-    private Party getUserParty(Long partyId, User user) {
-
-        return partyRepository.findById(partyId)
-                .orElseThrow(PartyNotFoundException::new);
     }
 
     // 파티 조회 및 예외 처리
@@ -203,22 +188,15 @@ public class PartyService {
                 .orElseThrow(PartyNotFoundException::new);
     }
 
-    // 파티에 속한 사용자 목록 조회
-    private List<MemberResponseDTO> getPartyMembers(Long partyId) {
+    private Party getUserParty(Long partyId, User user) {
 
-        return partyUserService.getPartyMembers(partyId);
-    }
-
-    public List<MyPartyResponseDTO> getPartiesByUserId(Long userId) {
-
-        return partyUserRepository.findPartiesByUserId(userId).stream().map(party ->
-                new MyPartyResponseDTO(party.getId(), party.getTitle(), party.getUsername(),
-                        party.getContent(),party.getHive().getId(),party.getHostId(), party.getDateTime(), party.getCreatedAt(),
-                        party.getModifiedAt(), getPartyMembers(party.getId()))).toList();
+        return partyRepository.findById(partyId)
+                .orElseThrow(PartyNotFoundException::new);
     }
 
     // 날짜와 시간 정보를 가져와 LocalDateTime 객체 생성
     private LocalDateTime getDateTimeFromDto(PartyRequestDTO dto) {
+
         return LocalDateTime.of(
                 dto.getYear(),
                 dto.getMonth(),
@@ -228,6 +206,7 @@ public class PartyService {
     }
 
     private LocalDateTime getLocalDateTime(PartyUpdateRequestDTO dto, Party party) {
+
         LocalDateTime currentDateTime = party.getDateTime();
         int year = dto.getYear() != null ? dto.getYear() : currentDateTime.getYear();
         int month = dto.getMonth() != null ? dto.getMonth() : currentDateTime.getMonthValue();
@@ -240,17 +219,10 @@ public class PartyService {
 
     // 설정한 파티 시간의 유효성 검증
     private void validatePartyTime(LocalDateTime dateTime) {
+
         if (dateTime.isBefore(LocalDateTime.now())) {
             throw new InvalidPartyTimeException();
         }
-    }
-
-    // PartyResponseDTO 생성 로직
-    private PartyResponseDTO createPartyResponseDTO(Party party) {
-        List<MemberResponseDTO> members = getPartyMembers(party.getId());
-        return new PartyResponseDTO(party.getId(), party.getTitle(),
-                party.getUsername(), party.getContent(), party.getDateTime(),
-                party.getCreatedAt(), party.getModifiedAt(), members);
     }
 
 }

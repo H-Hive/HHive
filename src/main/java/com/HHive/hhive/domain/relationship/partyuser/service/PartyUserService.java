@@ -1,6 +1,6 @@
 package com.HHive.hhive.domain.relationship.partyuser.service;
 
-import com.HHive.hhive.domain.party.dto.MemberResponseDTO;
+import com.HHive.hhive.domain.party.dto.PartyResponseDTO;
 import com.HHive.hhive.domain.party.entity.Party;
 import com.HHive.hhive.domain.relationship.hiveuser.repository.HiveUserRepository;
 import com.HHive.hhive.domain.relationship.partyuser.entity.PartyUser;
@@ -21,25 +21,30 @@ public class PartyUserService {
     private final HiveUserRepository hiveUserRepository;
     private final PartyUserRepository partyUserRepository;
 
-    // Hive 가입 여부 확인 메서드
+    @Transactional
     public boolean isUserMemberOfHive(Long userId, Long hiveId) {
+
         return hiveUserRepository.existsByUserIdAndHiveId(userId, hiveId);
     }
-
+    @Transactional
     public void addPartyUser(User user, Party party) {
+
         PartyUser partyUser = new PartyUser(user, party);
         partyUserRepository.save(partyUser);
     }
-
+    @Transactional
     public void removePartyUser(Long userId, Long partyId) {
+
         PartyUserPK partyUserPK = new PartyUserPK(userId, partyId);
         partyUserRepository.deleteById(partyUserPK);
     }
+    @Transactional
+    public List<PartyResponseDTO> getPartiesJoinedByUser(Long userId) {
 
-    public List<MemberResponseDTO> getPartyMembers(Long partyId) {
-        return partyUserRepository.findUsersByPartyId(partyId).stream()
-                .map(partyUser -> new MemberResponseDTO(partyUser.getUser().getUsername(), partyUser.getUser().getEmail()))
-                .collect(Collectors.toList());
+        List<PartyUser> partyUsers = partyUserRepository.findByUserId(userId);
+        List<Party> parties = partyUsers.stream().map(PartyUser::getParty).collect(Collectors.toList());
+
+        return parties.stream().map(PartyResponseDTO::of).collect(Collectors.toList());
     }
 
 }
