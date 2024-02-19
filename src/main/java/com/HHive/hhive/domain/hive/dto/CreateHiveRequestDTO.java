@@ -25,14 +25,16 @@ public class CreateHiveRequestDTO {
 
     private String roadAddress;
 
-    public Hive toEntity(User createdBy,MajorCategory majorCategory,SubCategory subCategory) {
+    private final String DEFAULT_INTRODUCTION = "마 내용 넣어라";
+
+    public Hive toEntity(User createdBy, MajorCategory majorCategory, SubCategory subCategory) {
         return Hive.builder()
                 .title(title)
                 .majorCategory(majorCategory)
                 .subCategory(subCategory)
                 .roadAddress(roadAddress)
                 .creatorId(createdBy.getId())
-                .introduction("내용을 넣어주세요")
+                .introduction(DEFAULT_INTRODUCTION)
                 .user(createdBy)
                 .build();
     }

@@ -20,7 +20,7 @@ public interface HiveUserRepository extends JpaRepository<HiveUser, HiveUserPK>,
     List<HiveUser> findHiveUsersByHiveId(Long hiveId);
 
     @Query("SELECT count (uh) > 0 FROM HiveUser uh WHERE uh.hive.id = :hiveId and uh.user.id = :userId and uh.user.is_deleted = false ")
-    Boolean existsByUser_IdAndHive_IdAndIsDeletedIsFasle(@Param("userId") Long userId, @Param("hiveId") Long hiveId);
+    Boolean existsByUser_IdAndHive_IdAndIsDeletedIsFalse(@Param("userId") Long userId, @Param("hiveId") Long hiveId);
 
     @Query("SELECT  hu.user FROM HiveUser hu WHERE hu.hive.id = :hiveId")
     List<User> findUsersByHiveId(Long hiveId);
