@@ -12,7 +12,6 @@ import com.HHive.hhive.global.exception.common.CustomException;
 import com.HHive.hhive.global.exception.common.ErrorCode;
 import com.HHive.hhive.global.exception.user.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,7 +153,7 @@ public class UserService {
     }
 
 
-//    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+    //    @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
     public void processPendingDeletions() {
         List<User> userToDelete = userRepository.findByIsDeletedAndDeletedAtBefore(true, LocalDateTime.now().minusMinutes(1));
 

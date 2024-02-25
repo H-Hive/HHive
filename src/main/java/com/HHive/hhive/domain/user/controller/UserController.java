@@ -11,7 +11,6 @@ import com.HHive.hhive.domain.user.service.UserService;
 import com.HHive.hhive.global.common.CommonResponse;
 import com.HHive.hhive.global.jwt.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,7 +66,6 @@ public class UserController {
     }
 
 
-
     @PostMapping("/login")
     public ResponseEntity<CommonResponse<UserInfoResponseDTO>> login(
             @RequestBody UserLoginRequestDTO requestDTO, HttpServletResponse response) {
@@ -92,7 +89,6 @@ public class UserController {
         UserInfoResponseDTO responseDTO = userService.getProfile(userId);
         return ResponseEntity.ok().body(CommonResponse.of("프로필 조회 성공", responseDTO));
     }
-
 
 
     @PatchMapping("/{userId}")
